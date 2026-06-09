@@ -56,42 +56,6 @@ Visualizes Chladni patterns - the beautiful geometric patterns formed by particl
 - **Accessibility**: Multiple color profiles (default, projector, colorblind-friendly)
 - **Internationalization**: English, Spanish, and French language support
 
-## Getting Started
-
-### Prerequisites
-
-- Node.js (v16 or higher)
-- npm
-
-### Installation
-
-```bash
-git clone https://github.com/veillette/resonance.git
-cd resonance
-npm install
-```
-
-### Development
-
-```bash
-npm start
-# Open http://localhost:5173
-```
-
-### Production Build
-
-```bash
-npm run build
-# Output in dist/
-```
-
-### Testing
-
-```bash
-npm test              # Run unit tests (Vitest)
-npm run test:fuzz     # Run fuzz tests (Playwright, 60s)
-npm run test:coverage # Run tests with coverage report
-```
 
 ## Physics Background
 
