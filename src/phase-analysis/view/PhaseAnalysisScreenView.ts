@@ -4,12 +4,12 @@
  * that lets users plot various physical quantities against each other.
  */
 
-import { ScreenViewOptions } from "scenerystack/sim";
+import type { ScreenViewOptions } from "scenerystack/sim";
 import { BaseOscillatorScreenView } from "../../common/view/BaseOscillatorScreenView.js";
-import { PhaseAnalysisModel } from "../model/PhaseAnalysisModel.js";
-import ConfigurableGraph from "../../common/view/graph/ConfigurableGraph.js";
+import type ConfigurableGraph from "../../common/view/graph/ConfigurableGraph.js";
 import type { PlottableProperty } from "../../common/view/graph/PlottableProperty.js";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
+import type { PhaseAnalysisModel } from "../model/PhaseAnalysisModel.js";
 
 export class PhaseAnalysisScreenView extends BaseOscillatorScreenView {
   private readonly configurableGraph: ConfigurableGraph;
@@ -92,8 +92,7 @@ export class PhaseAnalysisScreenView extends BaseOscillatorScreenView {
         unit: "J",
       },
       {
-        name: ResonanceStrings.controls
-          .gravitationalPotentialEnergyStringProperty,
+        name: ResonanceStrings.controls.gravitationalPotentialEnergyStringProperty,
         property: resonanceModel.gravitationalPotentialEnergyProperty,
         unit: "J",
       },

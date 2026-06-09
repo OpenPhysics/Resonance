@@ -4,7 +4,7 @@
  * P3 Priority: Utility class for managing property listener cleanup.
  */
 
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ListenerTracker } from "../ListenerTracker.js";
 
 // Mock Property implementation for testing
@@ -22,7 +22,9 @@ class MockProperty<T> {
 
   set value(newValue: T) {
     this._value = newValue;
-    this.listeners.forEach((listener) => listener(newValue));
+    this.listeners.forEach((listener) => {
+      listener(newValue);
+    });
   }
 
   link(listener: (value: T) => void): void {
@@ -282,12 +284,16 @@ describe("ListenerTracker", () => {
       }
 
       // All listeners should be tracked
-      properties.forEach((p) => expect(p.listenerCount).toBe(1));
+      properties.forEach((p) => {
+        expect(p.listenerCount).toBe(1);
+      });
 
       // Dispose should clean up all
       tracker.dispose();
 
-      properties.forEach((p) => expect(p.listenerCount).toBe(0));
+      properties.forEach((p) => {
+        expect(p.listenerCount).toBe(0);
+      });
     });
   });
 

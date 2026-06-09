@@ -6,10 +6,7 @@
  * throughout the simulation for screen reader announcements.
  */
 
-import {
-  UtteranceQueue,
-  AriaLiveAnnouncer,
-} from "scenerystack/utterance-queue";
+import { AriaLiveAnnouncer, UtteranceQueue } from "scenerystack/utterance-queue";
 
 // Create a shared AriaLiveAnnouncer for screen reader alerts
 const ariaLiveAnnouncer = new AriaLiveAnnouncer();

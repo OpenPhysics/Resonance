@@ -6,48 +6,36 @@
  * - A configurable graph for plotting physical quantities
  */
 
-import { ScreenViewOptions } from "scenerystack/sim";
+import type { ScreenViewOptions } from "scenerystack/sim";
+import ResonanceConstants from "../../common/ResonanceConstants.js";
 import { BaseOscillatorScreenView } from "../../common/view/BaseOscillatorScreenView.js";
-import { SingleOscillatorModel } from "../model/SingleOscillatorModel.js";
-import { OscillatorVectorNode } from "./OscillatorVectorNode.js";
-import { OscillatorVectorControlPanel } from "./OscillatorVectorControlPanel.js";
-import ConfigurableGraph from "../../common/view/graph/ConfigurableGraph.js";
+import type ConfigurableGraph from "../../common/view/graph/ConfigurableGraph.js";
 import type { PlottableProperty } from "../../common/view/graph/PlottableProperty.js";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
-import ResonanceConstants from "../../common/ResonanceConstants.js";
+import type { SingleOscillatorModel } from "../model/SingleOscillatorModel.js";
+import { OscillatorVectorControlPanel } from "./OscillatorVectorControlPanel.js";
+import { OscillatorVectorNode } from "./OscillatorVectorNode.js";
 
 export class SingleOscillatorScreenView extends BaseOscillatorScreenView {
   private readonly vectorNode: OscillatorVectorNode;
   private readonly vectorControlPanel: OscillatorVectorControlPanel;
   private readonly configurableGraph: ConfigurableGraph;
 
-  public constructor(
-    model: SingleOscillatorModel,
-    options?: ScreenViewOptions,
-  ) {
+  public constructor(model: SingleOscillatorModel, options?: ScreenViewOptions) {
     super(model, options);
 
     // Create the vector control panel (positioned in upper-left)
     this.vectorControlPanel = new OscillatorVectorControlPanel();
-    this.vectorControlPanel.left =
-      this.layoutBounds.minX + ResonanceConstants.CONTROL_PANEL_X_MARGIN;
-    this.vectorControlPanel.top =
-      this.layoutBounds.minY + ResonanceConstants.CONTROL_PANEL_TOP_MARGIN;
+    this.vectorControlPanel.left = this.layoutBounds.minX + ResonanceConstants.CONTROL_PANEL_X_MARGIN;
+    this.vectorControlPanel.top = this.layoutBounds.minY + ResonanceConstants.CONTROL_PANEL_TOP_MARGIN;
     this.addChild(this.vectorControlPanel);
 
     // Create the vector node that displays arrows on the mass
-    this.vectorNode = new OscillatorVectorNode(
-      model.resonanceModel,
-      this.modelViewTransform,
-      {
-        velocityVisibleProperty:
-          this.vectorControlPanel.velocityVisibleProperty,
-        accelerationVisibleProperty:
-          this.vectorControlPanel.accelerationVisibleProperty,
-        appliedForceVisibleProperty:
-          this.vectorControlPanel.appliedForceVisibleProperty,
-      },
-    );
+    this.vectorNode = new OscillatorVectorNode(model.resonanceModel, this.modelViewTransform, {
+      velocityVisibleProperty: this.vectorControlPanel.velocityVisibleProperty,
+      accelerationVisibleProperty: this.vectorControlPanel.accelerationVisibleProperty,
+      appliedForceVisibleProperty: this.vectorControlPanel.appliedForceVisibleProperty,
+    });
 
     // Add vector node to the resonators container so it appears with the mass
     this.resonatorsContainer.addChild(this.vectorNode);
@@ -100,19 +88,13 @@ export class SingleOscillatorScreenView extends BaseOscillatorScreenView {
     // - Right of the mass (mass is at layoutBounds.centerX + DRIVER_CENTER_X_OFFSET)
     // - Left of the control panel
     const massAreaRight =
-      this.layoutBounds.centerX +
-      ResonanceConstants.DRIVER_CENTER_X_OFFSET +
-      ResonanceConstants.MAX_MASS_SIZE / 2 +
-      60; // margin after mass
-    const controlPanelLeft =
-      this.controlPanel.left - 20; // margin before control panel
+      this.layoutBounds.centerX + ResonanceConstants.DRIVER_CENTER_X_OFFSET + ResonanceConstants.MAX_MASS_SIZE / 2 + 60; // margin after mass
+    const controlPanelLeft = this.controlPanel.left - 20; // margin before control panel
     const graphWidth = Math.min(350, controlPanelLeft - massAreaRight);
 
     // Calculate height: from control panel top to above driver plate
     const graphHeaderOffset = 60;
-    const driverPlateTopViewY = this.modelViewTransform.modelToViewY(
-      ResonanceConstants.DRIVER_PLATE_REST_MODEL_Y,
-    );
+    const driverPlateTopViewY = this.modelViewTransform.modelToViewY(ResonanceConstants.DRIVER_PLATE_REST_MODEL_Y);
     const graphTop = this.controlPanel.top + graphHeaderOffset;
     const graphBottom = driverPlateTopViewY - 40; // margin above driver
     const graphHeight = Math.min(300, graphBottom - graphTop);

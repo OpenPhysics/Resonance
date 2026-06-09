@@ -3,16 +3,9 @@
  * Handles auto-scaling, tick spacing calculations, and trail point rendering.
  */
 
-import { Vector2 } from "scenerystack/dot";
-import { Range } from "scenerystack/dot";
-import { Node, Circle } from "scenerystack/scenery";
-import type {
-  ChartTransform,
-  LinePlot,
-  GridLineSet,
-  TickMarkSet,
-  TickLabelSet,
-} from "scenerystack/bamboo";
+import type { ChartTransform, GridLineSet, LinePlot, TickLabelSet, TickMarkSet } from "scenerystack/bamboo";
+import { Range, Vector2 } from "scenerystack/dot";
+import { Circle, type Node } from "scenerystack/scenery";
 import ResonanceColors from "../../ResonanceColors.js";
 import resonance from "../../ResonanceNamespace.js";
 
@@ -69,7 +62,7 @@ export default class GraphDataManager {
    */
   public addDataPoint(xValue: number, yValue: number): void {
     // Skip invalid values
-    if (!isFinite(xValue) || !isFinite(yValue)) {
+    if (!(isFinite(xValue) && isFinite(yValue))) {
       return;
     }
 
@@ -99,7 +92,9 @@ export default class GraphDataManager {
    * @param points - Array of [x, y] value pairs
    */
   public addDataPoints(points: Array<{ x: number; y: number }>): void {
-    if (points.length === 0) return;
+    if (points.length === 0) {
+      return;
+    }
 
     // Add all valid points
     for (const { x, y } of points) {
@@ -222,7 +217,7 @@ export default class GraphDataManager {
     }
 
     // Round to a nice number (1, 2, 5, 10, 20, 50, etc.)
-    const magnitude = Math.pow(10, Math.floor(Math.log10(roughSpacing)));
+    const magnitude = 10 ** Math.floor(Math.log10(roughSpacing));
     const residual = roughSpacing / magnitude;
 
     let spacing: number;
@@ -258,7 +253,9 @@ export default class GraphDataManager {
 
     for (let i = 0; i < numTrailPoints; i++) {
       const point = this.dataPoints[startIndex + i];
-      if (!point) continue;
+      if (!point) {
+        continue;
+      }
 
       // Calculate the age of this point (0 = oldest in trail, numTrailPoints-1 = newest)
       const age = i;

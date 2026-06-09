@@ -7,13 +7,13 @@
  * - Chladni Screen: modal controls toggle and renderer selection
  */
 
-import { VBox, Text, HStrut } from "scenerystack/scenery";
-import { Checkbox, VerticalAquaRadioButtonGroup } from "scenerystack/sun";
+import { HStrut, Text, VBox } from "scenerystack/scenery";
 import { PhetFont } from "scenerystack/scenery-phet";
-import { ResonancePreferencesModel, RendererType } from "./ResonancePreferencesModel.js";
-import { ResonanceStrings } from "../i18n/ResonanceStrings.js";
+import { Checkbox, VerticalAquaRadioButtonGroup } from "scenerystack/sun";
 import { SolverType } from "../common/model/SolverType.js";
 import ResonanceColors from "../common/ResonanceColors.js";
+import { ResonanceStrings } from "../i18n/ResonanceStrings.js";
+import { RendererType, type ResonancePreferencesModel } from "./ResonancePreferencesModel.js";
 
 export class ResonancePreferencesNode extends VBox {
   public constructor(preferencesModel: ResonancePreferencesModel) {
@@ -32,16 +32,11 @@ export class ResonancePreferencesNode extends VBox {
    * Create the Oscillator Screens preferences section:
    * solver method radio buttons.
    */
-  private static createOscillatorSection(
-    preferencesModel: ResonancePreferencesModel,
-  ): VBox {
-    const header = new Text(
-      ResonanceStrings.screens.singleOscillatorStringProperty,
-      {
-        font: new PhetFont({ size: 18, weight: "bold" }),
-        fill: ResonanceColors.preferencesTextProperty,
-      },
-    );
+  private static createOscillatorSection(preferencesModel: ResonancePreferencesModel): VBox {
+    const header = new Text(ResonanceStrings.screens.singleOscillatorStringProperty, {
+      font: new PhetFont({ size: 18, weight: "bold" }),
+      fill: ResonanceColors.preferencesTextProperty,
+    });
 
     const solverSection = ResonancePreferencesNode.createSolverSection(preferencesModel);
 
@@ -55,9 +50,7 @@ export class ResonancePreferencesNode extends VBox {
   /**
    * Create the solver method radio button group section.
    */
-  private static createSolverSection(
-    preferencesModel: ResonancePreferencesModel,
-  ): VBox {
+  private static createSolverSection(preferencesModel: ResonancePreferencesModel): VBox {
     const solverRadioButtonGroup = new VerticalAquaRadioButtonGroup(
       preferencesModel.solverTypeProperty,
       [
@@ -99,21 +92,15 @@ export class ResonancePreferencesNode extends VBox {
       align: "left",
       spacing: 8,
       children: [
-        new Text(
-          ResonanceStrings.preferences.simulation.solverMethodStringProperty,
-          {
-            font: new PhetFont({ size: 14, weight: "bold" }),
-            fill: ResonanceColors.preferencesTextProperty,
-          },
-        ),
-        new Text(
-          ResonanceStrings.preferences.simulation.solverDescriptionStringProperty,
-          {
-            font: new PhetFont(11),
-            fill: ResonanceColors.preferencesTextSecondaryProperty,
-            maxWidth: 550,
-          },
-        ),
+        new Text(ResonanceStrings.preferences.simulation.solverMethodStringProperty, {
+          font: new PhetFont({ size: 14, weight: "bold" }),
+          fill: ResonanceColors.preferencesTextProperty,
+        }),
+        new Text(ResonanceStrings.preferences.simulation.solverDescriptionStringProperty, {
+          font: new PhetFont(11),
+          fill: ResonanceColors.preferencesTextSecondaryProperty,
+          maxWidth: 550,
+        }),
         solverRadioButtonGroup,
       ],
     });
@@ -123,16 +110,11 @@ export class ResonancePreferencesNode extends VBox {
    * Create the Chladni Patterns screen preferences section:
    * modal controls toggle and renderer selection.
    */
-  private static createChladniSection(
-    preferencesModel: ResonancePreferencesModel,
-  ): VBox {
-    const header = new Text(
-      ResonanceStrings.screens.chladniPatternsStringProperty,
-      {
-        font: new PhetFont({ size: 18, weight: "bold" }),
-        fill: ResonanceColors.preferencesTextProperty,
-      },
-    );
+  private static createChladniSection(preferencesModel: ResonancePreferencesModel): VBox {
+    const header = new Text(ResonanceStrings.screens.chladniPatternsStringProperty, {
+      font: new PhetFont({ size: 18, weight: "bold" }),
+      fill: ResonanceColors.preferencesTextProperty,
+    });
 
     const modalControlsCheckbox = new Checkbox(
       preferencesModel.showModalControlsProperty,
@@ -140,21 +122,15 @@ export class ResonancePreferencesNode extends VBox {
         align: "left",
         spacing: 2,
         children: [
-          new Text(
-            ResonanceStrings.preferences.simulation.showModalControlsStringProperty,
-            {
-              font: new PhetFont(14),
-              fill: ResonanceColors.preferencesTextProperty,
-            },
-          ),
-          new Text(
-            ResonanceStrings.preferences.simulation.showModalControlsDescriptionStringProperty,
-            {
-              font: new PhetFont(11),
-              fill: ResonanceColors.preferencesTextSecondaryProperty,
-              maxWidth: 500,
-            },
-          ),
+          new Text(ResonanceStrings.preferences.simulation.showModalControlsStringProperty, {
+            font: new PhetFont(14),
+            fill: ResonanceColors.preferencesTextProperty,
+          }),
+          new Text(ResonanceStrings.preferences.simulation.showModalControlsDescriptionStringProperty, {
+            font: new PhetFont(11),
+            fill: ResonanceColors.preferencesTextSecondaryProperty,
+            maxWidth: 500,
+          }),
         ],
       }),
       { boxWidth: 16 },
@@ -172,9 +148,7 @@ export class ResonancePreferencesNode extends VBox {
   /**
    * Create the renderer selection radio button group section.
    */
-  private static createRendererSection(
-    preferencesModel: ResonancePreferencesModel,
-  ): VBox {
+  private static createRendererSection(preferencesModel: ResonancePreferencesModel): VBox {
     const rendererRadioButtonGroup = new VerticalAquaRadioButtonGroup(
       preferencesModel.rendererTypeProperty,
       [
@@ -207,21 +181,15 @@ export class ResonancePreferencesNode extends VBox {
       align: "left",
       spacing: 8,
       children: [
-        new Text(
-          ResonanceStrings.preferences.simulation.rendererStringProperty,
-          {
-            font: new PhetFont({ size: 14, weight: "bold" }),
-            fill: ResonanceColors.preferencesTextProperty,
-          },
-        ),
-        new Text(
-          ResonanceStrings.preferences.simulation.rendererDescriptionStringProperty,
-          {
-            font: new PhetFont(11),
-            fill: ResonanceColors.preferencesTextSecondaryProperty,
-            maxWidth: 550,
-          },
-        ),
+        new Text(ResonanceStrings.preferences.simulation.rendererStringProperty, {
+          font: new PhetFont({ size: 14, weight: "bold" }),
+          fill: ResonanceColors.preferencesTextProperty,
+        }),
+        new Text(ResonanceStrings.preferences.simulation.rendererDescriptionStringProperty, {
+          font: new PhetFont(11),
+          fill: ResonanceColors.preferencesTextSecondaryProperty,
+          maxWidth: 550,
+        }),
         rendererRadioButtonGroup,
       ],
     });

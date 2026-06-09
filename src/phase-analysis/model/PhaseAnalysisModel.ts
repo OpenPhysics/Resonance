@@ -7,7 +7,7 @@
  */
 
 import { BaseOscillatorScreenModel } from "../../common/model/BaseOscillatorScreenModel.js";
-import { ResonancePreferencesModel } from "../../preferences/ResonancePreferencesModel.js";
+import type { ResonancePreferencesModel } from "../../preferences/ResonancePreferencesModel.js";
 
 export class PhaseAnalysisModel extends BaseOscillatorScreenModel {
   public constructor(preferencesModel: ResonancePreferencesModel) {

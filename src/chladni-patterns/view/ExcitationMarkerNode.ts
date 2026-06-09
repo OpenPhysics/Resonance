@@ -6,20 +6,13 @@
  * Extracted from ChladniScreenView for better separation of concerns.
  */
 
-import {
-  Circle,
-  DragListener,
-  KeyboardDragListener,
-  Node,
-  Voicing,
-} from "scenerystack/scenery";
-import { Bounds2, Transform3, Vector2 } from "scenerystack/dot";
 import { Property } from "scenerystack/axon";
-import { ModelViewTransform2 } from "scenerystack/phetcommon";
-import { ChladniModel } from "../model/ChladniModel.js";
+import { Bounds2, Matrix3, Transform3, Vector2 } from "scenerystack/dot";
+import type { ModelViewTransform2 } from "scenerystack/phetcommon";
+import { Circle, DragListener, KeyboardDragListener, Node, Voicing } from "scenerystack/scenery";
 import ResonanceColors from "../../common/ResonanceColors.js";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
-import { Matrix3 } from "scenerystack/dot";
+import type { ChladniModel } from "../model/ChladniModel.js";
 
 // Excitation marker properties
 const EXCITATION_MARKER_RADIUS = 12;
@@ -68,24 +61,21 @@ export class ExcitationMarkerNode extends VoicingNode {
   private isUpdatingFromModel = false;
   private isUpdatingFromView = false;
 
-  public constructor(
-    model: ChladniModel,
-    options: ExcitationMarkerNodeOptions,
-  ) {
+  public constructor(model: ChladniModel, options: ExcitationMarkerNodeOptions) {
     super({ cursor: "pointer" });
 
     this.model = model;
     this.options = options;
 
     // Create view position property initialized from model
-    const initialViewPos = this.modelToViewPosition(
-      model.excitationPositionProperty.value,
-    );
+    const initialViewPos = this.modelToViewPosition(model.excitationPositionProperty.value);
     this.viewPositionProperty = new Property(initialViewPos);
 
     // Bidirectional sync: model -> view
     model.excitationPositionProperty.link((modelPos) => {
-      if (this.isUpdatingFromView) return;
+      if (this.isUpdatingFromView) {
+        return;
+      }
       this.isUpdatingFromModel = true;
       this.viewPositionProperty.value = this.modelToViewPosition(modelPos);
       this.isUpdatingFromModel = false;
@@ -93,10 +83,11 @@ export class ExcitationMarkerNode extends VoicingNode {
 
     // Bidirectional sync: view -> model
     this.viewPositionProperty.lazyLink((viewPos) => {
-      if (this.isUpdatingFromModel) return;
+      if (this.isUpdatingFromModel) {
+        return;
+      }
       this.isUpdatingFromView = true;
-      model.excitationPositionProperty.value =
-        this.viewToModelPosition(viewPos);
+      model.excitationPositionProperty.value = this.viewToModelPosition(viewPos);
       this.isUpdatingFromView = false;
     });
 
@@ -117,17 +108,13 @@ export class ExcitationMarkerNode extends VoicingNode {
     // --- Accessibility (PDOM) Setup ---
     this.tagName = "div";
     this.focusable = true;
-    this.accessibleName =
-      ResonanceStrings.chladni.a11y.excitationMarkerLabelStringProperty;
-    this.descriptionContent =
-      ResonanceStrings.chladni.a11y.excitationMarkerDescriptionStringProperty;
+    this.accessibleName = ResonanceStrings.chladni.a11y.excitationMarkerLabelStringProperty;
+    this.descriptionContent = ResonanceStrings.chladni.a11y.excitationMarkerDescriptionStringProperty;
 
     // --- Voicing Setup ---
     // Spoken when the marker receives focus
-    this.voicingNameResponse =
-      ResonanceStrings.chladni.a11y.excitationMarkerLabelStringProperty;
-    this.voicingHintResponse =
-      ResonanceStrings.chladni.a11y.excitationMarkerVoicingHintStringProperty;
+    this.voicingNameResponse = ResonanceStrings.chladni.a11y.excitationMarkerLabelStringProperty;
+    this.voicingHintResponse = ResonanceStrings.chladni.a11y.excitationMarkerVoicingHintStringProperty;
   }
 
   /**
@@ -137,10 +124,7 @@ export class ExcitationMarkerNode extends VoicingNode {
     const transform = this.options.getModelViewTransform();
     const vizBounds = this.options.getVisualizationBounds();
     const localView = transform.modelToViewPosition(modelPos);
-    return new Vector2(
-      vizBounds.minX + localView.x,
-      vizBounds.minY + localView.y,
-    );
+    return new Vector2(vizBounds.minX + localView.x, vizBounds.minY + localView.y);
   }
 
   /**
@@ -149,10 +133,7 @@ export class ExcitationMarkerNode extends VoicingNode {
   private viewToModelPosition(viewPos: Vector2): Vector2 {
     const transform = this.options.getModelViewTransform();
     const vizBounds = this.options.getVisualizationBounds();
-    const localView = new Vector2(
-      viewPos.x - vizBounds.minX,
-      viewPos.y - vizBounds.minY,
-    );
+    const localView = new Vector2(viewPos.x - vizBounds.minX, viewPos.y - vizBounds.minY);
     return transform.viewToModelPosition(localView);
   }
 
@@ -250,9 +231,7 @@ export class ExcitationMarkerNode extends VoicingNode {
   public updatePosition(): void {
     // Trigger re-sync from model to view
     this.isUpdatingFromModel = true;
-    this.viewPositionProperty.value = this.modelToViewPosition(
-      this.model.excitationPositionProperty.value,
-    );
+    this.viewPositionProperty.value = this.modelToViewPosition(this.model.excitationPositionProperty.value);
     this.isUpdatingFromModel = false;
   }
 }

@@ -9,17 +9,12 @@
  * - Applied Force (orange): the spring force from the driver
  */
 
+import { type BooleanProperty, Multilink, type TReadOnlyProperty, type UnknownMultilink } from "scenerystack/axon";
+import type { ModelViewTransform2 } from "scenerystack/phetcommon";
 import { Node, Text } from "scenerystack/scenery";
 import { ArrowNode, PhetFont } from "scenerystack/scenery-phet";
-import {
-  BooleanProperty,
-  TReadOnlyProperty,
-  Multilink,
-  UnknownMultilink,
-} from "scenerystack/axon";
-import { ModelViewTransform2 } from "scenerystack/phetcommon";
+import type { ResonanceModel } from "../../common/model/ResonanceModel.js";
 import ResonanceColors from "../../common/ResonanceColors.js";
-import { ResonanceModel } from "../../common/model/ResonanceModel.js";
 
 // Scale factors to convert physics values to pixel lengths
 const VELOCITY_SCALE = 200; // pixels per m/s (increased for visibility)
@@ -58,7 +53,6 @@ export class OscillatorVectorNode extends Node {
   private readonly accelerationLabel: Text;
   private readonly appliedForceLabel: Text;
   private readonly model: ResonanceModel;
-  private readonly _modelViewTransform: ModelViewTransform2;
   private readonly multilink: UnknownMultilink;
 
   public constructor(
@@ -69,7 +63,6 @@ export class OscillatorVectorNode extends Node {
     super();
 
     this.model = model;
-    this._modelViewTransform = modelViewTransform;
 
     // Create velocity arrow container (green) - leftmost position
     this.velocityContainer = new Node({ x: -VECTOR_SPACING });
@@ -123,18 +116,9 @@ export class OscillatorVectorNode extends Node {
     this.addChild(this.appliedForceContainer);
 
     // Link visibility to the control properties
-    options.velocityVisibleProperty.linkAttribute(
-      this.velocityContainer,
-      "visible",
-    );
-    options.accelerationVisibleProperty.linkAttribute(
-      this.accelerationContainer,
-      "visible",
-    );
-    options.appliedForceVisibleProperty.linkAttribute(
-      this.appliedForceContainer,
-      "visible",
-    );
+    options.velocityVisibleProperty.linkAttribute(this.velocityContainer, "visible");
+    options.accelerationVisibleProperty.linkAttribute(this.accelerationContainer, "visible");
+    options.appliedForceVisibleProperty.linkAttribute(this.appliedForceContainer, "visible");
 
     // Create multilink to update vectors when physics values change
     this.multilink = Multilink.multilink(
@@ -181,12 +165,7 @@ export class OscillatorVectorNode extends Node {
 
     // Calculate acceleration from the equation of motion:
     // m*a = -k*x - b*v - m*g + F_drive
-    const acceleration =
-      (-springConstant * position -
-        damping * velocity -
-        mass * gravity +
-        drivingForce) /
-      mass;
+    const acceleration = (-springConstant * position - damping * velocity - mass * gravity + drivingForce) / mass;
 
     // The applied force is the spring force from the driver (the driving term)
     // This is F_drive = k * A * sin(phase)

@@ -9,8 +9,7 @@
  */
 
 import { Property } from "scenerystack/axon";
-import { Bounds2, Vector2 } from "scenerystack/dot";
-import { Vector2Property } from "scenerystack/dot";
+import { Bounds2, Vector2, Vector2Property } from "scenerystack/dot";
 
 export class MeasurementLineModel {
   // Position in model coordinates (x is fixed, y represents displacement from equilibrium)
@@ -70,14 +69,8 @@ export class MeasurementLinesModel {
     // x is fixed at 0
     this.dragBounds = new Bounds2(0, minDisplacement, 0, maxDisplacement);
 
-    this.line1 = new MeasurementLineModel(
-      initialDisplacement1,
-      this.dragBounds,
-    );
-    this.line2 = new MeasurementLineModel(
-      initialDisplacement2,
-      this.dragBounds,
-    );
+    this.line1 = new MeasurementLineModel(initialDisplacement1, this.dragBounds);
+    this.line2 = new MeasurementLineModel(initialDisplacement2, this.dragBounds);
   }
 
   public reset(): void {

@@ -6,11 +6,11 @@
  * - Scale indicator with double-headed arrow between two major grid lines
  */
 
-import { Node, Path, Line, Text } from "scenerystack/scenery";
-import { ArrowNode, PhetFont } from "scenerystack/scenery-phet";
+import type { Bounds2 } from "scenerystack/dot";
 import { Shape } from "scenerystack/kite";
-import { ModelViewTransform2 } from "scenerystack/phetcommon";
-import { Bounds2 } from "scenerystack/dot";
+import type { ModelViewTransform2 } from "scenerystack/phetcommon";
+import { Line, Node, Path, Text } from "scenerystack/scenery";
+import { ArrowNode, PhetFont } from "scenerystack/scenery-phet";
 import ResonanceColors from "../ResonanceColors.js";
 
 // Default grid options
@@ -89,17 +89,13 @@ export class OscillatorGridNode extends Node {
     const minorSpacing = this.majorSpacing / this.minorDivisionsPerMajor;
 
     // Calculate view spacing for minor grid lines
-    const minorSpacingView = Math.abs(
-      this.modelViewTransform.modelToViewDeltaY(minorSpacing),
-    );
+    const minorSpacingView = Math.abs(this.modelViewTransform.modelToViewDeltaY(minorSpacing));
 
     // Grid bounds in view coordinates (using modelViewTransform)
     const gridLeft = this.gridCenterX - this.gridWidth / 2;
     const gridRight = this.gridCenterX + this.gridWidth / 2;
     const gridTopView = this.modelViewTransform.modelToViewY(this.gridTopModel);
-    const gridBottomView = this.modelViewTransform.modelToViewY(
-      this.gridBottomModel,
-    );
+    const gridBottomView = this.modelViewTransform.modelToViewY(this.gridBottomModel);
 
     // Calculate equilibrium Y position (model Y=0) using modelViewTransform
     const equilibriumViewY = this.modelViewTransform.modelToViewY(0);
@@ -110,31 +106,23 @@ export class OscillatorGridNode extends Node {
 
     // Draw horizontal lines based on model coordinates
     // Iterate through model Y values from bottom to top
-    const numMajorLinesBelow = Math.ceil(
-      Math.abs(this.gridBottomModel) / this.majorSpacing,
-    );
+    const numMajorLinesBelow = Math.ceil(Math.abs(this.gridBottomModel) / this.majorSpacing);
     const numMajorLinesAbove = Math.ceil(this.gridTopModel / this.majorSpacing);
 
-    for (
-      let majorIndex = -numMajorLinesBelow;
-      majorIndex <= numMajorLinesAbove;
-      majorIndex++
-    ) {
+    for (let majorIndex = -numMajorLinesBelow; majorIndex <= numMajorLinesAbove; majorIndex++) {
       // Draw minor lines between this major and the next
-      for (
-        let minorIndex = 0;
-        minorIndex < this.minorDivisionsPerMajor;
-        minorIndex++
-      ) {
-        const modelY =
-          majorIndex * this.majorSpacing + minorIndex * minorSpacing;
-        if (modelY < this.gridBottomModel || modelY > this.gridTopModel)
+      for (let minorIndex = 0; minorIndex < this.minorDivisionsPerMajor; minorIndex++) {
+        const modelY = majorIndex * this.majorSpacing + minorIndex * minorSpacing;
+        if (modelY < this.gridBottomModel || modelY > this.gridTopModel) {
           continue;
+        }
 
         const viewY = this.modelViewTransform.modelToViewY(modelY);
 
         // Skip the y=0 line (will be drawn separately as bold)
-        if (Math.abs(modelY) < Y_ZERO_THRESHOLD) continue;
+        if (Math.abs(modelY) < Y_ZERO_THRESHOLD) {
+          continue;
+        }
 
         const isMajor = minorIndex === 0;
         const shape = isMajor ? majorLinesShape : minorLinesShape;
@@ -149,7 +137,9 @@ export class OscillatorGridNode extends Node {
 
     for (let i = -numLinesLeft; i <= numLinesRight; i++) {
       const x = this.gridCenterX + i * minorSpacingView;
-      if (x < gridLeft || x > gridRight) continue;
+      if (x < gridLeft || x > gridRight) {
+        continue;
+      }
 
       const isMajor = i % this.minorDivisionsPerMajor === 0;
       const shape = isMajor ? majorLinesShape : minorLinesShape;
@@ -171,16 +161,10 @@ export class OscillatorGridNode extends Node {
     });
 
     // Bold y=0 (equilibrium) line - positioned using modelViewTransform
-    const equilibriumLine = new Line(
-      gridLeft,
-      equilibriumViewY,
-      gridRight,
-      equilibriumViewY,
-      {
-        stroke: ResonanceColors.equilibriumProperty,
-        lineWidth: EQUILIBRIUM_LINE_WIDTH,
-      },
-    );
+    const equilibriumLine = new Line(gridLeft, equilibriumViewY, gridRight, equilibriumViewY, {
+      stroke: ResonanceColors.equilibriumProperty,
+      lineWidth: EQUILIBRIUM_LINE_WIDTH,
+    });
 
     // Add grid lines to the node
     this.addChild(minorLinesNode);
@@ -202,14 +186,12 @@ export class OscillatorGridNode extends Node {
 
     // Find the top two major grid lines using model coordinates
     // Use the top of the grid and one major spacing below it
-    const topMajorLineModel =
-      Math.floor(this.gridTopModel / this.majorSpacing) * this.majorSpacing;
+    const topMajorLineModel = Math.floor(this.gridTopModel / this.majorSpacing) * this.majorSpacing;
     const nextMajorLineModel = topMajorLineModel - this.majorSpacing;
 
     // Convert to view coordinates using modelViewTransform
     const arrowTop = this.modelViewTransform.modelToViewY(topMajorLineModel);
-    const arrowBottom =
-      this.modelViewTransform.modelToViewY(nextMajorLineModel);
+    const arrowBottom = this.modelViewTransform.modelToViewY(nextMajorLineModel);
 
     const arrow = new ArrowNode(indicatorX, arrowTop, indicatorX, arrowBottom, {
       doubleHead: true,

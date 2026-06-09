@@ -1,6 +1,6 @@
-import { defineConfig } from "vite";
 import { mkdir, writeFile } from "fs/promises";
 import { join } from "path";
+import { defineConfig } from "vite";
 
 // Simple splash SVG placeholder for brands
 const splashSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400">
@@ -38,8 +38,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         // Split scenerystack into its own chunk for better caching and to address chunk size warning
-        manualChunks: (id) =>
-          id.includes("node_modules/scenerystack") ? "scenerystack" : undefined,
+        manualChunks: (id) => (id.includes("node_modules/scenerystack") ? "scenerystack" : undefined),
       },
     },
   },

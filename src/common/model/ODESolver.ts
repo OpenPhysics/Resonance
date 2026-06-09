@@ -38,11 +38,7 @@ export abstract class ODESolver {
    * @param model - the model to integrate
    * @param onSubStep - optional callback invoked at each internal sub-step
    */
-  public abstract step(
-    dt: number,
-    model: ODEModel,
-    onSubStep?: SubStepCallback,
-  ): void;
+  public abstract step(dt: number, model: ODEModel, onSubStep?: SubStepCallback): void;
 
   /**
    * Set the fixed timestep for the solver (if applicable)

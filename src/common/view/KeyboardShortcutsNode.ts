@@ -5,17 +5,17 @@
  */
 
 import {
-  TwoColumnKeyboardHelpContent,
-  SliderControlsKeyboardHelpSection,
   BasicActionsKeyboardHelpSection,
+  KeyboardHelpIconFactory,
   KeyboardHelpSection,
   KeyboardHelpSectionRow,
-  KeyboardHelpIconFactory,
-  TextKeyNode,
   LetterKeyNode,
+  SliderControlsKeyboardHelpSection,
+  TextKeyNode,
+  TwoColumnKeyboardHelpContent,
 } from "scenerystack/scenery-phet";
-import resonance from "../ResonanceNamespace.js";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
+import resonance from "../ResonanceNamespace.js";
 
 // Layout constants
 const COLUMN_SPACING = 20;
@@ -41,9 +41,7 @@ class SimulationShortcutsKeyboardHelpSection extends KeyboardHelpSection {
     // Large frequency steps with Shift + arrows
     const largeStepRow = KeyboardHelpSectionRow.labelWithIcon(
       ResonanceStrings.keyboardHelp.largeFrequencyStepsStringProperty,
-      KeyboardHelpIconFactory.shiftPlusIcon(
-        KeyboardHelpIconFactory.upDownArrowKeysRowIcon(),
-      ),
+      KeyboardHelpIconFactory.shiftPlusIcon(KeyboardHelpIconFactory.upDownArrowKeysRowIcon()),
     );
 
     // Reset with R key
@@ -82,9 +80,7 @@ class DragObjectsKeyboardHelpSection extends KeyboardHelpSection {
     // Fine control with Shift
     const fineRow = KeyboardHelpSectionRow.labelWithIcon(
       ResonanceStrings.keyboardHelp.fineMovementStringProperty,
-      KeyboardHelpIconFactory.shiftPlusIcon(
-        KeyboardHelpIconFactory.arrowOrWasdKeysRowIcon(),
-      ),
+      KeyboardHelpIconFactory.shiftPlusIcon(KeyboardHelpIconFactory.arrowOrWasdKeysRowIcon()),
     );
 
     super(ResonanceStrings.keyboardHelp.dragControlsStringProperty, [moveRow, fineRow]);
@@ -107,14 +103,10 @@ export class KeyboardShortcutsNode extends TwoColumnKeyboardHelpContent {
 
     // Left column: simulation + drag controls
     // Right column: slider + basic actions
-    super(
-      [simulationSection, dragSection],
-      [sliderControlsSection, basicActionsSection],
-      {
-        columnSpacing: COLUMN_SPACING,
-        sectionSpacing: SECTION_SPACING,
-      },
-    );
+    super([simulationSection, dragSection], [sliderControlsSection, basicActionsSection], {
+      columnSpacing: COLUMN_SPACING,
+      sectionSpacing: SECTION_SPACING,
+    });
   }
 }
 

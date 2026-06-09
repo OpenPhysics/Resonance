@@ -8,19 +8,26 @@
  * - Phase Analysis
  */
 
-import { Node, Text, Rectangle, Color, LinearGradient } from "scenerystack/scenery";
-import { DragListener, KeyboardDragListener, Path } from "scenerystack/scenery";
+import { type NumberProperty, Property } from "scenerystack/axon";
+import { type Bounds2, Vector2, Vector2Property } from "scenerystack/dot";
+import type { ModelViewTransform2 } from "scenerystack/phetcommon";
+import {
+  Color,
+  DragListener,
+  KeyboardDragListener,
+  LinearGradient,
+  Node,
+  type Path,
+  Rectangle,
+  Text,
+} from "scenerystack/scenery";
 import { ParametricSpringNode, PhetFont } from "scenerystack/scenery-phet";
-import { Vector2Property } from "scenerystack/dot";
-import { Vector2, Bounds2 } from "scenerystack/dot";
-import { Property, NumberProperty } from "scenerystack/axon";
-import { ModelViewTransform2 } from "scenerystack/phetcommon";
-import { ResonanceModel } from "../model/index.js";
+import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
 import { BaseOscillatorScreenModel } from "../model/BaseOscillatorScreenModel.js";
+import type { ResonanceModel } from "../model/index.js";
 import ResonanceColors from "../ResonanceColors.js";
 import ResonanceConstants from "../ResonanceConstants.js";
 import { CircularUpdateGuard } from "../util/index.js";
-import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
 
 // Named constants for magic numbers
 const MASS_BOX_CORNER_RADIUS = 3;
@@ -44,13 +51,13 @@ export interface ResonatorBuildResult {
   massNodes: Node[];
 }
 
-export class OscillatorResonatorNodeBuilder {
+export const OscillatorResonatorNodeBuilder = {
   /**
    * Calculate mass box size based on mass value using cubic root scaling.
    * Cubic root scaling prevents large masses from becoming too large visually,
    * which helps avoid overlap between adjacent resonators.
    */
-  public static calculateMassSize(mass: number): number {
+  calculateMassSize(mass: number): number {
     const minMass = ResonanceConstants.MASS_RANGE.min;
     const maxMass = ResonanceConstants.MASS_RANGE.max;
     const minSize = ResonanceConstants.MIN_MASS_SIZE;
@@ -61,39 +68,33 @@ export class OscillatorResonatorNodeBuilder {
     const size = minSize + (maxSize - minSize) * Math.cbrt(normalizedMass);
 
     return size;
-  }
+  },
 
   /**
    * Creates a spring node for a resonator with line width varying by spring constant.
    */
-  public static createSpringNode(
+  createSpringNode(
     resonatorModel: ResonanceModel,
     index: number,
     modelViewTransform: ModelViewTransform2,
   ): ParametricSpringNode {
     // Generate accessible label with resonator number
     const springNumber = index + 1;
-    const springLabel =
-      ResonanceStrings.a11y.resonator.springLabelStringProperty.value.replace(
-        "{{number}}",
-        String(springNumber),
-      );
-    const springDescription =
-      ResonanceStrings.a11y.resonator.springDescriptionStringProperty.value.replace(
-        /\{\{number\}\}/g,
-        String(springNumber),
-      );
+    const springLabel = ResonanceStrings.a11y.resonator.springLabelStringProperty.value.replace(
+      "{{number}}",
+      String(springNumber),
+    );
+    const springDescription = ResonanceStrings.a11y.resonator.springDescriptionStringProperty.value.replace(
+      /\{\{number\}\}/g,
+      String(springNumber),
+    );
 
     // Convert spring end lengths from model coordinates (meters) to view coordinates (pixels)
     const leftEndLengthView = Math.abs(
-      modelViewTransform.modelToViewDeltaY(
-        ResonanceConstants.SPRING_LEFT_END_LENGTH_MODEL,
-      ),
+      modelViewTransform.modelToViewDeltaY(ResonanceConstants.SPRING_LEFT_END_LENGTH_MODEL),
     );
     const rightEndLengthView = Math.abs(
-      modelViewTransform.modelToViewDeltaY(
-        ResonanceConstants.SPRING_RIGHT_END_LENGTH_MODEL,
-      ),
+      modelViewTransform.modelToViewDeltaY(ResonanceConstants.SPRING_RIGHT_END_LENGTH_MODEL),
     );
 
     const springNode = new ParametricSpringNode({
@@ -127,9 +128,7 @@ export class OscillatorResonatorNodeBuilder {
     const frontPath = springNode.children[1] as Path;
 
     // Get the spring radius for gradient calculations
-    const yRadius =
-      ResonanceConstants.SPRING_RADIUS *
-      ResonanceConstants.SPRING_ASPECT_RATIO;
+    const yRadius = ResonanceConstants.SPRING_RADIUS * ResonanceConstants.SPRING_ASPECT_RATIO;
 
     resonatorModel.springConstantProperty.link((springConstant: number) => {
       const minK = ResonanceConstants.SPRING_CONSTANT_RANGE.min;
@@ -142,10 +141,7 @@ export class OscillatorResonatorNodeBuilder {
       const stiffBackColor = ResonanceColors.springStiffBackProperty.value;
 
       // Normalize spring constant to [0, 1] range, clamped to handle edge cases
-      const normalizedK = Math.max(
-        0,
-        Math.min(1, (springConstant - minK) / (maxK - minK)),
-      );
+      const normalizedK = Math.max(0, Math.min(1, (springConstant - minK) / (maxK - minK)));
 
       // Thickness uses square root scaling for more dramatic change at low k
       // sqrt(0) = 0, sqrt(0.25) = 0.5, sqrt(1) = 1
@@ -153,22 +149,12 @@ export class OscillatorResonatorNodeBuilder {
       const thicknessRatio = Math.sqrt(normalizedK);
       const lineWidth =
         ResonanceConstants.SPRING_LINE_WIDTH_MIN +
-        thicknessRatio *
-          (ResonanceConstants.SPRING_LINE_WIDTH_MAX -
-            ResonanceConstants.SPRING_LINE_WIDTH_MIN);
+        thicknessRatio * (ResonanceConstants.SPRING_LINE_WIDTH_MAX - ResonanceConstants.SPRING_LINE_WIDTH_MIN);
 
       // Color transitions linearly from red to purple over entire range
-      const frontColor = Color.interpolateRGBA(
-        softColor,
-        stiffColor,
-        normalizedK,
-      );
+      const frontColor = Color.interpolateRGBA(softColor, stiffColor, normalizedK);
       const middleColor = frontColor;
-      const backColor = Color.interpolateRGBA(
-        softBackColor,
-        stiffBackColor,
-        normalizedK,
-      );
+      const backColor = Color.interpolateRGBA(softBackColor, stiffBackColor, normalizedK);
 
       // Update line width
       springNode.lineWidthProperty.value = lineWidth;
@@ -187,44 +173,30 @@ export class OscillatorResonatorNodeBuilder {
     });
 
     return springNode;
-  }
+  },
 
   /**
    * Creates a mass node for a resonator with drag handling and position sync.
    */
-  public static createMassNode(
-    resonatorModel: ResonanceModel,
-    index: number,
-    context: ResonatorBuildContext,
-  ): Node {
-    const { modelViewTransform, layoutBounds, selectedResonatorIndexProperty } =
-      context;
+  createMassNode(resonatorModel: ResonanceModel, index: number, context: ResonatorBuildContext): Node {
+    const { modelViewTransform, layoutBounds, selectedResonatorIndexProperty } = context;
 
     const massNode = new Node();
-    const initialMassSize = OscillatorResonatorNodeBuilder.calculateMassSize(
-      resonatorModel.massProperty.value,
-    );
+    const initialMassSize = OscillatorResonatorNodeBuilder.calculateMassSize(resonatorModel.massProperty.value);
     // Position the mass box so its bottom is at y=0 (local origin at bottom)
     // This way, when mass size changes, the bottom stays fixed and it grows upward
-    const massBox = new Rectangle(
-      -initialMassSize / 2,
-      -initialMassSize,
-      initialMassSize,
-      initialMassSize,
-      {
-        fill: ResonanceColors.massProperty,
-        stroke: ResonanceColors.massStrokeProperty,
-        lineWidth: ResonanceConstants.MASS_STROKE_LINE_WIDTH,
-        cornerRadius: MASS_BOX_CORNER_RADIUS,
-      },
-    );
+    const massBox = new Rectangle(-initialMassSize / 2, -initialMassSize, initialMassSize, initialMassSize, {
+      fill: ResonanceColors.massProperty,
+      stroke: ResonanceColors.massStrokeProperty,
+      lineWidth: ResonanceConstants.MASS_STROKE_LINE_WIDTH,
+      cornerRadius: MASS_BOX_CORNER_RADIUS,
+    });
     // Use a fixed font size based on max resonators to avoid label size changes
     const massLabel = new Text(`${index + 1}`, {
       font: new PhetFont({
         size: Math.max(
           ResonanceConstants.MASS_LABEL_FONT_SIZE_MIN,
-          ResonanceConstants.MASS_LABEL_FONT_SIZE_BASE -
-            BaseOscillatorScreenModel.MAX_RESONATORS * 2,
+          ResonanceConstants.MASS_LABEL_FONT_SIZE_BASE - BaseOscillatorScreenModel.MAX_RESONATORS * 2,
         ),
         weight: "bold",
       }),
@@ -243,9 +215,7 @@ export class OscillatorResonatorNodeBuilder {
 
     // Change label color when dragging to indicate selection
     resonatorModel.isDraggingProperty.link((isDragging: boolean) => {
-      massLabel.fill = isDragging
-        ? ResonanceColors.massLabelDraggingProperty
-        : ResonanceColors.massLabelProperty;
+      massLabel.fill = isDragging ? ResonanceColors.massLabelDraggingProperty : ResonanceColors.massLabelProperty;
     });
 
     // Add vertical drag listener using positionProperty
@@ -270,10 +240,7 @@ export class OscillatorResonatorNodeBuilder {
         const viewY = modelViewTransform.modelToViewY(modelPosition);
 
         // Keep x fixed, only update y (this is the bottom position)
-        massPositionProperty.value = new Vector2(
-          massPositionProperty.value.x,
-          viewY,
-        );
+        massPositionProperty.value = new Vector2(massPositionProperty.value.x, viewY);
       });
     });
 
@@ -309,16 +276,14 @@ export class OscillatorResonatorNodeBuilder {
     // Make focusable for keyboard navigation (tab key)
     // Generate accessible label and description with resonator number
     const massNumber = index + 1;
-    const accessibleMassLabel =
-      ResonanceStrings.a11y.resonator.massLabelStringProperty.value.replace(
-        "{{number}}",
-        String(massNumber),
-      );
-    const accessibleMassDescription =
-      ResonanceStrings.a11y.resonator.massDescriptionStringProperty.value.replace(
-        /\{\{number\}\}/g,
-        String(massNumber),
-      );
+    const accessibleMassLabel = ResonanceStrings.a11y.resonator.massLabelStringProperty.value.replace(
+      "{{number}}",
+      String(massNumber),
+    );
+    const accessibleMassDescription = ResonanceStrings.a11y.resonator.massDescriptionStringProperty.value.replace(
+      /\{\{number\}\}/g,
+      String(massNumber),
+    );
 
     massNode.tagName = "div";
     massNode.focusable = true;
@@ -342,16 +307,13 @@ export class OscillatorResonatorNodeBuilder {
     massNode.addInputListener(keyboardDragListener);
 
     return massNode;
-  }
+  },
 
   /**
    * Builds all resonator nodes (springs + masses) for MAX_RESONATORS.
    * Nodes are created once and visibility is controlled separately.
    */
-  public static buildResonators(
-    resonatorModels: ResonanceModel[],
-    context: ResonatorBuildContext,
-  ): ResonatorBuildResult {
+  buildResonators(resonatorModels: ResonanceModel[], context: ResonatorBuildContext): ResonatorBuildResult {
     const springNodes: ParametricSpringNode[] = [];
     const massNodes: Node[] = [];
 
@@ -362,22 +324,14 @@ export class OscillatorResonatorNodeBuilder {
       }
 
       // Create spring node
-      const springNode = OscillatorResonatorNodeBuilder.createSpringNode(
-        resonatorModel,
-        i,
-        context.modelViewTransform,
-      );
+      const springNode = OscillatorResonatorNodeBuilder.createSpringNode(resonatorModel, i, context.modelViewTransform);
       springNodes.push(springNode);
 
       // Create mass node
-      const massNode = OscillatorResonatorNodeBuilder.createMassNode(
-        resonatorModel,
-        i,
-        context,
-      );
+      const massNode = OscillatorResonatorNodeBuilder.createMassNode(resonatorModel, i, context);
       massNodes.push(massNode);
     }
 
     return { springNodes, massNodes };
-  }
-}
+  },
+};

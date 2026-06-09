@@ -156,9 +156,7 @@ class MockAudioContext {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   decodeAudioData(audioData: ArrayBuffer): Promise<AudioBuffer> {
-    return Promise.resolve(
-      this.createBuffer(2, 44100, 44100) as unknown as AudioBuffer,
-    );
+    return Promise.resolve(this.createBuffer(2, 44100, 44100) as unknown as AudioBuffer);
   }
 
   resume() {
@@ -188,8 +186,8 @@ HTMLCanvasElement.prototype.getContext = function (
 ): RenderingContext | null {
   if (contextId === "2d") {
     try {
-      // Try to use node-canvas
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      // Try to use node-canvas (lazy require so the dependency stays optional)
+      // biome-ignore lint/style/noCommonJs: optional canvas dependency is loaded lazily in the test setup
       const { createCanvas } = require("canvas");
       const canvas = createCanvas(this.width || 300, this.height || 150);
       return canvas.getContext("2d");
@@ -248,46 +246,27 @@ const mockBBox = {
 // Add getBBox to SVGElement prototype
 if (typeof SVGElement !== "undefined") {
   // @ts-expect-error - Adding mock method
-  SVGElement.prototype.getBBox = function () {
-    return { ...mockBBox };
-  };
+  SVGElement.prototype.getBBox = () => ({ ...mockBBox });
 
   // @ts-expect-error - Adding mock method
-  SVGElement.prototype.getComputedTextLength = function () {
-    return 100;
-  };
+  SVGElement.prototype.getComputedTextLength = () => 100;
 
   // @ts-expect-error - Adding mock method
-  SVGElement.prototype.getSubStringLength = function () {
-    return 10;
-  };
+  SVGElement.prototype.getSubStringLength = () => 10;
 }
 
 // Mock createElementNS for SVG elements
 const originalCreateElementNS = document.createElementNS;
-document.createElementNS = function (
-  namespaceURI: string | null,
-  qualifiedName: string,
-) {
-  const element = originalCreateElementNS.call(
-    document,
-    namespaceURI,
-    qualifiedName,
-  );
+document.createElementNS = (namespaceURI: string | null, qualifiedName: string) => {
+  const element = originalCreateElementNS.call(document, namespaceURI, qualifiedName);
 
   if (namespaceURI === "http://www.w3.org/2000/svg") {
     // @ts-expect-error - Adding mock method
-    element.getBBox = function () {
-      return { ...mockBBox };
-    };
+    element.getBBox = () => ({ ...mockBBox });
     // @ts-expect-error - Adding mock method
-    element.getComputedTextLength = function () {
-      return 100;
-    };
+    element.getComputedTextLength = () => 100;
     // @ts-expect-error - Adding mock method
-    element.getSubStringLength = function () {
-      return 10;
-    };
+    element.getSubStringLength = () => 10;
   }
 
   return element;

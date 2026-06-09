@@ -7,7 +7,7 @@
  * difference to estimate the local truncation error.
  */
 
-import { ODESolver, ODEModel, SubStepCallback } from "./ODESolver.js";
+import { type ODEModel, ODESolver, type SubStepCallback } from "./ODESolver.js";
 
 export class AdaptiveRK45Solver extends ODESolver {
   private maxTimestep: number = 0.01;
@@ -29,36 +29,16 @@ export class AdaptiveRK45Solver extends ODESolver {
   ];
 
   // 5th order solution coefficients
-  private readonly c5 = [
-    35 / 384,
-    0,
-    500 / 1113,
-    125 / 192,
-    -2187 / 6784,
-    11 / 84,
-    0,
-  ];
+  private readonly c5 = [35 / 384, 0, 500 / 1113, 125 / 192, -2187 / 6784, 11 / 84, 0];
 
   // 4th order solution coefficients (for error estimation)
-  private readonly c4 = [
-    5179 / 57600,
-    0,
-    7571 / 16695,
-    393 / 640,
-    -92097 / 339200,
-    187 / 2100,
-    1 / 40,
-  ];
+  private readonly c4 = [5179 / 57600, 0, 7571 / 16695, 393 / 640, -92097 / 339200, 187 / 2100, 1 / 40];
 
   /**
    * Integrate the system forward by dt using adaptive RK45
    * @param onSubStep - optional callback invoked after each accepted sub-step
    */
-  public override step(
-    dt: number,
-    model: ODEModel,
-    onSubStep?: SubStepCallback,
-  ): void {
+  public override step(dt: number, model: ODEModel, onSubStep?: SubStepCallback): void {
     // Handle negative dt for stepping backward in time
     const sign = dt >= 0 ? 1 : -1;
     const absDt = Math.abs(dt);
@@ -83,9 +63,7 @@ export class AdaptiveRK45Solver extends ODESolver {
 
       // Safety check
       if (currentTimestep < this.minTimestep) {
-        console.warn(
-          "AdaptiveRK45Solver: Timestep became too small, forcing step",
-        );
+        // Timestep became too small; force a single step over the remaining time
         this.forceStep(sign * remainingTime, model);
         elapsedTime = dt; // We've consumed all time
         onSubStep?.(elapsedTime, model.getState());
@@ -97,10 +75,7 @@ export class AdaptiveRK45Solver extends ODESolver {
   /**
    * Try to take a step, return success and suggested next timestep
    */
-  private tryStep(
-    dt: number,
-    model: ODEModel,
-  ): { success: boolean; nextTimestep: number } {
+  private tryStep(dt: number, model: ODEModel): { success: boolean; nextTimestep: number } {
     const state = model.getState();
     const n = state.length;
 
@@ -131,10 +106,7 @@ export class AdaptiveRK45Solver extends ODESolver {
       }
 
       // Evaluate derivatives
-      const derivatives: number[] = model.getDerivatives(
-        this.a[stage]! * dt,
-        tempState,
-      );
+      const derivatives: number[] = model.getDerivatives(this.a[stage]! * dt, tempState);
       for (let i = 0; i < n; i++) {
         k[stage]![i] = derivatives[i]!;
       }
@@ -173,11 +145,8 @@ export class AdaptiveRK45Solver extends ODESolver {
     } else {
       // Standard timestep adjustment formula
       const ratio = this.errorTolerance / maxError;
-      const factor = this.safetyFactor * Math.pow(ratio, 0.2);
-      nextTimestep = Math.min(
-        Math.max(dt * factor, this.minTimestep),
-        this.maxTimestep,
-      );
+      const factor = this.safetyFactor * ratio ** 0.2;
+      nextTimestep = Math.min(Math.max(dt * factor, this.minTimestep), this.maxTimestep);
     }
 
     // Accept or reject the step
@@ -199,28 +168,18 @@ export class AdaptiveRK45Solver extends ODESolver {
     // Simple RK4 step
     const k1: number[] = model.getDerivatives(0, state);
 
-    const temp2: number[] = Array.from(
-      { length: n },
-      (_, i) => state[i]! + k1[i]! * dt * 0.5,
-    );
+    const temp2: number[] = Array.from({ length: n }, (_, i) => state[i]! + k1[i]! * dt * 0.5);
     const k2: number[] = model.getDerivatives(dt * 0.5, temp2);
 
-    const temp3: number[] = Array.from(
-      { length: n },
-      (_, i) => state[i]! + k2[i]! * dt * 0.5,
-    );
+    const temp3: number[] = Array.from({ length: n }, (_, i) => state[i]! + k2[i]! * dt * 0.5);
     const k3: number[] = model.getDerivatives(dt * 0.5, temp3);
 
-    const temp4: number[] = Array.from(
-      { length: n },
-      (_, i) => state[i]! + k3[i]! * dt,
-    );
+    const temp4: number[] = Array.from({ length: n }, (_, i) => state[i]! + k3[i]! * dt);
     const k4: number[] = model.getDerivatives(dt, temp4);
 
     const newState: number[] = Array.from(
       { length: n },
-      (_, i) =>
-        state[i]! + ((k1[i]! + 2 * k2[i]! + 2 * k3[i]! + k4[i]!) * dt) / 6,
+      (_, i) => state[i]! + ((k1[i]! + 2 * k2[i]! + 2 * k3[i]! + k4[i]!) * dt) / 6,
     );
 
     model.setState(newState);

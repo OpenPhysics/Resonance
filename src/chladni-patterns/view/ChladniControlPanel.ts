@@ -5,18 +5,18 @@
  * Uses modular section components for better organization.
  */
 
-import { Node, VBox, Line } from "scenerystack/scenery";
+import type { Property, TReadOnlyProperty } from "scenerystack/axon";
+import type { Bounds2 } from "scenerystack/dot";
+import { Line, Node, VBox } from "scenerystack/scenery";
 import { Panel } from "scenerystack/sun";
-import { Property, TReadOnlyProperty } from "scenerystack/axon";
-import { Bounds2 } from "scenerystack/dot";
-import { ChladniModel } from "../model/ChladniModel.js";
 import ResonanceColors from "../../common/ResonanceColors.js";
 import ResonanceConstants from "../../common/ResonanceConstants.js";
+import type { ChladniModel } from "../model/ChladniModel.js";
 import {
-  MaterialSection,
+  DisplayOptionsSection,
   FrequencySection,
   GrainSection,
-  DisplayOptionsSection,
+  MaterialSection,
   ModalSelectorSection,
 } from "./controls/index.js";
 import type { ModeSelection } from "./ModalShapeNode.js";
@@ -64,13 +64,8 @@ export class ChladniControlPanel extends Panel {
 
   private readonly displayOptionsSection: DisplayOptionsSection;
   private readonly modalSelectorSection: ModalSelectorSection;
-  private readonly modalSeparator: Line;
 
-  public constructor(
-    model: ChladniModel,
-    layoutBounds: Bounds2,
-    options: ChladniControlPanelOptions,
-  ) {
+  public constructor(model: ChladniModel, layoutBounds: Bounds2, options: ChladniControlPanelOptions) {
     const comboBoxListParent = new Node();
 
     // Create sections using modular components
@@ -107,10 +102,7 @@ export class ChladniControlPanel extends Panel {
     });
 
     // Link modal section and separator visibility to preference
-    options.showModalControlsProperty.linkAttribute(
-      modalSelectorSection,
-      "visible",
-    );
+    options.showModalControlsProperty.linkAttribute(modalSelectorSection, "visible");
     options.showModalControlsProperty.linkAttribute(modalSeparator, "visible");
 
     super(controlPanelContent, {
@@ -128,11 +120,9 @@ export class ChladniControlPanel extends Panel {
     this.comboBoxListParent = comboBoxListParent;
     this.displayOptionsSection = displayOptionsSection;
     this.modalSelectorSection = modalSelectorSection;
-    this.modalSeparator = modalSeparator;
 
     // Expose display option properties from the section
-    this.showResonanceCurveProperty =
-      displayOptionsSection.showResonanceCurveProperty;
+    this.showResonanceCurveProperty = displayOptionsSection.showResonanceCurveProperty;
     this.showRulerProperty = displayOptionsSection.showRulerProperty;
     this.showGridProperty = displayOptionsSection.showGridProperty;
     this.showColormapProperty = displayOptionsSection.showColormapProperty;

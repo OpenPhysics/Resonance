@@ -7,23 +7,13 @@
  * - Resize handles
  */
 
-import { Vector2 } from "scenerystack/dot";
-import { Range } from "scenerystack/dot";
-import {
-  Rectangle,
-  DragListener,
-  type Pointer,
-  type Node,
-} from "scenerystack/scenery";
-import type {
-  ChartRectangle,
-  ChartTransform,
-  TickLabelSet,
-} from "scenerystack/bamboo";
-import { BooleanProperty } from "scenerystack/axon";
+import type { BooleanProperty } from "scenerystack/axon";
+import type { ChartRectangle, ChartTransform, TickLabelSet } from "scenerystack/bamboo";
+import { Range, Vector2 } from "scenerystack/dot";
+import { DragListener, type Node, type Pointer, Rectangle } from "scenerystack/scenery";
 import ResonanceColors from "../../ResonanceColors.js";
-import type GraphDataManager from "./GraphDataManager.js";
 import resonance from "../../ResonanceNamespace.js";
+import type GraphDataManager from "./GraphDataManager.js";
 
 /**
  * Configuration for the chart and its data management
@@ -128,9 +118,7 @@ export default class GraphInteractionHandler {
         const delta = event.domEvent!.deltaY;
 
         // Get mouse position relative to chart
-        const pointerPoint = this.chartRectangle.globalToLocalPoint(
-          event.pointer.point,
-        );
+        const pointerPoint = this.chartRectangle.globalToLocalPoint(event.pointer.point);
 
         // Zoom in or out
         if (delta < 0) {
@@ -167,11 +155,8 @@ export default class GraphInteractionHandler {
     const dragListener = new DragListener({
       start: (event) => {
         // Record the starting point in model coordinates
-        const viewPoint = this.chartRectangle.globalToLocalPoint(
-          event.pointer.point,
-        );
-        dragStartModelPoint =
-          this.chartTransform.viewToModelPosition(viewPoint);
+        const viewPoint = this.chartRectangle.globalToLocalPoint(event.pointer.point);
+        dragStartModelPoint = this.chartTransform.viewToModelPosition(viewPoint);
         dragStartXRange = this.chartTransform.modelXRange.copy();
         dragStartYRange = this.chartTransform.modelYRange.copy();
 
@@ -182,25 +167,16 @@ export default class GraphInteractionHandler {
       drag: (event) => {
         if (dragStartModelPoint && dragStartXRange && dragStartYRange) {
           // Get current point in model coordinates
-          const viewPoint = this.chartRectangle.globalToLocalPoint(
-            event.pointer.point,
-          );
-          const currentModelPoint =
-            this.chartTransform.viewToModelPosition(viewPoint);
+          const viewPoint = this.chartRectangle.globalToLocalPoint(event.pointer.point);
+          const currentModelPoint = this.chartTransform.viewToModelPosition(viewPoint);
 
           // Calculate the delta in model coordinates
           const deltaX = dragStartModelPoint.x - currentModelPoint.x;
           const deltaY = dragStartModelPoint.y - currentModelPoint.y;
 
           // Translate the ranges by the delta
-          const newXRange = new Range(
-            dragStartXRange.min + deltaX,
-            dragStartXRange.max + deltaX,
-          );
-          const newYRange = new Range(
-            dragStartYRange.min + deltaY,
-            dragStartYRange.max + deltaY,
-          );
+          const newXRange = new Range(dragStartXRange.min + deltaX, dragStartXRange.max + deltaX);
+          const newYRange = new Range(dragStartYRange.min + deltaY, dragStartYRange.max + deltaY);
 
           // Update the chart transform
           this.chartTransform.setModelXRange(newXRange);
@@ -241,9 +217,7 @@ export default class GraphInteractionHandler {
       down: (event) => {
         // Only track touch events (not mouse)
         if (event.pointer.type === "touch") {
-          const localPoint = this.chartRectangle.globalToLocalPoint(
-            event.pointer.point,
-          );
+          const localPoint = this.chartRectangle.globalToLocalPoint(event.pointer.point);
           activePointers.set(event.pointer, localPoint);
 
           // If we now have exactly 2 touches, start pinch gesture
@@ -264,59 +238,38 @@ export default class GraphInteractionHandler {
 
       move: (event) => {
         // Only handle touch events
-        if (
-          event.pointer.type === "touch" &&
-          activePointers.has(event.pointer)
-        ) {
-          const localPoint = this.chartRectangle.globalToLocalPoint(
-            event.pointer.point,
-          );
+        if (event.pointer.type === "touch" && activePointers.has(event.pointer)) {
+          const localPoint = this.chartRectangle.globalToLocalPoint(event.pointer.point);
           activePointers.set(event.pointer, localPoint);
 
           // If we have exactly 2 touches, perform pinch zoom
-          if (
-            activePointers.size === 2 &&
-            initialDistance &&
-            initialMidpoint &&
-            initialXRange &&
-            initialYRange
-          ) {
+          if (activePointers.size === 2 && initialDistance && initialMidpoint && initialXRange && initialYRange) {
             const points = Array.from(activePointers.values());
             const point0 = points[0];
             const point1 = points[1];
-            if (!point0 || !point1) return;
+            if (!(point0 && point1)) {
+              return;
+            }
             const currentDistance = point0.distance(point1);
 
             // Calculate zoom factor from distance ratio
             const zoomFactor = initialDistance / currentDistance;
 
             // Convert initial midpoint to model coordinates
-            const initialModelCenter =
-              this.chartTransform.viewToModelPosition(initialMidpoint);
+            const initialModelCenter = this.chartTransform.viewToModelPosition(initialMidpoint);
 
             // Calculate new ranges centered on the initial midpoint
-            const xMin =
-              initialModelCenter.x -
-              (initialModelCenter.x - initialXRange.min) * zoomFactor;
-            const xMax =
-              initialModelCenter.x +
-              (initialXRange.max - initialModelCenter.x) * zoomFactor;
-            const yMin =
-              initialModelCenter.y -
-              (initialModelCenter.y - initialYRange.min) * zoomFactor;
-            const yMax =
-              initialModelCenter.y +
-              (initialYRange.max - initialModelCenter.y) * zoomFactor;
+            const xMin = initialModelCenter.x - (initialModelCenter.x - initialXRange.min) * zoomFactor;
+            const xMax = initialModelCenter.x + (initialXRange.max - initialModelCenter.x) * zoomFactor;
+            const yMin = initialModelCenter.y - (initialModelCenter.y - initialYRange.min) * zoomFactor;
+            const yMax = initialModelCenter.y + (initialYRange.max - initialModelCenter.y) * zoomFactor;
 
             // Apply the zoom
             this.chartTransform.setModelXRange(new Range(xMin, xMax));
             this.chartTransform.setModelYRange(new Range(yMin, yMax));
 
             // Update tick spacing
-            this.dataManager.updateTickSpacing(
-              this.chartTransform.modelXRange,
-              this.chartTransform.modelYRange,
-            );
+            this.dataManager.updateTickSpacing(this.chartTransform.modelXRange, this.chartTransform.modelYRange);
 
             // Update trail
             this.dataManager.updateTrail();
@@ -394,75 +347,46 @@ export default class GraphInteractionHandler {
       },
 
       move: (event) => {
-        if (
-          event.pointer.type === "touch" &&
-          activePointers.has(event.pointer)
-        ) {
+        if (event.pointer.type === "touch" && activePointers.has(event.pointer)) {
           const globalPoint = event.pointer.point;
           activePointers.set(event.pointer, globalPoint);
 
-          if (
-            activePointers.size === 1 &&
-            singleTouchStartY !== null &&
-            initialYRange
-          ) {
+          if (activePointers.size === 1 && singleTouchStartY !== null && initialYRange) {
             // Single touch - vertical pan
             const deltaY = globalPoint.y - singleTouchStartY;
 
             // Convert delta to model coordinates
-            const modelDeltaY =
-              deltaY * (initialYRange.getLength() / this.graphHeight);
+            const modelDeltaY = deltaY * (initialYRange.getLength() / this.graphHeight);
 
-            const newYRange = new Range(
-              initialYRange.min + modelDeltaY,
-              initialYRange.max + modelDeltaY,
-            );
+            const newYRange = new Range(initialYRange.min + modelDeltaY, initialYRange.max + modelDeltaY);
 
             this.chartTransform.setModelYRange(newYRange);
-            this.dataManager.updateTickSpacing(
-              this.chartTransform.modelXRange,
-              newYRange,
-            );
+            this.dataManager.updateTickSpacing(this.chartTransform.modelXRange, newYRange);
             this.dataManager.updateTrail();
-          } else if (
-            activePointers.size === 2 &&
-            initialYDistance &&
-            initialYMidpoint !== null &&
-            initialYRange
-          ) {
+          } else if (activePointers.size === 2 && initialYDistance && initialYMidpoint !== null && initialYRange) {
             // Two touches - pinch zoom on Y-axis only
             const points = Array.from(activePointers.values());
             const point0 = points[0];
             const point1 = points[1];
-            if (!point0 || !point1) return;
+            if (!(point0 && point1)) {
+              return;
+            }
             const currentYDistance = Math.abs(point0.y - point1.y);
 
             // Calculate zoom factor from Y-distance ratio
             const zoomFactor = initialYDistance / currentYDistance;
 
             // Convert initial midpoint Y to model coordinates
-            const viewMidpoint = new Vector2(
-              this.graphWidth / 2,
-              initialYMidpoint,
-            );
-            const localMidpoint =
-              this.chartRectangle.globalToLocalPoint(viewMidpoint);
-            const modelMidpointY =
-              this.chartTransform.viewToModelPosition(localMidpoint).y;
+            const viewMidpoint = new Vector2(this.graphWidth / 2, initialYMidpoint);
+            const localMidpoint = this.chartRectangle.globalToLocalPoint(viewMidpoint);
+            const modelMidpointY = this.chartTransform.viewToModelPosition(localMidpoint).y;
 
             // Calculate new Y range centered on the midpoint
-            const yMin =
-              modelMidpointY -
-              (modelMidpointY - initialYRange.min) * zoomFactor;
-            const yMax =
-              modelMidpointY +
-              (initialYRange.max - modelMidpointY) * zoomFactor;
+            const yMin = modelMidpointY - (modelMidpointY - initialYRange.min) * zoomFactor;
+            const yMax = modelMidpointY + (initialYRange.max - modelMidpointY) * zoomFactor;
 
             this.chartTransform.setModelYRange(new Range(yMin, yMax));
-            this.dataManager.updateTickSpacing(
-              this.chartTransform.modelXRange,
-              new Range(yMin, yMax),
-            );
+            this.dataManager.updateTickSpacing(this.chartTransform.modelXRange, new Range(yMin, yMax));
             this.dataManager.updateTrail();
           }
         }
@@ -514,8 +438,7 @@ export default class GraphInteractionHandler {
           const deltaY = event.pointer.point.y - mouseDragStartY;
 
           // Convert delta to model coordinates
-          const modelDeltaY =
-            deltaY * (mouseDragInitialYRange.getLength() / this.graphHeight);
+          const modelDeltaY = deltaY * (mouseDragInitialYRange.getLength() / this.graphHeight);
 
           const newYRange = new Range(
             mouseDragInitialYRange.min + modelDeltaY,
@@ -523,10 +446,7 @@ export default class GraphInteractionHandler {
           );
 
           this.chartTransform.setModelYRange(newYRange);
-          this.dataManager.updateTickSpacing(
-            this.chartTransform.modelXRange,
-            newYRange,
-          );
+          this.dataManager.updateTickSpacing(this.chartTransform.modelXRange, newYRange);
           this.dataManager.updateTrail();
         }
       },
@@ -552,10 +472,8 @@ export default class GraphInteractionHandler {
         // Get mouse position on Y-axis
         const mouseY = event.pointer.point.y;
         const viewMidpoint = new Vector2(this.graphWidth / 2, mouseY);
-        const localMidpoint =
-          this.chartRectangle.globalToLocalPoint(viewMidpoint);
-        const modelCenterY =
-          this.chartTransform.viewToModelPosition(localMidpoint).y;
+        const localMidpoint = this.chartRectangle.globalToLocalPoint(viewMidpoint);
+        const modelCenterY = this.chartTransform.viewToModelPosition(localMidpoint).y;
 
         const currentRange = this.chartTransform.modelYRange;
 
@@ -563,18 +481,13 @@ export default class GraphInteractionHandler {
         const zoomFactor = delta < 0 ? this.zoomFactor : 1 / this.zoomFactor;
 
         // Calculate new Y range centered on mouse position
-        const yMin =
-          modelCenterY - (modelCenterY - currentRange.min) / zoomFactor;
-        const yMax =
-          modelCenterY + (currentRange.max - modelCenterY) / zoomFactor;
+        const yMin = modelCenterY - (modelCenterY - currentRange.min) / zoomFactor;
+        const yMax = modelCenterY + (currentRange.max - modelCenterY) / zoomFactor;
 
         const newYRange = new Range(yMin, yMax);
 
         this.chartTransform.setModelYRange(newYRange);
-        this.dataManager.updateTickSpacing(
-          this.chartTransform.modelXRange,
-          newYRange,
-        );
+        this.dataManager.updateTickSpacing(this.chartTransform.modelXRange, newYRange);
         this.dataManager.updateTrail();
         this.dataManager.setManuallyZoomed(true);
       },
@@ -621,75 +534,46 @@ export default class GraphInteractionHandler {
       },
 
       move: (event) => {
-        if (
-          event.pointer.type === "touch" &&
-          activePointers.has(event.pointer)
-        ) {
+        if (event.pointer.type === "touch" && activePointers.has(event.pointer)) {
           const globalPoint = event.pointer.point;
           activePointers.set(event.pointer, globalPoint);
 
-          if (
-            activePointers.size === 1 &&
-            singleTouchStartX !== null &&
-            initialXRange
-          ) {
+          if (activePointers.size === 1 && singleTouchStartX !== null && initialXRange) {
             // Single touch - horizontal pan
             const deltaX = globalPoint.x - singleTouchStartX;
 
             // Convert delta to model coordinates
-            const modelDeltaX =
-              -deltaX * (initialXRange.getLength() / this.graphWidth);
+            const modelDeltaX = -deltaX * (initialXRange.getLength() / this.graphWidth);
 
-            const newXRange = new Range(
-              initialXRange.min + modelDeltaX,
-              initialXRange.max + modelDeltaX,
-            );
+            const newXRange = new Range(initialXRange.min + modelDeltaX, initialXRange.max + modelDeltaX);
 
             this.chartTransform.setModelXRange(newXRange);
-            this.dataManager.updateTickSpacing(
-              newXRange,
-              this.chartTransform.modelYRange,
-            );
+            this.dataManager.updateTickSpacing(newXRange, this.chartTransform.modelYRange);
             this.dataManager.updateTrail();
-          } else if (
-            activePointers.size === 2 &&
-            initialXDistance &&
-            initialXMidpoint !== null &&
-            initialXRange
-          ) {
+          } else if (activePointers.size === 2 && initialXDistance && initialXMidpoint !== null && initialXRange) {
             // Two touches - pinch zoom on X-axis only
             const points = Array.from(activePointers.values());
             const point0 = points[0];
             const point1 = points[1];
-            if (!point0 || !point1) return;
+            if (!(point0 && point1)) {
+              return;
+            }
             const currentXDistance = Math.abs(point0.x - point1.x);
 
             // Calculate zoom factor from X-distance ratio
             const zoomFactor = initialXDistance / currentXDistance;
 
             // Convert initial midpoint X to model coordinates
-            const viewMidpoint = new Vector2(
-              initialXMidpoint,
-              this.graphHeight / 2,
-            );
-            const localMidpoint =
-              this.chartRectangle.globalToLocalPoint(viewMidpoint);
-            const modelMidpointX =
-              this.chartTransform.viewToModelPosition(localMidpoint).x;
+            const viewMidpoint = new Vector2(initialXMidpoint, this.graphHeight / 2);
+            const localMidpoint = this.chartRectangle.globalToLocalPoint(viewMidpoint);
+            const modelMidpointX = this.chartTransform.viewToModelPosition(localMidpoint).x;
 
             // Calculate new X range centered on the midpoint
-            const xMin =
-              modelMidpointX -
-              (modelMidpointX - initialXRange.min) * zoomFactor;
-            const xMax =
-              modelMidpointX +
-              (initialXRange.max - modelMidpointX) * zoomFactor;
+            const xMin = modelMidpointX - (modelMidpointX - initialXRange.min) * zoomFactor;
+            const xMax = modelMidpointX + (initialXRange.max - modelMidpointX) * zoomFactor;
 
             this.chartTransform.setModelXRange(new Range(xMin, xMax));
-            this.dataManager.updateTickSpacing(
-              new Range(xMin, xMax),
-              this.chartTransform.modelYRange,
-            );
+            this.dataManager.updateTickSpacing(new Range(xMin, xMax), this.chartTransform.modelYRange);
             this.dataManager.updateTrail();
           }
         }
@@ -741,8 +625,7 @@ export default class GraphInteractionHandler {
           const deltaX = event.pointer.point.x - mouseDragStartX;
 
           // Convert delta to model coordinates
-          const modelDeltaX =
-            -deltaX * (mouseDragInitialXRange.getLength() / this.graphWidth);
+          const modelDeltaX = -deltaX * (mouseDragInitialXRange.getLength() / this.graphWidth);
 
           const newXRange = new Range(
             mouseDragInitialXRange.min + modelDeltaX,
@@ -750,10 +633,7 @@ export default class GraphInteractionHandler {
           );
 
           this.chartTransform.setModelXRange(newXRange);
-          this.dataManager.updateTickSpacing(
-            newXRange,
-            this.chartTransform.modelYRange,
-          );
+          this.dataManager.updateTickSpacing(newXRange, this.chartTransform.modelYRange);
           this.dataManager.updateTrail();
         }
       },
@@ -779,10 +659,8 @@ export default class GraphInteractionHandler {
         // Get mouse position on X-axis
         const mouseX = event.pointer.point.x;
         const viewMidpoint = new Vector2(mouseX, this.graphHeight / 2);
-        const localMidpoint =
-          this.chartRectangle.globalToLocalPoint(viewMidpoint);
-        const modelCenterX =
-          this.chartTransform.viewToModelPosition(localMidpoint).x;
+        const localMidpoint = this.chartRectangle.globalToLocalPoint(viewMidpoint);
+        const modelCenterX = this.chartTransform.viewToModelPosition(localMidpoint).x;
 
         const currentRange = this.chartTransform.modelXRange;
 
@@ -790,18 +668,13 @@ export default class GraphInteractionHandler {
         const zoomFactor = delta < 0 ? this.zoomFactor : 1 / this.zoomFactor;
 
         // Calculate new X range centered on mouse position
-        const xMin =
-          modelCenterX - (modelCenterX - currentRange.min) / zoomFactor;
-        const xMax =
-          modelCenterX + (currentRange.max - modelCenterX) / zoomFactor;
+        const xMin = modelCenterX - (modelCenterX - currentRange.min) / zoomFactor;
+        const xMax = modelCenterX + (currentRange.max - modelCenterX) / zoomFactor;
 
         const newXRange = new Range(xMin, xMax);
 
         this.chartTransform.setModelXRange(newXRange);
-        this.dataManager.updateTickSpacing(
-          newXRange,
-          this.chartTransform.modelYRange,
-        );
+        this.dataManager.updateTickSpacing(newXRange, this.chartTransform.modelYRange);
         this.dataManager.updateTrail();
         this.dataManager.setManuallyZoomed(true);
       },
@@ -858,20 +731,12 @@ export default class GraphInteractionHandler {
     ];
 
     corners.forEach((corner, index) => {
-      const handle = new Rectangle(
-        corner.x + handleOffset,
-        corner.y + handleOffset,
-        handleSize,
-        handleSize,
-        2,
-        2,
-        {
-          fill: ResonanceColors.controlPanelFillProperty,
-          stroke: ResonanceColors.controlPanelStrokeProperty,
-          lineWidth: 2,
-          cursor: corner.cursor,
-        },
-      );
+      const handle = new Rectangle(corner.x + handleOffset, corner.y + handleOffset, handleSize, handleSize, 2, 2, {
+        fill: ResonanceColors.controlPanelFillProperty,
+        stroke: ResonanceColors.controlPanelStrokeProperty,
+        lineWidth: 2,
+        cursor: corner.cursor,
+      });
 
       this.resizeHandles.push(handle);
       this.setupResizeHandleDrag(handle, index);
@@ -905,7 +770,9 @@ export default class GraphInteractionHandler {
       },
 
       drag: (event) => {
-        if (!dragStartGraphBounds || !dragStartPointerPoint) return;
+        if (!(dragStartGraphBounds && dragStartPointerPoint)) {
+          return;
+        }
 
         const delta = event.pointer.point.minus(dragStartPointerPoint);
         let newWidth = dragStartGraphBounds.width;
@@ -921,35 +788,23 @@ export default class GraphInteractionHandler {
         switch (cornerIndex) {
           case 0: // Top-left
             newWidth = Math.max(minWidth, dragStartGraphBounds.width - delta.x);
-            newHeight = Math.max(
-              minHeight,
-              dragStartGraphBounds.height - delta.y,
-            );
+            newHeight = Math.max(minHeight, dragStartGraphBounds.height - delta.y);
             deltaX = dragStartGraphBounds.width - newWidth;
             deltaY = dragStartGraphBounds.height - newHeight;
             break;
           case 1: // Top-right
             newWidth = Math.max(minWidth, dragStartGraphBounds.width + delta.x);
-            newHeight = Math.max(
-              minHeight,
-              dragStartGraphBounds.height - delta.y,
-            );
+            newHeight = Math.max(minHeight, dragStartGraphBounds.height - delta.y);
             deltaY = dragStartGraphBounds.height - newHeight;
             break;
           case 2: // Bottom-left
             newWidth = Math.max(minWidth, dragStartGraphBounds.width - delta.x);
-            newHeight = Math.max(
-              minHeight,
-              dragStartGraphBounds.height + delta.y,
-            );
+            newHeight = Math.max(minHeight, dragStartGraphBounds.height + delta.y);
             deltaX = dragStartGraphBounds.width - newWidth;
             break;
           case 3: // Bottom-right
             newWidth = Math.max(minWidth, dragStartGraphBounds.width + delta.x);
-            newHeight = Math.max(
-              minHeight,
-              dragStartGraphBounds.height + delta.y,
-            );
+            newHeight = Math.max(minHeight, dragStartGraphBounds.height + delta.y);
             break;
         }
 
@@ -996,12 +851,7 @@ export default class GraphInteractionHandler {
     this.resizeHandles.forEach((handle, index) => {
       const corner = corners[index];
       if (corner) {
-        handle.setRect(
-          corner.x + handleOffset,
-          corner.y + handleOffset,
-          12,
-          12,
-        );
+        handle.setRect(corner.x + handleOffset, corner.y + handleOffset, 12, 12);
       }
     });
   }
@@ -1019,11 +869,7 @@ export default class GraphInteractionHandler {
    * @param centerPoint - Point to zoom around (in view coordinates)
    * @param setManualFlag - Whether to set the manual zoom flag (default: true)
    */
-  private zoom(
-    factor: number,
-    centerPoint: Vector2,
-    setManualFlag: boolean = true,
-  ): void {
+  private zoom(factor: number, centerPoint: Vector2, setManualFlag: boolean = true): void {
     if (setManualFlag) {
       this.dataManager.setManuallyZoomed(true);
     }
@@ -1103,28 +949,16 @@ export default class GraphInteractionHandler {
 
     switch (direction) {
       case "left":
-        newXRange = new Range(
-          currentXRange.min - xDelta,
-          currentXRange.max - xDelta,
-        );
+        newXRange = new Range(currentXRange.min - xDelta, currentXRange.max - xDelta);
         break;
       case "right":
-        newXRange = new Range(
-          currentXRange.min + xDelta,
-          currentXRange.max + xDelta,
-        );
+        newXRange = new Range(currentXRange.min + xDelta, currentXRange.max + xDelta);
         break;
       case "up":
-        newYRange = new Range(
-          currentYRange.min + yDelta,
-          currentYRange.max + yDelta,
-        );
+        newYRange = new Range(currentYRange.min + yDelta, currentYRange.max + yDelta);
         break;
       case "down":
-        newYRange = new Range(
-          currentYRange.min - yDelta,
-          currentYRange.max - yDelta,
-        );
+        newYRange = new Range(currentYRange.min - yDelta, currentYRange.max - yDelta);
         break;
     }
 

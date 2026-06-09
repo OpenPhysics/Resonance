@@ -2,15 +2,15 @@
 // order: init.ts => assert.ts => splash.ts => brand.ts => everything else (here)
 import "./brand.js";
 
-import { onReadyToLaunch, Sim, PreferencesModel } from "scenerystack/sim";
+import { onReadyToLaunch, PreferencesModel, Sim } from "scenerystack/sim";
 import { Tandem } from "scenerystack/tandem";
-import { SingleOscillatorScreen } from "./single-oscillator/SingleOscillatorScreen.js";
-import { MultipleOscillatorsScreen } from "./multiple-oscillators/MultipleOscillatorsScreen.js";
-import { PhaseAnalysisScreen } from "./phase-analysis/PhaseAnalysisScreen.js";
 import { ChladniScreen } from "./chladni-patterns/ChladniScreen.js";
 import { ResonanceStrings } from "./i18n/ResonanceStrings.js";
+import { MultipleOscillatorsScreen } from "./multiple-oscillators/MultipleOscillatorsScreen.js";
+import { PhaseAnalysisScreen } from "./phase-analysis/PhaseAnalysisScreen.js";
 import { ResonancePreferencesModel } from "./preferences/ResonancePreferencesModel.js";
 import { ResonancePreferencesNode } from "./preferences/ResonancePreferencesNode.js";
+import { SingleOscillatorScreen } from "./single-oscillator/SingleOscillatorScreen.js";
 
 onReadyToLaunch(() => {
   const resonancePreferences = new ResonancePreferencesModel();
@@ -37,8 +37,7 @@ onReadyToLaunch(() => {
       simulationOptions: {
         customPreferences: [
           {
-            createContent: (_tandem: Tandem) =>
-              new ResonancePreferencesNode(resonancePreferences),
+            createContent: (_tandem: Tandem) => new ResonancePreferencesNode(resonancePreferences),
           },
         ],
       },
@@ -60,11 +59,7 @@ onReadyToLaunch(() => {
     }),
   ];
 
-  const sim = new Sim(
-    ResonanceStrings.titleStringProperty,
-    screens,
-    simOptions,
-  );
+  const sim = new Sim(ResonanceStrings.titleStringProperty, screens, simOptions);
 
   sim.start();
 });

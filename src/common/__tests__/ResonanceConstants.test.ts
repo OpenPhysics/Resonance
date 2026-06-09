@@ -4,35 +4,27 @@
  * P2 Priority: Validates that constants produce expected geometry and physics ranges.
  */
 
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import ResonanceConstants from "../ResonanceConstants.js";
 
 describe("ResonanceConstants", () => {
   describe("physics ranges", () => {
     describe("FREQUENCY_RANGE", () => {
       it("should have non-negative minimum", () => {
-        expect(ResonanceConstants.FREQUENCY_RANGE.min).toBeGreaterThanOrEqual(
-          0,
-        );
+        expect(ResonanceConstants.FREQUENCY_RANGE.min).toBeGreaterThanOrEqual(0);
       });
 
       it("should have maximum greater than minimum", () => {
-        expect(ResonanceConstants.FREQUENCY_RANGE.max).toBeGreaterThan(
-          ResonanceConstants.FREQUENCY_RANGE.min,
-        );
+        expect(ResonanceConstants.FREQUENCY_RANGE.max).toBeGreaterThan(ResonanceConstants.FREQUENCY_RANGE.min);
       });
 
       it("should cover typical resonance frequencies (0.1 to 5 Hz)", () => {
         expect(ResonanceConstants.FREQUENCY_RANGE.min).toBeLessThanOrEqual(0.5);
-        expect(ResonanceConstants.FREQUENCY_RANGE.max).toBeGreaterThanOrEqual(
-          2,
-        );
+        expect(ResonanceConstants.FREQUENCY_RANGE.max).toBeGreaterThanOrEqual(2);
       });
 
       it("should have reasonable range for user interaction", () => {
-        const range =
-          ResonanceConstants.FREQUENCY_RANGE.max -
-          ResonanceConstants.FREQUENCY_RANGE.min;
+        const range = ResonanceConstants.FREQUENCY_RANGE.max - ResonanceConstants.FREQUENCY_RANGE.min;
         expect(range).toBeGreaterThan(1);
         expect(range).toBeLessThan(100);
       });
@@ -40,15 +32,11 @@ describe("ResonanceConstants", () => {
 
     describe("AMPLITUDE_RANGE", () => {
       it("should have non-negative minimum", () => {
-        expect(ResonanceConstants.AMPLITUDE_RANGE.min).toBeGreaterThanOrEqual(
-          0,
-        );
+        expect(ResonanceConstants.AMPLITUDE_RANGE.min).toBeGreaterThanOrEqual(0);
       });
 
       it("should have maximum greater than minimum", () => {
-        expect(ResonanceConstants.AMPLITUDE_RANGE.max).toBeGreaterThan(
-          ResonanceConstants.AMPLITUDE_RANGE.min,
-        );
+        expect(ResonanceConstants.AMPLITUDE_RANGE.max).toBeGreaterThan(ResonanceConstants.AMPLITUDE_RANGE.min);
       });
 
       it("should be in meters (small values)", () => {
@@ -59,37 +47,25 @@ describe("ResonanceConstants", () => {
 
       it("should represent centimeter-scale oscillations", () => {
         // Min can be 0 (no amplitude)
-        expect(ResonanceConstants.AMPLITUDE_RANGE.min).toBeGreaterThanOrEqual(
-          0,
-        );
+        expect(ResonanceConstants.AMPLITUDE_RANGE.min).toBeGreaterThanOrEqual(0);
         // Max should be around 2 cm = 0.02 m
-        expect(ResonanceConstants.AMPLITUDE_RANGE.max).toBeLessThanOrEqual(
-          0.05,
-        );
+        expect(ResonanceConstants.AMPLITUDE_RANGE.max).toBeLessThanOrEqual(0.05);
       });
     });
 
     describe("RESONATOR_COUNT_RANGE", () => {
       it("should have minimum of at least 1", () => {
-        expect(
-          ResonanceConstants.RESONATOR_COUNT_RANGE.min,
-        ).toBeGreaterThanOrEqual(1);
+        expect(ResonanceConstants.RESONATOR_COUNT_RANGE.min).toBeGreaterThanOrEqual(1);
       });
 
       it("should have reasonable maximum (not too many resonators)", () => {
         expect(ResonanceConstants.RESONATOR_COUNT_RANGE.max).toBeGreaterThan(1);
-        expect(
-          ResonanceConstants.RESONATOR_COUNT_RANGE.max,
-        ).toBeLessThanOrEqual(20);
+        expect(ResonanceConstants.RESONATOR_COUNT_RANGE.max).toBeLessThanOrEqual(20);
       });
 
       it("should be integer range", () => {
-        expect(
-          Number.isInteger(ResonanceConstants.RESONATOR_COUNT_RANGE.min),
-        ).toBe(true);
-        expect(
-          Number.isInteger(ResonanceConstants.RESONATOR_COUNT_RANGE.max),
-        ).toBe(true);
+        expect(Number.isInteger(ResonanceConstants.RESONATOR_COUNT_RANGE.min)).toBe(true);
+        expect(Number.isInteger(ResonanceConstants.RESONATOR_COUNT_RANGE.max)).toBe(true);
       });
     });
 
@@ -99,9 +75,7 @@ describe("ResonanceConstants", () => {
       });
 
       it("should have maximum greater than minimum", () => {
-        expect(ResonanceConstants.MASS_RANGE.max).toBeGreaterThan(
-          ResonanceConstants.MASS_RANGE.min,
-        );
+        expect(ResonanceConstants.MASS_RANGE.max).toBeGreaterThan(ResonanceConstants.MASS_RANGE.min);
       });
 
       it("should represent reasonable physical masses (grams to kilograms)", () => {
@@ -125,13 +99,9 @@ describe("ResonanceConstants", () => {
 
       it("should cover typical spring constants (N/m)", () => {
         // Should include soft springs (< 100 N/m)
-        expect(
-          ResonanceConstants.SPRING_CONSTANT_RANGE.min,
-        ).toBeLessThanOrEqual(100);
+        expect(ResonanceConstants.SPRING_CONSTANT_RANGE.min).toBeLessThanOrEqual(100);
         // Should include stiff springs (> 1000 N/m)
-        expect(
-          ResonanceConstants.SPRING_CONSTANT_RANGE.max,
-        ).toBeGreaterThanOrEqual(1000);
+        expect(ResonanceConstants.SPRING_CONSTANT_RANGE.max).toBeGreaterThanOrEqual(1000);
       });
     });
 
@@ -142,9 +112,7 @@ describe("ResonanceConstants", () => {
       });
 
       it("should have maximum greater than minimum", () => {
-        expect(ResonanceConstants.DAMPING_RANGE.max).toBeGreaterThan(
-          ResonanceConstants.DAMPING_RANGE.min,
-        );
+        expect(ResonanceConstants.DAMPING_RANGE.max).toBeGreaterThan(ResonanceConstants.DAMPING_RANGE.min);
       });
     });
   });
@@ -155,17 +123,9 @@ describe("ResonanceConstants", () => {
       // With min mass and max k, freq = sqrt(6000/0.1) / (2*pi) ≈ 39 Hz
       // With max mass and min k, freq = sqrt(10/5.0) / (2*pi) ≈ 0.22 Hz
       const minFreq =
-        Math.sqrt(
-          ResonanceConstants.SPRING_CONSTANT_RANGE.min /
-            ResonanceConstants.MASS_RANGE.max,
-        ) /
-        (2 * Math.PI);
+        Math.sqrt(ResonanceConstants.SPRING_CONSTANT_RANGE.min / ResonanceConstants.MASS_RANGE.max) / (2 * Math.PI);
       const maxFreq =
-        Math.sqrt(
-          ResonanceConstants.SPRING_CONSTANT_RANGE.max /
-            ResonanceConstants.MASS_RANGE.min,
-        ) /
-        (2 * Math.PI);
+        Math.sqrt(ResonanceConstants.SPRING_CONSTANT_RANGE.max / ResonanceConstants.MASS_RANGE.min) / (2 * Math.PI);
 
       // Driving frequency range should overlap with achievable natural frequencies
       expect(minFreq).toBeLessThan(ResonanceConstants.FREQUENCY_RANGE.max);
@@ -187,27 +147,17 @@ describe("ResonanceConstants", () => {
     });
 
     it("should have reasonable aspect ratio", () => {
-      const aspectRatio =
-        ResonanceConstants.DRIVER_BOX_WIDTH /
-        ResonanceConstants.DRIVER_BOX_HEIGHT;
+      const aspectRatio = ResonanceConstants.DRIVER_BOX_WIDTH / ResonanceConstants.DRIVER_BOX_HEIGHT;
       // Should be wider than tall for a driver box
       expect(aspectRatio).toBeGreaterThan(1);
       expect(aspectRatio).toBeLessThan(20);
     });
 
     it("should have valid corner radius", () => {
-      expect(
-        ResonanceConstants.DRIVER_BOX_CORNER_RADIUS,
-      ).toBeGreaterThanOrEqual(0);
+      expect(ResonanceConstants.DRIVER_BOX_CORNER_RADIUS).toBeGreaterThanOrEqual(0);
       // Corner radius should be less than half the smaller dimension
-      const maxRadius =
-        Math.min(
-          ResonanceConstants.DRIVER_BOX_WIDTH,
-          ResonanceConstants.DRIVER_BOX_HEIGHT,
-        ) / 2;
-      expect(ResonanceConstants.DRIVER_BOX_CORNER_RADIUS).toBeLessThan(
-        maxRadius,
-      );
+      const maxRadius = Math.min(ResonanceConstants.DRIVER_BOX_WIDTH, ResonanceConstants.DRIVER_BOX_HEIGHT) / 2;
+      expect(ResonanceConstants.DRIVER_BOX_CORNER_RADIUS).toBeLessThan(maxRadius);
     });
 
     it("should have positive line width", () => {
@@ -235,15 +185,11 @@ describe("ResonanceConstants", () => {
 
   describe("model-view transform constants", () => {
     it("should have symmetric model bounds", () => {
-      expect(ResonanceConstants.MODEL_BOUNDS_MIN).toBe(
-        -ResonanceConstants.MODEL_BOUNDS_MAX,
-      );
+      expect(ResonanceConstants.MODEL_BOUNDS_MIN).toBe(-ResonanceConstants.MODEL_BOUNDS_MAX);
     });
 
     it("should represent reasonable physical scale (meters)", () => {
-      const totalRange =
-        ResonanceConstants.MODEL_BOUNDS_MAX -
-        ResonanceConstants.MODEL_BOUNDS_MIN;
+      const totalRange = ResonanceConstants.MODEL_BOUNDS_MAX - ResonanceConstants.MODEL_BOUNDS_MIN;
       // Should be around 1 meter total
       expect(totalRange).toBeGreaterThan(0.1);
       expect(totalRange).toBeLessThan(10);
@@ -253,9 +199,7 @@ describe("ResonanceConstants", () => {
   describe("spring and mass rendering", () => {
     it("should have valid mass size range", () => {
       expect(ResonanceConstants.MIN_MASS_SIZE).toBeGreaterThan(0);
-      expect(ResonanceConstants.MAX_MASS_SIZE).toBeGreaterThan(
-        ResonanceConstants.MIN_MASS_SIZE,
-      );
+      expect(ResonanceConstants.MAX_MASS_SIZE).toBeGreaterThan(ResonanceConstants.MIN_MASS_SIZE);
     });
 
     it("should have positive spring parameters", () => {
@@ -267,9 +211,7 @@ describe("ResonanceConstants", () => {
 
     it("should have valid spring line width range", () => {
       expect(ResonanceConstants.SPRING_LINE_WIDTH_MIN).toBeGreaterThan(0);
-      expect(ResonanceConstants.SPRING_LINE_WIDTH_MAX).toBeGreaterThanOrEqual(
-        ResonanceConstants.SPRING_LINE_WIDTH_MIN,
-      );
+      expect(ResonanceConstants.SPRING_LINE_WIDTH_MAX).toBeGreaterThanOrEqual(ResonanceConstants.SPRING_LINE_WIDTH_MIN);
     });
 
     it("should have valid min spring scale", () => {
@@ -286,9 +228,7 @@ describe("ResonanceConstants", () => {
 
     it("should have valid tick configuration", () => {
       expect(ResonanceConstants.RULER_NUM_MAJOR_TICKS).toBeGreaterThan(1);
-      expect(
-        ResonanceConstants.RULER_MINOR_TICKS_PER_MAJOR,
-      ).toBeGreaterThanOrEqual(0);
+      expect(ResonanceConstants.RULER_MINOR_TICKS_PER_MAJOR).toBeGreaterThanOrEqual(0);
     });
 
     it("should represent 50 cm ruler", () => {
@@ -303,9 +243,7 @@ describe("ResonanceConstants", () => {
     });
 
     it("should have valid corner radius", () => {
-      expect(
-        ResonanceConstants.CONTROL_PANEL_CORNER_RADIUS,
-      ).toBeGreaterThanOrEqual(0);
+      expect(ResonanceConstants.CONTROL_PANEL_CORNER_RADIUS).toBeGreaterThanOrEqual(0);
     });
 
     it("should have positive spacing", () => {
@@ -353,9 +291,7 @@ describe("ResonanceConstants", () => {
       ];
 
       expectedKeys.forEach((key) => {
-        expect(
-          ResonanceConstants[key as keyof typeof ResonanceConstants],
-        ).toBeDefined();
+        expect(ResonanceConstants[key as keyof typeof ResonanceConstants]).toBeDefined();
       });
     });
   });

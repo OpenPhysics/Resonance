@@ -17,12 +17,11 @@
  *   FUZZ_POINTERS - Max concurrent pointers (default: 1)
  */
 
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 // Configuration from environment or defaults
 const FUZZ_DURATION = parseInt(process.env.FUZZ_DURATION || "60", 10) * 1000;
-const FUZZ_SEED =
-  process.env.FUZZ_SEED || Math.floor(Math.random() * 1000000).toString();
+const FUZZ_SEED = process.env.FUZZ_SEED || Math.floor(Math.random() * 1000000).toString();
 const FUZZ_RATE = process.env.FUZZ_RATE || "100";
 const FUZZ_POINTERS = process.env.FUZZ_POINTERS || "1";
 
@@ -80,10 +79,7 @@ test.describe("Fuzz Testing", () => {
         console.log(`[${(timestamp / 1000).toFixed(1)}s] ERROR: ${text}`);
       } else if (type === "warning") {
         warnings.push(message);
-      } else if (
-        text.includes("Assertion failed") ||
-        text.includes("AssertionError")
-      ) {
+      } else if (text.includes("Assertion failed") || text.includes("AssertionError")) {
         assertions.push(message);
         console.log(`[${(timestamp / 1000).toFixed(1)}s] ASSERTION: ${text}`);
       }
@@ -98,9 +94,7 @@ test.describe("Fuzz Testing", () => {
         location: error.stack || "unknown",
         timestamp,
       });
-      console.log(
-        `[${(timestamp / 1000).toFixed(1)}s] PAGE ERROR: ${error.message}`,
-      );
+      console.log(`[${(timestamp / 1000).toFixed(1)}s] PAGE ERROR: ${error.message}`);
     });
 
     // Navigate to the fuzz URL
@@ -160,9 +154,7 @@ test.describe("Fuzz Testing", () => {
     if (result.errors.length > 0) {
       console.log("\nERRORS:");
       result.errors.forEach((err, i) => {
-        console.log(
-          `  ${i + 1}. [${(err.timestamp / 1000).toFixed(1)}s] ${err.text}`,
-        );
+        console.log(`  ${i + 1}. [${(err.timestamp / 1000).toFixed(1)}s] ${err.text}`);
         console.log(`     Location: ${err.location}`);
       });
     }
@@ -170,9 +162,7 @@ test.describe("Fuzz Testing", () => {
     if (result.assertions.length > 0) {
       console.log("\nASSERTIONS:");
       result.assertions.forEach((a, i) => {
-        console.log(
-          `  ${i + 1}. [${(a.timestamp / 1000).toFixed(1)}s] ${a.text}`,
-        );
+        console.log(`  ${i + 1}. [${(a.timestamp / 1000).toFixed(1)}s] ${a.text}`);
       });
     }
 
@@ -182,14 +172,8 @@ test.describe("Fuzz Testing", () => {
     console.log("========================================\n");
 
     // Fail the test if there were errors or assertions
-    expect(
-      result.errors.length,
-      `Found ${result.errors.length} console errors`,
-    ).toBe(0);
-    expect(
-      result.assertions.length,
-      `Found ${result.assertions.length} assertion failures`,
-    ).toBe(0);
+    expect(result.errors.length, `Found ${result.errors.length} console errors`).toBe(0);
+    expect(result.assertions.length, `Found ${result.assertions.length} assertion failures`).toBe(0);
   });
 
   test("should handle rapid configuration changes", async ({ page }) => {
@@ -275,10 +259,7 @@ test.describe("Fuzz Testing", () => {
       });
     }
 
-    expect(
-      errors.length,
-      `Found ${errors.length} errors during stress test`,
-    ).toBe(0);
+    expect(errors.length, `Found ${errors.length} errors during stress test`).toBe(0);
   });
 
   test("should run multitouch fuzz test", async ({ page }) => {
@@ -337,9 +318,6 @@ test.describe("Fuzz Testing", () => {
     console.log("\n\nMultitouch fuzz test complete.");
     console.log(`Errors found: ${errors.length}`);
 
-    expect(
-      errors.length,
-      `Found ${errors.length} errors in multitouch test`,
-    ).toBe(0);
+    expect(errors.length, `Found ${errors.length} errors in multitouch test`).toBe(0);
   });
 });

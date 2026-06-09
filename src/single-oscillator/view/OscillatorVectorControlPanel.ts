@@ -6,10 +6,10 @@
  * vector's color for easy visual identification.
  */
 
-import { Text, HBox, VBox } from "scenerystack/scenery";
-import { ArrowNode } from "scenerystack/scenery-phet";
-import { Panel, Checkbox } from "scenerystack/sun";
 import { BooleanProperty } from "scenerystack/axon";
+import { HBox, Text, VBox } from "scenerystack/scenery";
+import { ArrowNode } from "scenerystack/scenery-phet";
+import { Checkbox, Panel } from "scenerystack/sun";
 import ResonanceColors from "../../common/ResonanceColors.js";
 import ResonanceConstants from "../../common/ResonanceConstants.js";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
@@ -55,14 +55,10 @@ export class OscillatorVectorControlPanel extends Panel {
       spacing: CHECKBOX_SPACING,
     });
 
-    const velocityCheckbox = new Checkbox(
-      velocityVisibleProperty,
-      velocityLabel,
-      {
-        boxWidth: CHECKBOX_BOX_WIDTH,
-        accessibleName: ResonanceStrings.controls.velocityStringProperty,
-      },
-    );
+    const velocityCheckbox = new Checkbox(velocityVisibleProperty, velocityLabel, {
+      boxWidth: CHECKBOX_BOX_WIDTH,
+      accessibleName: ResonanceStrings.controls.velocityStringProperty,
+    });
 
     // Create acceleration checkbox with yellow arrow icon
     const accelerationArrowIcon = new ArrowNode(0, 0, ICON_ARROW_LENGTH, 0, {
@@ -84,14 +80,10 @@ export class OscillatorVectorControlPanel extends Panel {
       spacing: CHECKBOX_SPACING,
     });
 
-    const accelerationCheckbox = new Checkbox(
-      accelerationVisibleProperty,
-      accelerationLabel,
-      {
-        boxWidth: CHECKBOX_BOX_WIDTH,
-        accessibleName: ResonanceStrings.controls.accelerationStringProperty,
-      },
-    );
+    const accelerationCheckbox = new Checkbox(accelerationVisibleProperty, accelerationLabel, {
+      boxWidth: CHECKBOX_BOX_WIDTH,
+      accessibleName: ResonanceStrings.controls.accelerationStringProperty,
+    });
 
     // Create applied force checkbox with orange arrow icon
     const appliedForceArrowIcon = new ArrowNode(0, 0, ICON_ARROW_LENGTH, 0, {
@@ -113,14 +105,10 @@ export class OscillatorVectorControlPanel extends Panel {
       spacing: CHECKBOX_SPACING,
     });
 
-    const appliedForceCheckbox = new Checkbox(
-      appliedForceVisibleProperty,
-      appliedForceLabel,
-      {
-        boxWidth: CHECKBOX_BOX_WIDTH,
-        accessibleName: ResonanceStrings.controls.appliedForceStringProperty,
-      },
-    );
+    const appliedForceCheckbox = new Checkbox(appliedForceVisibleProperty, appliedForceLabel, {
+      boxWidth: CHECKBOX_BOX_WIDTH,
+      accessibleName: ResonanceStrings.controls.appliedForceStringProperty,
+    });
 
     // Arrange checkboxes vertically
     const content = new VBox({

@@ -8,14 +8,9 @@
  * x ranges from -width/2 to width/2, and y ranges from -height/2 to height/2.
  */
 
-import { NumberProperty, Property } from "scenerystack/axon";
-import { Range, Vector2, Bounds2 } from "scenerystack/dot";
-import {
-  DEFAULT_PLATE_WIDTH,
-  DEFAULT_PLATE_HEIGHT,
-  MIN_PLATE_WIDTH,
-  MIN_PLATE_HEIGHT,
-} from "./ChladniConstants.js";
+import { NumberProperty, type Property } from "scenerystack/axon";
+import { Bounds2, Range, Vector2 } from "scenerystack/dot";
+import { DEFAULT_PLATE_HEIGHT, DEFAULT_PLATE_WIDTH, MIN_PLATE_HEIGHT, MIN_PLATE_WIDTH } from "./ChladniConstants.js";
 
 /**
  * Options for creating a PlateGeometry
@@ -168,9 +163,7 @@ export class PlateGeometry {
    *
    * @param excitationPositionProperty - The property to clamp
    */
-  public clampExcitationPosition(
-    excitationPositionProperty: Property<Vector2>,
-  ): void {
+  public clampExcitationPosition(excitationPositionProperty: Property<Vector2>): void {
     const pos = excitationPositionProperty.value;
     const clamped = this.clampVector(pos);
 
@@ -229,9 +222,7 @@ export class PlateGeometry {
    * @param listener - Callback function (width, height)
    * @unused - Currently not used in the codebase but kept for dimension change notifications
    */
-  public linkDimensions(
-    listener: (width: number, height: number) => void,
-  ): void {
+  public linkDimensions(listener: (width: number, height: number) => void): void {
     // Link both properties and call the listener
     const update = () => {
       listener(this.widthProperty.value, this.heightProperty.value);

@@ -5,9 +5,9 @@
  * Includes checkboxes for resonance curve, ruler, grid, and displacement colormap visibility.
  */
 
+import { Property } from "scenerystack/axon";
 import { Text, VBox } from "scenerystack/scenery";
 import { Checkbox } from "scenerystack/sun";
-import { Property } from "scenerystack/axon";
 import ResonanceColors from "../../../common/ResonanceColors.js";
 import ResonanceConstants from "../../../common/ResonanceConstants.js";
 import { ResonanceStrings } from "../../../i18n/ResonanceStrings.js";
@@ -50,9 +50,7 @@ export class DisplayOptionsSection extends VBox {
       {
         boxWidth: ResonanceConstants.RULER_CHECKBOX_BOX_WIDTH,
         // Accessibility
-        accessibleName:
-          ResonanceStrings.chladni.a11y.controlPanel
-            .showResonanceCurveLabelStringProperty,
+        accessibleName: ResonanceStrings.chladni.a11y.controlPanel.showResonanceCurveLabelStringProperty,
       },
     );
 
@@ -66,9 +64,7 @@ export class DisplayOptionsSection extends VBox {
       {
         boxWidth: ResonanceConstants.RULER_CHECKBOX_BOX_WIDTH,
         // Accessibility
-        accessibleName:
-          ResonanceStrings.chladni.a11y.controlPanel
-            .showRulerLabelStringProperty,
+        accessibleName: ResonanceStrings.chladni.a11y.controlPanel.showRulerLabelStringProperty,
       },
     );
 
@@ -82,9 +78,7 @@ export class DisplayOptionsSection extends VBox {
       {
         boxWidth: ResonanceConstants.RULER_CHECKBOX_BOX_WIDTH,
         // Accessibility
-        accessibleName:
-          ResonanceStrings.chladni.a11y.controlPanel
-            .showGridLabelStringProperty,
+        accessibleName: ResonanceStrings.chladni.a11y.controlPanel.showGridLabelStringProperty,
       },
     );
 
@@ -98,19 +92,12 @@ export class DisplayOptionsSection extends VBox {
       {
         boxWidth: ResonanceConstants.RULER_CHECKBOX_BOX_WIDTH,
         // Accessibility
-        accessibleName:
-          ResonanceStrings.chladni.a11y.controlPanel
-            .showColormapLabelStringProperty,
+        accessibleName: ResonanceStrings.chladni.a11y.controlPanel.showColormapLabelStringProperty,
       },
     );
 
     super({
-      children: [
-        showResonanceCurveCheckbox,
-        showRulerCheckbox,
-        showGridCheckbox,
-        showColormapCheckbox,
-      ],
+      children: [showResonanceCurveCheckbox, showRulerCheckbox, showGridCheckbox, showColormapCheckbox],
       spacing: ResonanceConstants.CONTROL_PANEL_SPACING,
       align: "left",
     });

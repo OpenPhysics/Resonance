@@ -5,8 +5,8 @@
  * Physics calculation errors would make the entire application incorrect.
  */
 
-import { describe, it, expect, beforeEach } from "vitest";
 import { Property } from "scenerystack/axon";
+import { beforeEach, describe, expect, it } from "vitest";
 import { ResonanceModel, ResonancePresets } from "../ResonanceModel.js";
 import { SolverType } from "../SolverType.js";
 
@@ -178,8 +178,7 @@ describe("ResonanceModel", () => {
       const finalEnergy = model.totalEnergyProperty.value;
 
       // Energy should be conserved within 0.1%
-      const energyChange =
-        Math.abs(finalEnergy - initialEnergy) / initialEnergy;
+      const energyChange = Math.abs(finalEnergy - initialEnergy) / initialEnergy;
       expect(energyChange).toBeLessThan(0.001);
     });
 
@@ -208,8 +207,7 @@ describe("ResonanceModel", () => {
   describe("phase angle at resonance", () => {
     it("should be pi/2 when driving at natural frequency", () => {
       // Set driving frequency to natural frequency
-      model.drivingFrequencyProperty.value =
-        model.naturalFrequencyHzProperty.value;
+      model.drivingFrequencyProperty.value = model.naturalFrequencyHzProperty.value;
       model.drivingEnabledProperty.value = true;
 
       // At resonance, phase should be pi/2
@@ -494,18 +492,14 @@ describe("ResonanceModel", () => {
       model.velocityProperty.value = 0;
       model.drivingEnabledProperty.value = true;
       model.drivingAmplitudeProperty.value = 1.0;
-      model.drivingFrequencyProperty.value =
-        model.naturalFrequencyHzProperty.value;
+      model.drivingFrequencyProperty.value = model.naturalFrequencyHzProperty.value;
 
       // Track amplitude
       let maxAmplitude = 0;
 
       for (let i = 0; i < 5000; i++) {
         model.step(0.001, true);
-        maxAmplitude = Math.max(
-          maxAmplitude,
-          Math.abs(model.positionProperty.value),
-        );
+        maxAmplitude = Math.max(maxAmplitude, Math.abs(model.positionProperty.value));
       }
 
       // At resonance, amplitude should build up significantly
@@ -522,15 +516,11 @@ describe("ResonanceModel", () => {
       model.drivingAmplitudeProperty.value = 1.0;
 
       // First, measure amplitude at resonance
-      model.drivingFrequencyProperty.value =
-        model.naturalFrequencyHzProperty.value;
+      model.drivingFrequencyProperty.value = model.naturalFrequencyHzProperty.value;
       let maxAtResonance = 0;
       for (let i = 0; i < 3000; i++) {
         model.step(0.001, true);
-        maxAtResonance = Math.max(
-          maxAtResonance,
-          Math.abs(model.positionProperty.value),
-        );
+        maxAtResonance = Math.max(maxAtResonance, Math.abs(model.positionProperty.value));
       }
 
       // Reset and measure off-resonance
@@ -538,16 +528,12 @@ describe("ResonanceModel", () => {
       model.dampingProperty.value = 0.5;
       model.drivingEnabledProperty.value = true;
       model.drivingAmplitudeProperty.value = 1.0;
-      model.drivingFrequencyProperty.value =
-        model.naturalFrequencyHzProperty.value * 3; // Far from resonance
+      model.drivingFrequencyProperty.value = model.naturalFrequencyHzProperty.value * 3; // Far from resonance
 
       let maxOffResonance = 0;
       for (let i = 0; i < 3000; i++) {
         model.step(0.001, true);
-        maxOffResonance = Math.max(
-          maxOffResonance,
-          Math.abs(model.positionProperty.value),
-        );
+        maxOffResonance = Math.max(maxOffResonance, Math.abs(model.positionProperty.value));
       }
 
       // Off-resonance amplitude should be smaller
@@ -576,12 +562,8 @@ describe("ResonanceModel", () => {
 
       for (const freq of [0.5, 1.0, 2.0, 4.0]) {
         model.drivingFrequencyProperty.value = freq;
-        expect(model.springForcePhaseProperty.value).toBeGreaterThanOrEqual(
-          -Math.PI,
-        );
-        expect(model.springForcePhaseProperty.value).toBeLessThanOrEqual(
-          Math.PI,
-        );
+        expect(model.springForcePhaseProperty.value).toBeGreaterThanOrEqual(-Math.PI);
+        expect(model.springForcePhaseProperty.value).toBeLessThanOrEqual(Math.PI);
       }
     });
 
@@ -589,8 +571,7 @@ describe("ResonanceModel", () => {
       model.drivingEnabledProperty.value = true;
       // Well below resonance: displacement phase ≈ 0, so spring force phase ≈ ±π
       // which means spring force is anti-phase to driver
-      model.drivingFrequencyProperty.value =
-        model.naturalFrequencyHzProperty.value * 0.1;
+      model.drivingFrequencyProperty.value = model.naturalFrequencyHzProperty.value * 0.1;
       const phase = model.springForcePhaseProperty.value;
       // Displacement phase is small positive → spring force phase ≈ π (or -π)
       expect(Math.abs(phase)).toBeGreaterThan(Math.PI * 0.8);
@@ -599,8 +580,7 @@ describe("ResonanceModel", () => {
     it("should be near 0 above resonance (spring force nearly in phase with driver)", () => {
       model.drivingEnabledProperty.value = true;
       // Well above resonance: displacement phase ≈ π, so spring force phase ≈ 0
-      model.drivingFrequencyProperty.value =
-        model.naturalFrequencyHzProperty.value * 5;
+      model.drivingFrequencyProperty.value = model.naturalFrequencyHzProperty.value * 5;
       const phase = model.springForcePhaseProperty.value;
       expect(Math.abs(phase)).toBeLessThan(Math.PI * 0.3);
     });
@@ -614,7 +594,9 @@ describe("ResonanceModel", () => {
       const dampPhase = model.dampingForcePhaseProperty.value;
       // Should differ by exactly π (mod 2π)
       let diff = Math.abs(dampPhase - velPhase);
-      if (diff > Math.PI) diff = 2 * Math.PI - diff;
+      if (diff > Math.PI) {
+        diff = 2 * Math.PI - diff;
+      }
       expect(diff).toBeCloseTo(Math.PI, 5);
     });
 
@@ -623,19 +605,14 @@ describe("ResonanceModel", () => {
 
       for (const freq of [0.5, 1.0, 2.0, 4.0]) {
         model.drivingFrequencyProperty.value = freq;
-        expect(model.dampingForcePhaseProperty.value).toBeGreaterThanOrEqual(
-          -Math.PI,
-        );
-        expect(model.dampingForcePhaseProperty.value).toBeLessThanOrEqual(
-          Math.PI,
-        );
+        expect(model.dampingForcePhaseProperty.value).toBeGreaterThanOrEqual(-Math.PI);
+        expect(model.dampingForcePhaseProperty.value).toBeLessThanOrEqual(Math.PI);
       }
     });
 
     it("should be ±π at resonance (damping force anti-phase to driver)", () => {
       model.drivingEnabledProperty.value = true;
-      model.drivingFrequencyProperty.value =
-        model.naturalFrequencyHzProperty.value;
+      model.drivingFrequencyProperty.value = model.naturalFrequencyHzProperty.value;
       // At resonance: velocity phase = φ - π/2 = π/2 - π/2 = 0
       // damping force phase = velocity phase + π = π
       const phase = model.dampingForcePhaseProperty.value;
@@ -660,23 +637,20 @@ describe("ResonanceModel", () => {
 
     it("should be zero at natural frequency (resonance)", () => {
       model.drivingEnabledProperty.value = true;
-      model.drivingFrequencyProperty.value =
-        model.naturalFrequencyHzProperty.value;
+      model.drivingFrequencyProperty.value = model.naturalFrequencyHzProperty.value;
       // At resonance: mω₀ = k/ω₀ (both equal √(mk)), so X = 0
       expect(model.mechanicalReactanceProperty.value).toBeCloseTo(0, 3);
     });
 
     it("should be negative below resonance (stiffness-dominated)", () => {
       model.drivingEnabledProperty.value = true;
-      model.drivingFrequencyProperty.value =
-        model.naturalFrequencyHzProperty.value * 0.3;
+      model.drivingFrequencyProperty.value = model.naturalFrequencyHzProperty.value * 0.3;
       expect(model.mechanicalReactanceProperty.value).toBeLessThan(0);
     });
 
     it("should be positive above resonance (inertia-dominated)", () => {
       model.drivingEnabledProperty.value = true;
-      model.drivingFrequencyProperty.value =
-        model.naturalFrequencyHzProperty.value * 3;
+      model.drivingFrequencyProperty.value = model.naturalFrequencyHzProperty.value * 3;
       expect(model.mechanicalReactanceProperty.value).toBeGreaterThan(0);
     });
 
@@ -698,24 +672,18 @@ describe("ResonanceModel", () => {
 
     it("should equal damping coefficient at resonance (purely resistive)", () => {
       model.drivingEnabledProperty.value = true;
-      model.drivingFrequencyProperty.value =
-        model.naturalFrequencyHzProperty.value;
+      model.drivingFrequencyProperty.value = model.naturalFrequencyHzProperty.value;
       // At resonance X = 0, so |Z| = b
-      expect(model.impedanceMagnitudeProperty.value).toBeCloseTo(
-        model.dampingProperty.value,
-        3,
-      );
+      expect(model.impedanceMagnitudeProperty.value).toBeCloseTo(model.dampingProperty.value, 3);
     });
 
     it("should be minimized at resonance", () => {
       model.drivingEnabledProperty.value = true;
 
-      model.drivingFrequencyProperty.value =
-        model.naturalFrequencyHzProperty.value;
+      model.drivingFrequencyProperty.value = model.naturalFrequencyHzProperty.value;
       const atResonance = model.impedanceMagnitudeProperty.value;
 
-      model.drivingFrequencyProperty.value =
-        model.naturalFrequencyHzProperty.value * 3;
+      model.drivingFrequencyProperty.value = model.naturalFrequencyHzProperty.value * 3;
       const offResonance = model.impedanceMagnitudeProperty.value;
 
       expect(atResonance).toBeLessThan(offResonance);
@@ -730,10 +698,7 @@ describe("ResonanceModel", () => {
       const X0 = model.displacementAmplitudeProperty.value;
       // |Z| = F₀ / (ωX₀) = F₀ / V₀
       if (X0 > 1e-15) {
-        expect(model.impedanceMagnitudeProperty.value).toBeCloseTo(
-          F0 / (omega * X0),
-          5,
-        );
+        expect(model.impedanceMagnitudeProperty.value).toBeCloseTo(F0 / (omega * X0), 5);
       }
     });
 
@@ -749,31 +714,32 @@ describe("ResonanceModel", () => {
       model.drivingFrequencyProperty.value = 2.0;
       const phi = model.displacementPhaseProperty.value;
       let expected = phi - Math.PI / 2;
-      while (expected < -Math.PI) expected += 2 * Math.PI;
-      while (expected > Math.PI) expected -= 2 * Math.PI;
+      while (expected < -Math.PI) {
+        expected += 2 * Math.PI;
+      }
+      while (expected > Math.PI) {
+        expected -= 2 * Math.PI;
+      }
       expect(model.impedancePhaseProperty.value).toBeCloseTo(expected, 10);
     });
 
     it("should be zero at resonance (force and velocity in phase)", () => {
       model.drivingEnabledProperty.value = true;
-      model.drivingFrequencyProperty.value =
-        model.naturalFrequencyHzProperty.value;
+      model.drivingFrequencyProperty.value = model.naturalFrequencyHzProperty.value;
       // At resonance: φ = π/2, so ∠Z = π/2 - π/2 = 0
       expect(model.impedancePhaseProperty.value).toBeCloseTo(0, 2);
     });
 
     it("should be negative below resonance (stiffness-dominated)", () => {
       model.drivingEnabledProperty.value = true;
-      model.drivingFrequencyProperty.value =
-        model.naturalFrequencyHzProperty.value * 0.3;
+      model.drivingFrequencyProperty.value = model.naturalFrequencyHzProperty.value * 0.3;
       // Below resonance: φ < π/2, so ∠Z = φ - π/2 < 0
       expect(model.impedancePhaseProperty.value).toBeLessThan(0);
     });
 
     it("should be positive above resonance (inertia-dominated)", () => {
       model.drivingEnabledProperty.value = true;
-      model.drivingFrequencyProperty.value =
-        model.naturalFrequencyHzProperty.value * 3;
+      model.drivingFrequencyProperty.value = model.naturalFrequencyHzProperty.value * 3;
       // Above resonance: φ > π/2, so ∠Z = φ - π/2 > 0
       expect(model.impedancePhaseProperty.value).toBeGreaterThan(0);
     });
@@ -794,24 +760,21 @@ describe("ResonanceModel", () => {
 
     it("should be 1 at resonance (maximum power transfer)", () => {
       model.drivingEnabledProperty.value = true;
-      model.drivingFrequencyProperty.value =
-        model.naturalFrequencyHzProperty.value;
+      model.drivingFrequencyProperty.value = model.naturalFrequencyHzProperty.value;
       // At resonance: φ = π/2, sin(π/2) = 1
       expect(model.powerFactorProperty.value).toBeCloseTo(1, 2);
     });
 
     it("should approach 0 far below resonance", () => {
       model.drivingEnabledProperty.value = true;
-      model.drivingFrequencyProperty.value =
-        model.naturalFrequencyHzProperty.value * 0.01;
+      model.drivingFrequencyProperty.value = model.naturalFrequencyHzProperty.value * 0.01;
       // φ → 0, sin(φ) → 0
       expect(model.powerFactorProperty.value).toBeLessThan(0.1);
     });
 
     it("should approach 0 far above resonance", () => {
       model.drivingEnabledProperty.value = true;
-      model.drivingFrequencyProperty.value =
-        model.naturalFrequencyHzProperty.value * 10;
+      model.drivingFrequencyProperty.value = model.naturalFrequencyHzProperty.value * 10;
       // φ → π, sin(π) → 0
       expect(model.powerFactorProperty.value).toBeLessThan(0.1);
     });
@@ -850,10 +813,7 @@ describe("ResonanceModel", () => {
       const V0 = model.velocityAmplitudeProperty.value;
       const pf = model.powerFactorProperty.value;
       // P_avg = ½F₀V₀·sin(φ) = ½F₀V₀·PF
-      expect(model.steadyStateAveragePowerProperty.value).toBeCloseTo(
-        0.5 * F0 * V0 * pf,
-        5,
-      );
+      expect(model.steadyStateAveragePowerProperty.value).toBeCloseTo(0.5 * F0 * V0 * pf, 5);
     });
   });
 
@@ -874,10 +834,7 @@ describe("ResonanceModel", () => {
       model.dampingProperty.value = 2.0;
       // zeta = 2/(2*sqrt(100)) = 0.1, Q = 1/(2*0.1) = 5
       expect(model.qualityFactorProperty.value).toBeCloseTo(5, 5);
-      expect(model.qualityFactorProperty.value).toBeCloseTo(
-        1 / (2 * model.dampingRatioProperty.value),
-        5,
-      );
+      expect(model.qualityFactorProperty.value).toBeCloseTo(1 / (2 * model.dampingRatioProperty.value), 5);
     });
 
     it("should be 0.5 for critically damped system", () => {
@@ -915,17 +872,12 @@ describe("ResonanceModel", () => {
       const omega0 = Math.sqrt(100);
       const zeta = 2 / (2 * Math.sqrt(100)); // = 0.1
       const expected = omega0 * Math.sqrt(1 - zeta * zeta);
-      expect(model.dampedAngularFrequencyProperty.value).toBeCloseTo(
-        expected,
-        5,
-      );
+      expect(model.dampedAngularFrequencyProperty.value).toBeCloseTo(expected, 5);
     });
 
     it("should be less than natural frequency for underdamped", () => {
       model.dampingProperty.value = 1.0; // underdamped
-      expect(model.dampedAngularFrequencyProperty.value).toBeLessThan(
-        model.naturalFrequencyProperty.value,
-      );
+      expect(model.dampedAngularFrequencyProperty.value).toBeLessThan(model.naturalFrequencyProperty.value);
       expect(model.dampedAngularFrequencyProperty.value).toBeGreaterThan(0);
     });
 
@@ -945,10 +897,7 @@ describe("ResonanceModel", () => {
 
     it("should approach natural frequency for very light damping", () => {
       model.dampingProperty.value = 0.001;
-      expect(model.dampedAngularFrequencyProperty.value).toBeCloseTo(
-        model.naturalFrequencyProperty.value,
-        2,
-      );
+      expect(model.dampedAngularFrequencyProperty.value).toBeCloseTo(model.naturalFrequencyProperty.value, 2);
     });
   });
 
@@ -957,8 +906,7 @@ describe("ResonanceModel", () => {
       model.massProperty.value = 1.0;
       model.springConstantProperty.value = 100.0;
       model.dampingProperty.value = 2.0;
-      const expected =
-        model.dampedAngularFrequencyProperty.value / (2 * Math.PI);
+      const expected = model.dampedAngularFrequencyProperty.value / (2 * Math.PI);
       expect(model.dampedFrequencyHzProperty.value).toBeCloseTo(expected, 5);
     });
 
@@ -1004,10 +952,7 @@ describe("ResonanceModel", () => {
   describe("decay time constant", () => {
     it("should calculate tau = 2m/b", () => {
       // Default: m=2.53, b=1.0 -> tau = 2*2.53/1.0 = 5.06 s
-      expect(model.decayTimeConstantProperty.value).toBeCloseTo(
-        (2 * 2.53) / 1.0,
-        5,
-      );
+      expect(model.decayTimeConstantProperty.value).toBeCloseTo((2 * 2.53) / 1.0, 5);
     });
 
     it("should return Infinity for zero damping", () => {
@@ -1056,8 +1001,7 @@ describe("ResonanceModel", () => {
     it("should equal b/(2*pi*m) which is the -3dB bandwidth", () => {
       // Δf = f₀/Q = (ω₀/2π) / (√(mk)/b) = ω₀b/(2π√(mk)) = b√(k/m)/(2π√(mk))
       // = b/(2πm) for any system
-      const expected =
-        model.dampingProperty.value / (2 * Math.PI * model.massProperty.value);
+      const expected = model.dampingProperty.value / (2 * Math.PI * model.massProperty.value);
       expect(model.bandwidthProperty.value).toBeCloseTo(expected, 5);
     });
   });
@@ -1070,10 +1014,7 @@ describe("ResonanceModel", () => {
       const omega = 2.0 * 2 * Math.PI;
       const X0 = model.displacementAmplitudeProperty.value;
       const expected = 0.5 * b * omega * omega * X0 * X0;
-      expect(model.steadyStateAveragePowerProperty.value).toBeCloseTo(
-        expected,
-        10,
-      );
+      expect(model.steadyStateAveragePowerProperty.value).toBeCloseTo(expected, 10);
     });
 
     it("should be zero when driving is disabled", () => {
@@ -1086,13 +1027,11 @@ describe("ResonanceModel", () => {
       model.drivingAmplitudeProperty.value = 0.01;
 
       // At resonance
-      model.drivingFrequencyProperty.value =
-        model.naturalFrequencyHzProperty.value;
+      model.drivingFrequencyProperty.value = model.naturalFrequencyHzProperty.value;
       const powerAtResonance = model.steadyStateAveragePowerProperty.value;
 
       // Off resonance
-      model.drivingFrequencyProperty.value =
-        model.naturalFrequencyHzProperty.value * 3;
+      model.drivingFrequencyProperty.value = model.naturalFrequencyHzProperty.value * 3;
       const powerOffResonance = model.steadyStateAveragePowerProperty.value;
 
       expect(powerAtResonance).toBeGreaterThan(powerOffResonance);
@@ -1108,24 +1047,17 @@ describe("ResonanceModel", () => {
       const omega = 2.0 * 2 * Math.PI;
       const X0 = model.displacementAmplitudeProperty.value;
       const expected = 0.25 * (m * omega * omega + k) * X0 * X0;
-      expect(model.steadyStateAverageEnergyProperty.value).toBeCloseTo(
-        expected,
-        10,
-      );
+      expect(model.steadyStateAverageEnergyProperty.value).toBeCloseTo(expected, 10);
     });
 
     it("should equal 0.5*k*X0^2 at resonance (where KE equals PE)", () => {
       model.drivingEnabledProperty.value = true;
       model.drivingAmplitudeProperty.value = 0.01;
-      model.drivingFrequencyProperty.value =
-        model.naturalFrequencyHzProperty.value;
+      model.drivingFrequencyProperty.value = model.naturalFrequencyHzProperty.value;
       // At resonance mω² = k, so ¼(mω² + k)X₀² = ¼(2k)X₀² = ½kX₀²
       const k = model.springConstantProperty.value;
       const X0 = model.displacementAmplitudeProperty.value;
-      expect(model.steadyStateAverageEnergyProperty.value).toBeCloseTo(
-        0.5 * k * X0 * X0,
-        5,
-      );
+      expect(model.steadyStateAverageEnergyProperty.value).toBeCloseTo(0.5 * k * X0 * X0, 5);
     });
 
     it("should equal sum of KE and PE components", () => {
@@ -1133,10 +1065,7 @@ describe("ResonanceModel", () => {
       model.drivingFrequencyProperty.value = 2.0;
       const ke = model.steadyStateKineticEnergyProperty.value;
       const pe = model.steadyStatePotentialEnergyProperty.value;
-      expect(model.steadyStateAverageEnergyProperty.value).toBeCloseTo(
-        ke + pe,
-        10,
-      );
+      expect(model.steadyStateAverageEnergyProperty.value).toBeCloseTo(ke + pe, 10);
     });
 
     it("should be zero when driving is disabled", () => {
@@ -1148,8 +1077,7 @@ describe("ResonanceModel", () => {
       // At resonance: P_avg = ω₀ E_avg / Q
       model.drivingEnabledProperty.value = true;
       model.drivingAmplitudeProperty.value = 0.01;
-      model.drivingFrequencyProperty.value =
-        model.naturalFrequencyHzProperty.value;
+      model.drivingFrequencyProperty.value = model.naturalFrequencyHzProperty.value;
 
       const P = model.steadyStateAveragePowerProperty.value;
       const E = model.steadyStateAverageEnergyProperty.value;
@@ -1171,18 +1099,13 @@ describe("ResonanceModel", () => {
       const f0 = model.naturalFrequencyHzProperty.value;
       const zeta = model.dampingRatioProperty.value;
       const expected = f0 * Math.sqrt(1 - 2 * zeta * zeta);
-      expect(model.peakResponseFrequencyProperty.value).toBeCloseTo(
-        expected,
-        5,
-      );
+      expect(model.peakResponseFrequencyProperty.value).toBeCloseTo(expected, 5);
     });
 
     it("should be less than natural frequency", () => {
       model.drivingEnabledProperty.value = true;
       model.dampingProperty.value = 1.0;
-      expect(model.peakResponseFrequencyProperty.value).toBeLessThanOrEqual(
-        model.naturalFrequencyHzProperty.value,
-      );
+      expect(model.peakResponseFrequencyProperty.value).toBeLessThanOrEqual(model.naturalFrequencyHzProperty.value);
     });
 
     it("should return 0 when zeta >= 1/sqrt(2)", () => {
@@ -1203,10 +1126,7 @@ describe("ResonanceModel", () => {
     it("should approach natural frequency for very light damping", () => {
       model.drivingEnabledProperty.value = true;
       model.dampingProperty.value = 0.001;
-      expect(model.peakResponseFrequencyProperty.value).toBeCloseTo(
-        model.naturalFrequencyHzProperty.value,
-        2,
-      );
+      expect(model.peakResponseFrequencyProperty.value).toBeCloseTo(model.naturalFrequencyHzProperty.value, 2);
     });
   });
 
@@ -1223,10 +1143,7 @@ describe("ResonanceModel", () => {
       const zeta = 0.1;
       const F0 = k * A;
       const expected = F0 / (2 * k * zeta * Math.sqrt(1 - zeta * zeta));
-      expect(model.peakDisplacementAmplitudeProperty.value).toBeCloseTo(
-        expected,
-        5,
-      );
+      expect(model.peakDisplacementAmplitudeProperty.value).toBeCloseTo(expected, 5);
     });
 
     it("should be greater than static deflection for underdamped", () => {
@@ -1235,9 +1152,7 @@ describe("ResonanceModel", () => {
       model.drivingAmplitudeProperty.value = 0.01;
 
       // Static deflection = A (driver amplitude)
-      expect(model.peakDisplacementAmplitudeProperty.value).toBeGreaterThan(
-        model.drivingAmplitudeProperty.value,
-      );
+      expect(model.peakDisplacementAmplitudeProperty.value).toBeGreaterThan(model.drivingAmplitudeProperty.value);
     });
 
     it("should be zero when driving is disabled", () => {
@@ -1264,10 +1179,7 @@ describe("ResonanceModel", () => {
       model.drivingEnabledProperty.value = true;
       model.drivingFrequencyProperty.value = 2.0;
       const X0 = model.displacementAmplitudeProperty.value;
-      expect(model.steadyStateRmsDisplacementProperty.value).toBeCloseTo(
-        X0 / Math.SQRT2,
-        10,
-      );
+      expect(model.steadyStateRmsDisplacementProperty.value).toBeCloseTo(X0 / Math.SQRT2, 10);
     });
 
     it("should be zero when driving is disabled", () => {
@@ -1281,10 +1193,7 @@ describe("ResonanceModel", () => {
       model.drivingEnabledProperty.value = true;
       model.drivingFrequencyProperty.value = 2.0;
       const V0 = model.velocityAmplitudeProperty.value;
-      expect(model.steadyStateRmsVelocityProperty.value).toBeCloseTo(
-        V0 / Math.SQRT2,
-        10,
-      );
+      expect(model.steadyStateRmsVelocityProperty.value).toBeCloseTo(V0 / Math.SQRT2, 10);
     });
 
     it("should be zero when driving is disabled", () => {
@@ -1298,10 +1207,7 @@ describe("ResonanceModel", () => {
       model.drivingEnabledProperty.value = true;
       model.drivingFrequencyProperty.value = 2.0;
       const A0 = model.accelerationAmplitudeProperty.value;
-      expect(model.steadyStateRmsAccelerationProperty.value).toBeCloseTo(
-        A0 / Math.SQRT2,
-        10,
-      );
+      expect(model.steadyStateRmsAccelerationProperty.value).toBeCloseTo(A0 / Math.SQRT2, 10);
     });
 
     it("should be zero when driving is disabled", () => {
@@ -1314,10 +1220,7 @@ describe("ResonanceModel", () => {
       model.drivingFrequencyProperty.value = 3.0;
       const omega = 3.0 * 2 * Math.PI;
       const rmsV = model.steadyStateRmsVelocityProperty.value;
-      expect(model.steadyStateRmsAccelerationProperty.value).toBeCloseTo(
-        rmsV * omega,
-        10,
-      );
+      expect(model.steadyStateRmsAccelerationProperty.value).toBeCloseTo(rmsV * omega, 10);
     });
   });
 
@@ -1329,10 +1232,7 @@ describe("ResonanceModel", () => {
       const omega = 2.0 * 2 * Math.PI;
       const X0 = model.displacementAmplitudeProperty.value;
       const expected = 0.25 * m * omega * omega * X0 * X0;
-      expect(model.steadyStateKineticEnergyProperty.value).toBeCloseTo(
-        expected,
-        10,
-      );
+      expect(model.steadyStateKineticEnergyProperty.value).toBeCloseTo(expected, 10);
     });
 
     it("should be zero when driving is disabled", () => {
@@ -1343,8 +1243,7 @@ describe("ResonanceModel", () => {
     it("should equal PE at resonance", () => {
       model.drivingEnabledProperty.value = true;
       model.drivingAmplitudeProperty.value = 0.01;
-      model.drivingFrequencyProperty.value =
-        model.naturalFrequencyHzProperty.value;
+      model.drivingFrequencyProperty.value = model.naturalFrequencyHzProperty.value;
       // At resonance ω = ω₀, mω² = k, so ¼mω²X₀² = ¼kX₀²
       expect(model.steadyStateKineticEnergyProperty.value).toBeCloseTo(
         model.steadyStatePotentialEnergyProperty.value,
@@ -1356,8 +1255,7 @@ describe("ResonanceModel", () => {
       model.drivingEnabledProperty.value = true;
       model.drivingAmplitudeProperty.value = 0.01;
       // Drive well above natural frequency
-      model.drivingFrequencyProperty.value =
-        model.naturalFrequencyHzProperty.value * 3;
+      model.drivingFrequencyProperty.value = model.naturalFrequencyHzProperty.value * 3;
       // Above resonance: mω² > k, so <KE> > <PE>
       expect(model.steadyStateKineticEnergyProperty.value).toBeGreaterThan(
         model.steadyStatePotentialEnergyProperty.value,
@@ -1368,12 +1266,9 @@ describe("ResonanceModel", () => {
       model.drivingEnabledProperty.value = true;
       model.drivingAmplitudeProperty.value = 0.01;
       // Drive well below natural frequency
-      model.drivingFrequencyProperty.value =
-        model.naturalFrequencyHzProperty.value * 0.1;
+      model.drivingFrequencyProperty.value = model.naturalFrequencyHzProperty.value * 0.1;
       // Below resonance: mω² < k, so <KE> < <PE>
-      expect(model.steadyStateKineticEnergyProperty.value).toBeLessThan(
-        model.steadyStatePotentialEnergyProperty.value,
-      );
+      expect(model.steadyStateKineticEnergyProperty.value).toBeLessThan(model.steadyStatePotentialEnergyProperty.value);
     });
 
     it("should equal 0.5 * m * rmsV^2", () => {
@@ -1381,10 +1276,7 @@ describe("ResonanceModel", () => {
       model.drivingFrequencyProperty.value = 2.0;
       const m = model.massProperty.value;
       const rmsV = model.steadyStateRmsVelocityProperty.value;
-      expect(model.steadyStateKineticEnergyProperty.value).toBeCloseTo(
-        0.5 * m * rmsV * rmsV,
-        10,
-      );
+      expect(model.steadyStateKineticEnergyProperty.value).toBeCloseTo(0.5 * m * rmsV * rmsV, 10);
     });
   });
 
@@ -1395,10 +1287,7 @@ describe("ResonanceModel", () => {
       const k = model.springConstantProperty.value;
       const X0 = model.displacementAmplitudeProperty.value;
       const expected = 0.25 * k * X0 * X0;
-      expect(model.steadyStatePotentialEnergyProperty.value).toBeCloseTo(
-        expected,
-        10,
-      );
+      expect(model.steadyStatePotentialEnergyProperty.value).toBeCloseTo(expected, 10);
     });
 
     it("should be zero when driving is disabled", () => {
@@ -1411,10 +1300,7 @@ describe("ResonanceModel", () => {
       model.drivingFrequencyProperty.value = 2.0;
       const k = model.springConstantProperty.value;
       const rmsX = model.steadyStateRmsDisplacementProperty.value;
-      expect(model.steadyStatePotentialEnergyProperty.value).toBeCloseTo(
-        0.5 * k * rmsX * rmsX,
-        10,
-      );
+      expect(model.steadyStatePotentialEnergyProperty.value).toBeCloseTo(0.5 * k * rmsX * rmsX, 10);
     });
   });
 
@@ -1428,10 +1314,7 @@ describe("ResonanceModel", () => {
       const X0 = model.displacementAmplitudeProperty.value;
       const phi = model.phaseAngleProperty.value;
       const expected = 0.5 * F0 * omega * X0 * Math.sin(phi);
-      expect(model.steadyStateDrivingPowerProperty.value).toBeCloseTo(
-        expected,
-        10,
-      );
+      expect(model.steadyStateDrivingPowerProperty.value).toBeCloseTo(expected, 10);
     });
 
     it("should be zero when driving is disabled", () => {
@@ -1443,32 +1326,24 @@ describe("ResonanceModel", () => {
       model.drivingEnabledProperty.value = true;
       model.drivingAmplitudeProperty.value = 0.01;
       model.drivingFrequencyProperty.value = 2.0;
-      expect(model.steadyStateDrivingPowerProperty.value).toBeCloseTo(
-        -model.steadyStateDampingPowerProperty.value,
-        5,
-      );
+      expect(model.steadyStateDrivingPowerProperty.value).toBeCloseTo(-model.steadyStateDampingPowerProperty.value, 5);
     });
 
     it("should equal steady-state average power (magnitude)", () => {
       model.drivingEnabledProperty.value = true;
       model.drivingAmplitudeProperty.value = 0.01;
       model.drivingFrequencyProperty.value = 2.0;
-      expect(model.steadyStateDrivingPowerProperty.value).toBeCloseTo(
-        model.steadyStateAveragePowerProperty.value,
-        5,
-      );
+      expect(model.steadyStateDrivingPowerProperty.value).toBeCloseTo(model.steadyStateAveragePowerProperty.value, 5);
     });
 
     it("should be maximized near resonance", () => {
       model.drivingEnabledProperty.value = true;
       model.drivingAmplitudeProperty.value = 0.01;
 
-      model.drivingFrequencyProperty.value =
-        model.naturalFrequencyHzProperty.value;
+      model.drivingFrequencyProperty.value = model.naturalFrequencyHzProperty.value;
       const atResonance = model.steadyStateDrivingPowerProperty.value;
 
-      model.drivingFrequencyProperty.value =
-        model.naturalFrequencyHzProperty.value * 3;
+      model.drivingFrequencyProperty.value = model.naturalFrequencyHzProperty.value * 3;
       const offResonance = model.steadyStateDrivingPowerProperty.value;
 
       expect(atResonance).toBeGreaterThan(offResonance);
@@ -1483,10 +1358,7 @@ describe("ResonanceModel", () => {
       const omega = 2.0 * 2 * Math.PI;
       const X0 = model.displacementAmplitudeProperty.value;
       const expected = -0.5 * b * omega * omega * X0 * X0;
-      expect(model.steadyStateDampingPowerProperty.value).toBeCloseTo(
-        expected,
-        10,
-      );
+      expect(model.steadyStateDampingPowerProperty.value).toBeCloseTo(expected, 10);
     });
 
     it("should be zero when driving is disabled", () => {
@@ -1501,9 +1373,7 @@ describe("ResonanceModel", () => {
       // Test at various frequencies
       for (const freq of [0.5, 1.0, 2.0, 4.0]) {
         model.drivingFrequencyProperty.value = freq;
-        expect(model.steadyStateDampingPowerProperty.value).toBeLessThanOrEqual(
-          0,
-        );
+        expect(model.steadyStateDampingPowerProperty.value).toBeLessThanOrEqual(0);
       }
     });
 
@@ -1511,10 +1381,7 @@ describe("ResonanceModel", () => {
       model.drivingEnabledProperty.value = true;
       model.drivingAmplitudeProperty.value = 0.01;
       model.drivingFrequencyProperty.value = 2.0;
-      expect(model.steadyStateDampingPowerProperty.value).toBeCloseTo(
-        -model.steadyStateAveragePowerProperty.value,
-        10,
-      );
+      expect(model.steadyStateDampingPowerProperty.value).toBeCloseTo(-model.steadyStateAveragePowerProperty.value, 10);
     });
 
     it("should equal -b * rmsV^2 (in terms of RMS velocity)", () => {
@@ -1523,10 +1390,7 @@ describe("ResonanceModel", () => {
       const b = model.dampingProperty.value;
       const rmsV = model.steadyStateRmsVelocityProperty.value;
       // <-bv²> = -b<v²> = -b(V_rms)²
-      expect(model.steadyStateDampingPowerProperty.value).toBeCloseTo(
-        -b * rmsV * rmsV,
-        10,
-      );
+      expect(model.steadyStateDampingPowerProperty.value).toBeCloseTo(-b * rmsV * rmsV, 10);
     });
   });
 });

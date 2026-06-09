@@ -19,42 +19,30 @@
  */
 
 import { Multilink } from "scenerystack/axon";
-import { Utterance } from "scenerystack/utterance-queue";
-import { utteranceQueue } from "../../common/util/utteranceQueue.js";
-import { ScreenView, ScreenViewOptions, audioManager } from "scenerystack/sim";
-import {
-  DragListener,
-  HBox,
-  KeyboardUtils,
-  Node,
-  Path,
-  Rectangle,
-  Text,
-  VBox,
-} from "scenerystack/scenery";
-import {
-  ResetAllButton,
-  PlayPauseStepButtonGroup,
-} from "scenerystack/scenery-phet";
-import { AquaRadioButtonGroup } from "scenerystack/sun";
-import { Vector2 } from "scenerystack/dot";
+import type { Vector2 } from "scenerystack/dot";
 import { Shape } from "scenerystack/kite";
-import { ModelViewTransform2 } from "scenerystack/phetcommon";
-import { ChladniModel } from "../model/ChladniModel.js";
-import { ChladniVisualizationNode } from "./ChladniVisualizationNode.js";
-import { ChladniControlPanel } from "./ChladniControlPanel.js";
-import { ResonanceCurveNode } from "./ResonanceCurveNode.js";
-import { ChladniRulerNode } from "./ChladniRulerNode.js";
-import { ChladniGridNode } from "./ChladniGridNode.js";
-import { DisplacementColormapNode } from "./DisplacementColormapNode.js";
-import { ModalShapeNode } from "./ModalShapeNode.js";
-import { ExcitationMarkerNode } from "./ExcitationMarkerNode.js";
-import { createChladniTransform } from "./ChladniTransformFactory.js";
-import { ResonanceSonification } from "./ResonanceSonification.js";
-import ResonanceConstants from "../../common/ResonanceConstants.js";
+import type { ModelViewTransform2 } from "scenerystack/phetcommon";
+import { DragListener, HBox, KeyboardUtils, Node, Path, Rectangle, Text, VBox } from "scenerystack/scenery";
+import { PlayPauseStepButtonGroup, ResetAllButton } from "scenerystack/scenery-phet";
+import { audioManager, ScreenView, type ScreenViewOptions } from "scenerystack/sim";
+import { AquaRadioButtonGroup } from "scenerystack/sun";
+import { Utterance } from "scenerystack/utterance-queue";
 import ResonanceColors from "../../common/ResonanceColors.js";
+import ResonanceConstants from "../../common/ResonanceConstants.js";
+import { utteranceQueue } from "../../common/util/utteranceQueue.js";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
-import { ResonancePreferencesModel } from "../../preferences/ResonancePreferencesModel.js";
+import type { ResonancePreferencesModel } from "../../preferences/ResonancePreferencesModel.js";
+import type { ChladniModel } from "../model/ChladniModel.js";
+import { ChladniControlPanel } from "./ChladniControlPanel.js";
+import { ChladniGridNode } from "./ChladniGridNode.js";
+import { ChladniRulerNode } from "./ChladniRulerNode.js";
+import { createChladniTransform } from "./ChladniTransformFactory.js";
+import { ChladniVisualizationNode } from "./ChladniVisualizationNode.js";
+import { DisplacementColormapNode } from "./DisplacementColormapNode.js";
+import { ExcitationMarkerNode } from "./ExcitationMarkerNode.js";
+import { ModalShapeNode } from "./ModalShapeNode.js";
+import { ResonanceCurveNode } from "./ResonanceCurveNode.js";
+import { ResonanceSonification } from "./ResonanceSonification.js";
 
 // Base size for the Chladni plate visualization (pixels per meter of plate)
 const PIXELS_PER_METER = 1400;
@@ -90,11 +78,7 @@ export class ChladniScreenView extends ScreenView {
   // Model-View transform for coordinate conversion
   private modelViewTransform: ModelViewTransform2;
 
-  public constructor(
-    model: ChladniModel,
-    preferencesModel: ResonancePreferencesModel,
-    options?: ScreenViewOptions,
-  ) {
+  public constructor(model: ChladniModel, preferencesModel: ResonancePreferencesModel, options?: ScreenViewOptions) {
     super(options);
     this.model = model;
 
@@ -107,22 +91,13 @@ export class ChladniScreenView extends ScreenView {
     const initialHeight = model.plateHeight * PIXELS_PER_METER;
 
     // Create the model-view transform using the shared factory
-    this.modelViewTransform = createChladniTransform(
-      model.plateWidth,
-      model.plateHeight,
-      initialWidth,
-      initialHeight,
-    );
+    this.modelViewTransform = createChladniTransform(model.plateWidth, model.plateHeight, initialWidth, initialHeight);
 
     // Create the particle visualization with proper dimensions and transform
-    this.visualizationNode = new ChladniVisualizationNode(
-      model,
-      preferencesModel.rendererTypeProperty,
-      {
-        visualizationWidth: initialWidth,
-        visualizationHeight: initialHeight,
-      },
-    );
+    this.visualizationNode = new ChladniVisualizationNode(model, preferencesModel.rendererTypeProperty, {
+      visualizationWidth: initialWidth,
+      visualizationHeight: initialHeight,
+    });
 
     // Center the visualization
     this.visualizationNode.centerX = this.visualizationCenterX;
@@ -131,24 +106,14 @@ export class ChladniScreenView extends ScreenView {
     this.addChild(this.visualizationNode);
 
     // Create the grid overlay (behind particles, but on visualization)
-    this.gridNode = new ChladniGridNode(
-      initialWidth,
-      initialHeight,
-      model.plateWidth,
-      model.plateHeight,
-    );
+    this.gridNode = new ChladniGridNode(initialWidth, initialHeight, model.plateWidth, model.plateHeight);
     this.gridNode.visible = false;
     this.gridNode.x = this.visualizationNode.bounds.minX;
     this.gridNode.y = this.visualizationNode.bounds.minY;
     this.addChild(this.gridNode);
 
     // Create the ruler overlay
-    this.rulerNode = new ChladniRulerNode(
-      initialWidth,
-      initialHeight,
-      model.plateWidth,
-      model.plateHeight,
-    );
+    this.rulerNode = new ChladniRulerNode(initialWidth, initialHeight, model.plateWidth, model.plateHeight);
     this.rulerNode.visible = false;
     this.rulerNode.x = this.visualizationNode.bounds.minX;
     this.rulerNode.y = this.visualizationNode.bounds.minY;
@@ -193,13 +158,10 @@ export class ChladniScreenView extends ScreenView {
     this.addChild(this.controlPanel.comboBoxListParent);
 
     // Create the resonance curve display
-    const curveLabel = new Text(
-      ResonanceStrings.chladni.resonanceCurveStringProperty,
-      {
-        font: ResonanceConstants.LABEL_FONT,
-        fill: ResonanceColors.textProperty,
-      },
-    );
+    const curveLabel = new Text(ResonanceStrings.chladni.resonanceCurveStringProperty, {
+      font: ResonanceConstants.LABEL_FONT,
+      fill: ResonanceColors.textProperty,
+    });
 
     this.resonanceCurveNode = new ResonanceCurveNode(model);
 
@@ -210,32 +172,22 @@ export class ChladniScreenView extends ScreenView {
     });
 
     // Position below the control panel, aligned to right side
-    this.curveContainer.right =
-      this.layoutBounds.maxX - ResonanceConstants.CONTROL_PANEL_RIGHT_MARGIN;
+    this.curveContainer.right = this.layoutBounds.maxX - ResonanceConstants.CONTROL_PANEL_RIGHT_MARGIN;
     this.curveContainer.top = this.controlPanel.bottom + 15;
 
     this.addChild(this.curveContainer);
 
     // Link curve visibility to the checkbox property
-    this.controlPanel.showResonanceCurveProperty.linkAttribute(
-      this.curveContainer,
-      "visible",
-    );
+    this.controlPanel.showResonanceCurveProperty.linkAttribute(this.curveContainer, "visible");
 
     // Link ruler visibility to the checkbox property
-    this.controlPanel.showRulerProperty.linkAttribute(
-      this.rulerNode,
-      "visible",
-    );
+    this.controlPanel.showRulerProperty.linkAttribute(this.rulerNode, "visible");
 
     // Link grid visibility to the checkbox property
     this.controlPanel.showGridProperty.linkAttribute(this.gridNode, "visible");
 
     // Link colormap visibility to the checkbox property
-    this.controlPanel.showColormapProperty.linkAttribute(
-      this.colormapNode,
-      "visible",
-    );
+    this.controlPanel.showColormapProperty.linkAttribute(this.colormapNode, "visible");
 
     // Create the modal shape overlay (after control panel so we can use its mode property)
     this.modalShapeNode = new ModalShapeNode(
@@ -244,7 +196,6 @@ export class ChladniScreenView extends ScreenView {
       model.plateWidth,
       model.plateHeight,
       this.controlPanel.selectedModeProperty,
-      model.waveNumber,
     );
     this.modalShapeNode.visible = false;
     this.modalShapeNode.x = this.visualizationNode.bounds.minX;
@@ -253,10 +204,7 @@ export class ChladniScreenView extends ScreenView {
     this.addChild(this.modalShapeNode);
 
     // Link modal shape visibility to the checkbox property (after node is created)
-    this.controlPanel.showModalShapeProperty.linkAttribute(
-      this.modalShapeNode,
-      "visible",
-    );
+    this.controlPanel.showModalShapeProperty.linkAttribute(this.modalShapeNode, "visible");
 
     // Create playback controls
     this.playbackControls = this.createPlaybackControls();
@@ -269,26 +217,19 @@ export class ChladniScreenView extends ScreenView {
         this.reset();
       },
       right: this.layoutBounds.maxX - ResonanceConstants.RESET_ALL_RIGHT_MARGIN,
-      bottom:
-        this.layoutBounds.maxY - ResonanceConstants.RESET_ALL_BOTTOM_MARGIN,
+      bottom: this.layoutBounds.maxY - ResonanceConstants.RESET_ALL_BOTTOM_MARGIN,
     });
     this.addChild(resetAllButton);
 
     // Listen to plate dimension changes to update the visualization
     // Using Multilink for coordinated updates
-    Multilink.multilink(
-      [model.plateWidthProperty, model.plateHeightProperty],
-      () => this.updateVisualizationSize(),
-    );
+    Multilink.multilink([model.plateWidthProperty, model.plateHeightProperty], () => this.updateVisualizationSize());
 
     // Set up keyboard accessibility
     this.setupKeyboardControls();
 
     // Set up audio sonification for resonance peaks
-    this.sonification = new ResonanceSonification(
-      model,
-      audioManager.audioAndSoundEnabledProperty,
-    );
+    this.sonification = new ResonanceSonification(model, audioManager.audioAndSoundEnabledProperty);
 
     // Set up screen reader alerts for resonance detection
     this.setupAccessibilityAlerts();
@@ -311,10 +252,7 @@ export class ChladniScreenView extends ScreenView {
     this.sonification.isAtResonanceProperty.lazyLink((isAtResonance) => {
       if (isAtResonance) {
         const frequency = this.model.frequencyProperty.value.toFixed(0);
-        const alertString = a11y.resonancePeakAlertStringProperty.value.replace(
-          "{{frequency}}",
-          frequency,
-        );
+        const alertString = a11y.resonancePeakAlertStringProperty.value.replace("{{frequency}}", frequency);
         resonanceUtterance.alert = alertString;
         utteranceQueue.addToBack(resonanceUtterance);
       }
@@ -345,10 +283,7 @@ export class ChladniScreenView extends ScreenView {
 
     // Announce material changes
     this.model.materialProperty.lazyLink((material) => {
-      const alertString = a11y.materialChangedAlertStringProperty.value.replace(
-        "{{material}}",
-        material.name,
-      );
+      const alertString = a11y.materialChangedAlertStringProperty.value.replace("{{material}}", material.name);
       utteranceQueue.addToBack(
         new Utterance({
           alert: alertString,
@@ -370,10 +305,7 @@ export class ChladniScreenView extends ScreenView {
     // Use DOM event listener for global keyboard handling
     const handleKeyDown = (event: KeyboardEvent) => {
       // Ignore if typing in an input field
-      if (
-        event.target instanceof HTMLInputElement ||
-        event.target instanceof HTMLTextAreaElement
-      ) {
+      if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) {
         return;
       }
 
@@ -382,11 +314,7 @@ export class ChladniScreenView extends ScreenView {
       if (KeyboardUtils.isArrowKey(event)) {
         const activeElement = document.activeElement;
         // Skip if focus is on a button, slider, or other interactive element
-        if (
-          activeElement &&
-          activeElement !== document.body &&
-          activeElement.tagName !== "BODY"
-        ) {
+        if (activeElement && activeElement !== document.body && activeElement.tagName !== "BODY") {
           return;
         }
       }
@@ -396,8 +324,7 @@ export class ChladniScreenView extends ScreenView {
       if (KeyboardUtils.isKeyEvent(event, KeyboardUtils.KEY_SPACE)) {
         // Toggle play/pause
         event.preventDefault();
-        this.model.isPlayingProperty.value =
-          !this.model.isPlayingProperty.value;
+        this.model.isPlayingProperty.value = !this.model.isPlayingProperty.value;
       } else if (KeyboardUtils.isArrowKey(event)) {
         // Block frequency adjustment during sweep
         if (this.model.isSweepActiveProperty.value) {
@@ -407,33 +334,19 @@ export class ChladniScreenView extends ScreenView {
 
         if (KeyboardUtils.isKeyEvent(event, KeyboardUtils.KEY_LEFT_ARROW)) {
           // Decrease frequency
-          const step = shiftPressed
-            ? FREQUENCY_STEP_MEDIUM
-            : FREQUENCY_STEP_SMALL;
+          const step = shiftPressed ? FREQUENCY_STEP_MEDIUM : FREQUENCY_STEP_SMALL;
           this.adjustFrequency(-step);
-        } else if (
-          KeyboardUtils.isKeyEvent(event, KeyboardUtils.KEY_RIGHT_ARROW)
-        ) {
+        } else if (KeyboardUtils.isKeyEvent(event, KeyboardUtils.KEY_RIGHT_ARROW)) {
           // Increase frequency
-          const step = shiftPressed
-            ? FREQUENCY_STEP_MEDIUM
-            : FREQUENCY_STEP_SMALL;
+          const step = shiftPressed ? FREQUENCY_STEP_MEDIUM : FREQUENCY_STEP_SMALL;
           this.adjustFrequency(step);
-        } else if (
-          KeyboardUtils.isKeyEvent(event, KeyboardUtils.KEY_DOWN_ARROW)
-        ) {
+        } else if (KeyboardUtils.isKeyEvent(event, KeyboardUtils.KEY_DOWN_ARROW)) {
           // Decrease frequency (larger step)
-          const step = shiftPressed
-            ? FREQUENCY_STEP_LARGE
-            : FREQUENCY_STEP_MEDIUM;
+          const step = shiftPressed ? FREQUENCY_STEP_LARGE : FREQUENCY_STEP_MEDIUM;
           this.adjustFrequency(-step);
-        } else if (
-          KeyboardUtils.isKeyEvent(event, KeyboardUtils.KEY_UP_ARROW)
-        ) {
+        } else if (KeyboardUtils.isKeyEvent(event, KeyboardUtils.KEY_UP_ARROW)) {
           // Increase frequency (larger step)
-          const step = shiftPressed
-            ? FREQUENCY_STEP_LARGE
-            : FREQUENCY_STEP_MEDIUM;
+          const step = shiftPressed ? FREQUENCY_STEP_LARGE : FREQUENCY_STEP_MEDIUM;
           this.adjustFrequency(step);
         }
       } else if (event.key.toLowerCase() === "r" && !event.ctrlKey) {
@@ -461,10 +374,7 @@ export class ChladniScreenView extends ScreenView {
     const currentFreq = this.model.frequencyProperty.value;
     const newFreq = currentFreq + delta;
     const range = this.model.frequencyRange;
-    this.model.frequencyProperty.value = Math.max(
-      range.min,
-      Math.min(range.max, newFreq),
-    );
+    this.model.frequencyProperty.value = Math.max(range.min, Math.min(range.max, newFreq));
   }
 
   /**
@@ -505,32 +415,12 @@ export class ChladniScreenView extends ScreenView {
     const vizBounds = this.visualizationNode.bounds;
 
     // Update dimensions
-    this.rulerNode.updateDimensions(
-      vizWidth,
-      vizHeight,
-      this.model.plateWidth,
-      this.model.plateHeight,
-    );
-    this.gridNode.updateDimensions(
-      vizWidth,
-      vizHeight,
-      this.model.plateWidth,
-      this.model.plateHeight,
-    );
-    this.colormapNode.updateDimensions(
-      vizWidth,
-      vizHeight,
-      this.model.plateWidth,
-      this.model.plateHeight,
-    );
+    this.rulerNode.updateDimensions(vizWidth, vizHeight, this.model.plateWidth, this.model.plateHeight);
+    this.gridNode.updateDimensions(vizWidth, vizHeight, this.model.plateWidth, this.model.plateHeight);
+    this.colormapNode.updateDimensions(vizWidth, vizHeight, this.model.plateWidth, this.model.plateHeight);
     // Update modal shape if it exists (may not during initial construction)
     if (this.modalShapeNode) {
-      this.modalShapeNode.updateDimensions(
-        vizWidth,
-        vizHeight,
-        this.model.plateWidth,
-        this.model.plateHeight,
-      );
+      this.modalShapeNode.updateDimensions(vizWidth, vizHeight, this.model.plateWidth, this.model.plateHeight);
     }
 
     // Update positions to match visualization bounds
@@ -552,16 +442,10 @@ export class ChladniScreenView extends ScreenView {
    */
   private createResizeHandle(): Node {
     // Larger invisible hit area for easier grabbing
-    const hitArea = new Rectangle(
-      0,
-      0,
-      RESIZE_HANDLE_HIT_AREA,
-      RESIZE_HANDLE_HIT_AREA,
-      {
-        fill: "rgba(0,0,0,0.01)", // Nearly invisible but still catches events
-        cursor: "nwse-resize",
-      },
-    );
+    const hitArea = new Rectangle(0, 0, RESIZE_HANDLE_HIT_AREA, RESIZE_HANDLE_HIT_AREA, {
+      fill: "rgba(0,0,0,0.01)", // Nearly invisible but still catches events
+      cursor: "nwse-resize",
+    });
 
     // Create a diagonal resize indicator (three diagonal lines)
     const handleShape = new Shape();
@@ -598,7 +482,9 @@ export class ChladniScreenView extends ScreenView {
         startHeight = this.model.plateHeightProperty.value;
       },
       drag: (event) => {
-        if (!dragStartPoint) return;
+        if (!dragStartPoint) {
+          return;
+        }
 
         // Calculate the drag delta
         const currentPoint = event.pointer.point;
@@ -614,14 +500,8 @@ export class ChladniScreenView extends ScreenView {
         // Calculate new dimensions
         const widthRange = this.model.plateWidthProperty.range;
         const heightRange = this.model.plateHeightProperty.range;
-        const newWidth = Math.max(
-          widthRange.min,
-          Math.min(widthRange.max, startWidth + widthDelta),
-        );
-        const newHeight = Math.max(
-          heightRange.min,
-          Math.min(heightRange.max, startHeight + heightDelta),
-        );
+        const newWidth = Math.max(widthRange.min, Math.min(widthRange.max, startWidth + widthDelta));
+        const newHeight = Math.max(heightRange.min, Math.min(heightRange.max, startHeight + heightDelta));
 
         // Update the model
         this.model.plateWidthProperty.value = newWidth;
@@ -670,30 +550,23 @@ export class ChladniScreenView extends ScreenView {
       },
     ];
 
-    const speedControl = new AquaRadioButtonGroup(
-      this.model.timeSpeedProperty,
-      speedButtons,
-      {
-        orientation: "horizontal",
-        spacing: ResonanceConstants.SPEED_CONTROL_SPACING,
-        radioButtonOptions: {
-          radius: ResonanceConstants.SPEED_RADIO_BUTTON_RADIUS,
-        },
+    const speedControl = new AquaRadioButtonGroup(this.model.timeSpeedProperty, speedButtons, {
+      orientation: "horizontal",
+      spacing: ResonanceConstants.SPEED_CONTROL_SPACING,
+      radioButtonOptions: {
+        radius: ResonanceConstants.SPEED_RADIO_BUTTON_RADIUS,
       },
-    );
+    });
 
-    const playPauseStepButtonGroup = new PlayPauseStepButtonGroup(
-      this.model.isPlayingProperty,
-      {
-        stepForwardButtonOptions: {
-          listener: () => {
-            // Step the model forward by a fixed amount
-            this.model.step(ResonanceConstants.STEP_DT);
-            this.visualizationNode.update();
-          },
+    const playPauseStepButtonGroup = new PlayPauseStepButtonGroup(this.model.isPlayingProperty, {
+      stepForwardButtonOptions: {
+        listener: () => {
+          // Step the model forward by a fixed amount
+          this.model.step(ResonanceConstants.STEP_DT);
+          this.visualizationNode.update();
         },
       },
-    );
+    });
 
     const container = new HBox({
       children: [speedControl, playPauseStepButtonGroup],
@@ -702,8 +575,7 @@ export class ChladniScreenView extends ScreenView {
 
     // Position at the bottom center of the screen
     container.centerX = this.visualizationNode.centerX;
-    container.bottom =
-      this.layoutBounds.maxY - ResonanceConstants.PLAYBACK_BOTTOM_MARGIN;
+    container.bottom = this.layoutBounds.maxY - ResonanceConstants.PLAYBACK_BOTTOM_MARGIN;
 
     return container;
   }
@@ -728,7 +600,6 @@ export class ChladniScreenView extends ScreenView {
 
     // Update modal shape if visible (reflects current wave number and mode)
     if (this.modalShapeNode.visible) {
-      this.modalShapeNode.setWaveNumber(this.model.waveNumber);
       this.modalShapeNode.update();
     }
   }

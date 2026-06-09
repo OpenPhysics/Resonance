@@ -16,5 +16,4 @@ export const ResonatorConfigMode = {
   CUSTOM: "custom",
 } as const;
 
-export type ResonatorConfigModeType =
-  (typeof ResonatorConfigMode)[keyof typeof ResonatorConfigMode];
+export type ResonatorConfigModeType = (typeof ResonatorConfigMode)[keyof typeof ResonatorConfigMode];

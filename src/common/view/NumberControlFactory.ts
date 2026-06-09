@@ -3,10 +3,10 @@
  * with consistent styling throughout the Resonance simulation.
  */
 
-import { Text, Color } from "scenerystack/scenery";
+import type { NumberProperty, TReadOnlyProperty } from "scenerystack/axon";
+import { Dimension2, type Range } from "scenerystack/dot";
+import type { Color, Text } from "scenerystack/scenery";
 import { NumberControl } from "scenerystack/scenery-phet";
-import { NumberProperty, TReadOnlyProperty } from "scenerystack/axon";
-import { Range, Dimension2 } from "scenerystack/dot";
 import ResonanceColors from "../ResonanceColors.js";
 import ResonanceConstants from "../ResonanceConstants.js";
 
@@ -39,18 +39,18 @@ export interface NumberControlFactoryOptions {
 }
 
 /**
+ * Default track size used across the simulation.
+ */
+const DEFAULT_TRACK_SIZE = new Dimension2(120, 3);
+
+/**
  * Factory for creating consistently styled NumberControl instances.
  */
-export class NumberControlFactory {
-  /**
-   * Default track size used across the simulation.
-   */
-  private static readonly DEFAULT_TRACK_SIZE = new Dimension2(120, 3);
-
+export const NumberControlFactory = {
   /**
    * Creates a NumberControl with standard Resonance styling.
    */
-  public static create(options: NumberControlFactoryOptions): NumberControl {
+  create(options: NumberControlFactoryOptions): NumberControl {
     const {
       titleProperty,
       numberProperty,
@@ -65,10 +65,7 @@ export class NumberControlFactory {
       enabledRangeProperty,
     } = options;
 
-    const trackSize =
-      trackWidth === 120
-        ? NumberControlFactory.DEFAULT_TRACK_SIZE
-        : new Dimension2(trackWidth, 3);
+    const trackSize = trackWidth === 120 ? DEFAULT_TRACK_SIZE : new Dimension2(trackWidth, 3);
 
     return new NumberControl(titleProperty, numberProperty, range, {
       delta,
@@ -94,16 +91,14 @@ export class NumberControlFactory {
         minorTickStroke: ResonanceColors.textProperty,
       },
     });
-  }
+  },
 
   /**
    * Creates a NumberControl and applies the standard control scale.
    */
-  public static createScaled(
-    options: NumberControlFactoryOptions,
-  ): NumberControl {
+  createScaled(options: NumberControlFactoryOptions): NumberControl {
     const control = NumberControlFactory.create(options);
     control.setScaleMagnitude(ResonanceConstants.CONTROL_SCALE);
     return control;
-  }
-}
+  },
+};

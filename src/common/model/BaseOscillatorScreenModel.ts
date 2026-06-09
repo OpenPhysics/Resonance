@@ -16,17 +16,14 @@
  * - CUSTOM: User sets all parameters manually
  */
 
-import { ResonanceModel } from "./ResonanceModel.js";
-import {
-  ResonatorConfigMode,
-  ResonatorConfigModeType,
-} from "./ResonatorConfigMode.js";
-import { ResonancePreferencesModel } from "../../preferences/ResonancePreferencesModel.js";
-import { Property, NumberProperty } from "scenerystack/axon";
-import { TimeSpeed } from "./BaseModel.js";
-import { CircularUpdateGuard } from "../util/index.js";
-import { FrequencySweepController } from "./FrequencySweepController.js";
+import { NumberProperty, Property } from "scenerystack/axon";
+import type { ResonancePreferencesModel } from "../../preferences/ResonancePreferencesModel.js";
 import ResonanceConstants from "../ResonanceConstants.js";
+import { CircularUpdateGuard } from "../util/index.js";
+import type { TimeSpeed } from "./BaseModel.js";
+import { FrequencySweepController } from "./FrequencySweepController.js";
+import { ResonanceModel } from "./ResonanceModel.js";
+import { ResonatorConfigMode, type ResonatorConfigModeType } from "./ResonatorConfigMode.js";
 
 export type BaseOscillatorScreenModelOptions = {
   /**
@@ -78,18 +75,13 @@ export class BaseOscillatorScreenModel {
     return this.resonanceModel.isPlayingProperty;
   }
 
-  public constructor(
-    preferencesModel: ResonancePreferencesModel,
-    options?: BaseOscillatorScreenModelOptions,
-  ) {
+  public constructor(preferencesModel: ResonancePreferencesModel, options?: BaseOscillatorScreenModelOptions) {
     this.preferencesModel = preferencesModel;
     this.singleOscillatorMode = options?.singleOscillatorMode ?? false;
     this.resonanceModel = new ResonanceModel(preferencesModel);
     this.resonatorModels = [this.resonanceModel];
 
-    this.resonatorConfigProperty = new Property<ResonatorConfigModeType>(
-      ResonatorConfigMode.SAME_MASS,
-    );
+    this.resonatorConfigProperty = new Property<ResonatorConfigModeType>(ResonatorConfigMode.SAME_MASS);
 
     this.resonatorCountProperty = new NumberProperty(1);
     this.selectedResonatorIndexProperty = new NumberProperty(0); // Start with first resonator selected
@@ -242,22 +234,20 @@ export class BaseOscillatorScreenModel {
       const count = this.resonatorCountProperty.value;
 
       // Target frequency range
-      const f_min = 1.0; // Hz
-      const f_max = 5.5; // Hz
+      const fMin = 1.0; // Hz
+      const fMax = 5.5; // Hz
 
       // Set base resonator values when mode changes
       if (resetBaseValues) {
-        const omega_min = 2 * Math.PI * f_min;
+        const omegaMin = 2 * Math.PI * fMin;
         if (mode === ResonatorConfigMode.SAME_MASS) {
           // For same mass mode: m = 1 kg, calculate k for f = 1 Hz
           this.resonanceModel.massProperty.value = 1.0;
-          this.resonanceModel.springConstantProperty.value =
-            omega_min * omega_min * 1.0;
+          this.resonanceModel.springConstantProperty.value = omegaMin * omegaMin * 1.0;
         } else if (mode === ResonatorConfigMode.SAME_SPRING_CONSTANT) {
           // For same spring constant mode: k = 200 N/m, calculate m for f = 1 Hz
           this.resonanceModel.springConstantProperty.value = 200.0;
-          this.resonanceModel.massProperty.value =
-            200.0 / (omega_min * omega_min);
+          this.resonanceModel.massProperty.value = 200.0 / (omegaMin * omegaMin);
         }
       }
 
@@ -271,7 +261,7 @@ export class BaseOscillatorScreenModel {
 
         // Calculate target frequency for this resonator (evenly distributed)
         // f_i = f_min + (i / (count - 1)) × (f_max - f_min)
-        const targetFrequency = f_min + (i / (count - 1)) * (f_max - f_min);
+        const targetFrequency = fMin + (i / (count - 1)) * (fMax - fMin);
         const omega = 2 * Math.PI * targetFrequency; // Angular frequency (rad/s)
 
         switch (mode) {
@@ -323,9 +313,7 @@ export class BaseOscillatorScreenModel {
   public getResonatorModel(index: number): ResonanceModel {
     const model = this.resonatorModels[index];
     if (model === undefined) {
-      throw new Error(
-        `Resonator index ${index} out of range (0-${this.resonatorModels.length - 1})`,
-      );
+      throw new Error(`Resonator index ${index} out of range (0-${this.resonatorModels.length - 1})`);
     }
     return model;
   }

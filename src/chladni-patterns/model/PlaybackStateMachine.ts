@@ -12,22 +12,12 @@
  * - paused_sweeping: Animation paused but sweep will resume when playing
  */
 
-import {
-  BooleanProperty,
-  DerivedProperty,
-  StringUnionProperty,
-  TReadOnlyProperty,
-} from "scenerystack/axon";
+import { BooleanProperty, DerivedProperty, StringUnionProperty, type TReadOnlyProperty } from "scenerystack/axon";
 
 /**
  * Valid playback state values.
  */
-export const PlaybackStateValues = [
-  "idle",
-  "playing",
-  "sweeping",
-  "paused_sweeping",
-] as const;
+export const PlaybackStateValues = ["idle", "playing", "sweeping", "paused_sweeping"] as const;
 
 /**
  * Possible playback states for the simulation.

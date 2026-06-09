@@ -3,7 +3,7 @@
  * Manages all user preferences including visual, simulation, and localization settings
  */
 
-import { Property, BooleanProperty } from "scenerystack/axon";
+import { BooleanProperty, Property } from "scenerystack/axon";
 import { SolverType } from "../common/model/SolverType.js";
 
 /**
@@ -38,9 +38,7 @@ export class ResonancePreferencesModel {
 
   public constructor() {
     // Simulation preferences
-    this.solverTypeProperty = new Property<SolverType>(
-      SolverType.RUNGE_KUTTA_4,
-    );
+    this.solverTypeProperty = new Property<SolverType>(SolverType.RUNGE_KUTTA_4);
 
     // Chladni screen preferences - modal controls hidden by default
     this.showModalControlsProperty = new BooleanProperty(false);
@@ -71,8 +69,8 @@ export class ResonancePreferencesModel {
           this.rendererTypeProperty.value = preferences.rendererType;
         }
       }
-    } catch (error) {
-      console.warn("Failed to load preferences:", error);
+    } catch {
+      // Preferences are best-effort; ignore load errors
     }
   }
 
@@ -86,12 +84,9 @@ export class ResonancePreferencesModel {
         showModalControls: this.showModalControlsProperty.value,
         rendererType: this.rendererTypeProperty.value,
       };
-      localStorage.setItem(
-        "resonance-preferences",
-        JSON.stringify(preferences),
-      );
-    } catch (error) {
-      console.warn("Failed to save preferences:", error);
+      localStorage.setItem("resonance-preferences", JSON.stringify(preferences));
+    } catch {
+      // Preferences are best-effort; ignore save errors
     }
   }
 

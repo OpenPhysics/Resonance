@@ -5,23 +5,19 @@
  * Includes grain count selection, actual count display, and replenish button.
  */
 
-import { Node, Text, VBox, HBox } from "scenerystack/scenery";
-import {
-  ComboBox,
-  TextPushButton,
-  AquaRadioButtonGroup,
-} from "scenerystack/sun";
+import { DerivedProperty, type TReadOnlyProperty } from "scenerystack/axon";
+import { HBox, type Node, Text, VBox } from "scenerystack/scenery";
 import type { ComboBoxItem } from "scenerystack/sun";
-import { DerivedProperty, TReadOnlyProperty } from "scenerystack/axon";
-import {
-  ChladniModel,
-  GrainCountOption,
-  GRAIN_COUNT_OPTIONS,
-  BoundaryMode,
-} from "../../model/ChladniModel.js";
+import { AquaRadioButtonGroup, ComboBox, TextPushButton } from "scenerystack/sun";
 import ResonanceColors from "../../../common/ResonanceColors.js";
 import ResonanceConstants from "../../../common/ResonanceConstants.js";
 import { ResonanceStrings } from "../../../i18n/ResonanceStrings.js";
+import {
+  type BoundaryMode,
+  type ChladniModel,
+  GRAIN_COUNT_OPTIONS,
+  type GrainCountOption,
+} from "../../model/ChladniModel.js";
 
 /**
  * Map of grain count values to their string properties.
@@ -36,40 +32,29 @@ const GRAIN_COUNT_STRINGS = new Map<number, TReadOnlyProperty<string>>([
 export class GrainSection extends VBox {
   public constructor(model: ChladniModel, comboBoxListParent: Node) {
     // --- Grain Count Selection ---
-    const grainCountLabel = new Text(
-      ResonanceStrings.chladni.grainsStringProperty,
-      {
-        font: ResonanceConstants.LABEL_FONT,
-        fill: ResonanceColors.textProperty,
-      },
-    );
+    const grainCountLabel = new Text(ResonanceStrings.chladni.grainsStringProperty, {
+      font: ResonanceConstants.LABEL_FONT,
+      fill: ResonanceColors.textProperty,
+    });
 
-    const grainCountComboBoxItems: ComboBoxItem<GrainCountOption>[] =
-      GRAIN_COUNT_OPTIONS.map((option) => ({
-        value: option,
-        createNode: () => {
-          const stringProperty =
-            GRAIN_COUNT_STRINGS.get(option.value) ??
-            ResonanceStrings.chladni.grains10000StringProperty;
-          return new Text(stringProperty, {
-            font: ResonanceConstants.CONTROL_FONT,
-          });
-        },
-      }));
-
-    const grainCountComboBox = new ComboBox(
-      model.grainCountProperty,
-      grainCountComboBoxItems,
-      comboBoxListParent,
-      {
-        xMargin: ResonanceConstants.COMBO_BOX_X_MARGIN,
-        yMargin: ResonanceConstants.COMBO_BOX_Y_MARGIN,
-        cornerRadius: ResonanceConstants.COMBO_BOX_CORNER_RADIUS,
-        // Accessibility
-        accessibleName:
-          ResonanceStrings.chladni.a11y.controlPanel.grainsLabelStringProperty,
+    const grainCountComboBoxItems: ComboBoxItem<GrainCountOption>[] = GRAIN_COUNT_OPTIONS.map((option) => ({
+      value: option,
+      createNode: () => {
+        const stringProperty =
+          GRAIN_COUNT_STRINGS.get(option.value) ?? ResonanceStrings.chladni.grains10000StringProperty;
+        return new Text(stringProperty, {
+          font: ResonanceConstants.CONTROL_FONT,
+        });
       },
-    );
+    }));
+
+    const grainCountComboBox = new ComboBox(model.grainCountProperty, grainCountComboBoxItems, comboBoxListParent, {
+      xMargin: ResonanceConstants.COMBO_BOX_X_MARGIN,
+      yMargin: ResonanceConstants.COMBO_BOX_Y_MARGIN,
+      cornerRadius: ResonanceConstants.COMBO_BOX_CORNER_RADIUS,
+      // Accessibility
+      accessibleName: ResonanceStrings.chladni.a11y.controlPanel.grainsLabelStringProperty,
+    });
 
     // --- Actual Grain Count Display ---
     const actualCountText = new Text("", {
@@ -89,31 +74,21 @@ export class GrainSection extends VBox {
 
     // Text fill changes based on enabled state and color profile
     const replenishTextFillProperty = new DerivedProperty(
-      [
-        replenishEnabledProperty,
-        ResonanceColors.textProperty,
-        ResonanceColors.textDisabledProperty,
-      ],
-      (enabled, textColor, disabledColor) =>
-        enabled ? textColor : disabledColor,
+      [replenishEnabledProperty, ResonanceColors.textProperty, ResonanceColors.textDisabledProperty],
+      (enabled, textColor, disabledColor) => (enabled ? textColor : disabledColor),
     );
 
-    const replenishButton = new TextPushButton(
-      ResonanceStrings.chladni.replenishStringProperty,
-      {
-        font: ResonanceConstants.CONTROL_FONT,
-        listener: () => {
-          model.regenerateParticles();
-        },
-        baseColor: ResonanceColors.subPanelFillProperty,
-        textFill: replenishTextFillProperty,
-        enabledProperty: replenishEnabledProperty,
-        // Accessibility
-        accessibleName:
-          ResonanceStrings.chladni.a11y.controlPanel
-            .replenishButtonLabelStringProperty,
+    const replenishButton = new TextPushButton(ResonanceStrings.chladni.replenishStringProperty, {
+      font: ResonanceConstants.CONTROL_FONT,
+      listener: () => {
+        model.regenerateParticles();
       },
-    );
+      baseColor: ResonanceColors.subPanelFillProperty,
+      textFill: replenishTextFillProperty,
+      enabledProperty: replenishEnabledProperty,
+      // Accessibility
+      accessibleName: ResonanceStrings.chladni.a11y.controlPanel.replenishButtonLabelStringProperty,
+    });
 
     const grainCountRow = new HBox({
       children: [grainCountComboBox, actualCountText, replenishButton],
@@ -128,49 +103,39 @@ export class GrainSection extends VBox {
     });
 
     // --- Boundary Mode Radio Buttons ---
-    const boundaryModeLabel = new Text(
-      ResonanceStrings.chladni.boundaryModeStringProperty,
-      {
-        font: ResonanceConstants.LABEL_FONT,
-        fill: ResonanceColors.textProperty,
-      },
-    );
+    const boundaryModeLabel = new Text(ResonanceStrings.chladni.boundaryModeStringProperty, {
+      font: ResonanceConstants.LABEL_FONT,
+      fill: ResonanceColors.textProperty,
+    });
 
-    const boundaryModeItems: { value: BoundaryMode; createNode: () => Node }[] =
-      [
-        {
-          value: "clamp",
-          createNode: () =>
-            new Text(ResonanceStrings.chladni.boundaryClampStringProperty, {
-              font: ResonanceConstants.CONTROL_FONT,
-              fill: ResonanceColors.textProperty,
-            }),
-        },
-        {
-          value: "remove",
-          createNode: () =>
-            new Text(ResonanceStrings.chladni.boundaryRemoveStringProperty, {
-              font: ResonanceConstants.CONTROL_FONT,
-              fill: ResonanceColors.textProperty,
-            }),
-        },
-      ];
-
-    const boundaryModeRadioButtons = new AquaRadioButtonGroup(
-      model.boundaryModeProperty,
-      boundaryModeItems,
+    const boundaryModeItems: { value: BoundaryMode; createNode: () => Node }[] = [
       {
-        orientation: "horizontal",
-        spacing: 15,
-        radioButtonOptions: {
-          radius: 8,
-        },
-        // Accessibility
-        accessibleName:
-          ResonanceStrings.chladni.a11y.controlPanel
-            .boundaryModeLabelStringProperty,
+        value: "clamp",
+        createNode: () =>
+          new Text(ResonanceStrings.chladni.boundaryClampStringProperty, {
+            font: ResonanceConstants.CONTROL_FONT,
+            fill: ResonanceColors.textProperty,
+          }),
       },
-    );
+      {
+        value: "remove",
+        createNode: () =>
+          new Text(ResonanceStrings.chladni.boundaryRemoveStringProperty, {
+            font: ResonanceConstants.CONTROL_FONT,
+            fill: ResonanceColors.textProperty,
+          }),
+      },
+    ];
+
+    const boundaryModeRadioButtons = new AquaRadioButtonGroup(model.boundaryModeProperty, boundaryModeItems, {
+      orientation: "horizontal",
+      spacing: 15,
+      radioButtonOptions: {
+        radius: 8,
+      },
+      // Accessibility
+      accessibleName: ResonanceStrings.chladni.a11y.controlPanel.boundaryModeLabelStringProperty,
+    });
 
     const boundaryModeBox = new HBox({
       children: [boundaryModeLabel, boundaryModeRadioButtons],

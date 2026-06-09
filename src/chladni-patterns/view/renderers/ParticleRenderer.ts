@@ -5,9 +5,9 @@
  * Allows switching between different rendering implementations (Canvas 2D, WebGL).
  */
 
-import { Node } from "scenerystack/scenery";
-import { Vector2 } from "scenerystack/dot";
-import { ModelViewTransform2 } from "scenerystack/phetcommon";
+import type { Vector2 } from "scenerystack/dot";
+import type { ModelViewTransform2 } from "scenerystack/phetcommon";
+import type { Node } from "scenerystack/scenery";
 
 /**
  * Interface for particle renderers.
