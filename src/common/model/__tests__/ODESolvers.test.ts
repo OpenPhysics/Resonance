@@ -5,10 +5,10 @@
  * These tests verify that solvers produce correct results for known problems.
  */
 
-import { describe, it, expect, beforeEach } from "vitest";
-import { ODEModel, ODESolver } from "../ODESolver.js";
-import { RungeKuttaSolver } from "../RungeKuttaSolver.js";
+import { beforeEach, describe, expect, it } from "vitest";
 import { AdaptiveRK45Solver } from "../AdaptiveRK45Solver.js";
+import type { ODEModel, ODESolver } from "../ODESolver.js";
+import { RungeKuttaSolver } from "../RungeKuttaSolver.js";
 
 /**
  * Simple harmonic oscillator model for testing
@@ -20,11 +20,7 @@ class SimpleHarmonicOscillator implements ODEModel {
   private state: number[];
   public readonly omega: number;
 
-  constructor(
-    omega: number = 1,
-    initialPosition: number = 1,
-    initialVelocity: number = 0,
-  ) {
+  constructor(omega: number = 1, initialPosition: number = 1, initialVelocity: number = 0) {
     this.omega = omega;
     this.state = [initialPosition, initialVelocity];
   }
@@ -48,17 +44,11 @@ class SimpleHarmonicOscillator implements ODEModel {
 
   // Analytical solution: x(t) = x0*cos(omega*t) + (v0/omega)*sin(omega*t)
   analyticalPosition(t: number, x0: number, v0: number): number {
-    return (
-      x0 * Math.cos(this.omega * t) +
-      (v0 / this.omega) * Math.sin(this.omega * t)
-    );
+    return x0 * Math.cos(this.omega * t) + (v0 / this.omega) * Math.sin(this.omega * t);
   }
 
   analyticalVelocity(t: number, x0: number, v0: number): number {
-    return (
-      -x0 * this.omega * Math.sin(this.omega * t) +
-      v0 * Math.cos(this.omega * t)
-    );
+    return -x0 * this.omega * Math.sin(this.omega * t) + v0 * Math.cos(this.omega * t);
   }
 
   // Total energy: E = 0.5*v^2 + 0.5*omega^2*x^2
@@ -203,8 +193,7 @@ describe("RungeKuttaSolver", () => {
       const finalEnergy = model.totalEnergy();
 
       // Energy should be conserved within 0.1%
-      const relativeError =
-        Math.abs(finalEnergy - initialEnergy) / initialEnergy;
+      const relativeError = Math.abs(finalEnergy - initialEnergy) / initialEnergy;
       expect(relativeError).toBeLessThan(0.001);
     });
 
@@ -349,8 +338,7 @@ describe("AdaptiveRK45Solver", () => {
       const finalEnergy = model.totalEnergy();
 
       // Energy should be conserved within 0.1%
-      const relativeError =
-        Math.abs(finalEnergy - initialEnergy) / initialEnergy;
+      const relativeError = Math.abs(finalEnergy - initialEnergy) / initialEnergy;
       expect(relativeError).toBeLessThan(0.001);
     });
   });
@@ -490,8 +478,7 @@ describe("Solver comparison", () => {
 
       if (foundPeriod) {
         // Measured period should match expected within 1%
-        const periodError =
-          Math.abs(measuredPeriod - expectedPeriod) / expectedPeriod;
+        const periodError = Math.abs(measuredPeriod - expectedPeriod) / expectedPeriod;
         expect(periodError).toBeLessThan(0.01);
       }
     }

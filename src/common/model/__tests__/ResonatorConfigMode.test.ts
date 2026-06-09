@@ -4,11 +4,8 @@
  * P2 Priority: Tests for configuration mode values and types.
  */
 
-import { describe, it, expect } from "vitest";
-import {
-  ResonatorConfigMode,
-  ResonatorConfigModeType,
-} from "../ResonatorConfigMode.js";
+import { describe, expect, it } from "vitest";
+import { ResonatorConfigMode, type ResonatorConfigModeType } from "../ResonatorConfigMode.js";
 
 describe("ResonatorConfigMode", () => {
   describe("mode values", () => {
@@ -19,9 +16,7 @@ describe("ResonatorConfigMode", () => {
 
     it("should have SAME_SPRING_CONSTANT mode", () => {
       expect(ResonatorConfigMode.SAME_SPRING_CONSTANT).toBeDefined();
-      expect(ResonatorConfigMode.SAME_SPRING_CONSTANT).toBe(
-        "sameSpringConstant",
-      );
+      expect(ResonatorConfigMode.SAME_SPRING_CONSTANT).toBe("sameSpringConstant");
     });
 
     it("should have MIXED mode", () => {
@@ -59,9 +54,7 @@ describe("ResonatorConfigMode", () => {
 
     it("SAME_SPRING_CONSTANT should indicate constant k across resonators", () => {
       // In SAME_SPRING_CONSTANT mode: k is constant, masses vary (m, 2m, 3m, ...)
-      expect(ResonatorConfigMode.SAME_SPRING_CONSTANT).toContain(
-        "SpringConstant",
-      );
+      expect(ResonatorConfigMode.SAME_SPRING_CONSTANT).toContain("SpringConstant");
     });
 
     it("MIXED should indicate both vary", () => {
@@ -99,15 +92,9 @@ describe("ResonatorConfigMode", () => {
         }
       };
 
-      expect(describeModePhysics(ResonatorConfigMode.SAME_MASS)).toContain(
-        "masses equal",
-      );
-      expect(
-        describeModePhysics(ResonatorConfigMode.SAME_SPRING_CONSTANT),
-      ).toContain("spring constants equal");
-      expect(describeModePhysics(ResonatorConfigMode.SAME_FREQUENCY)).toContain(
-        "frequencies equal",
-      );
+      expect(describeModePhysics(ResonatorConfigMode.SAME_MASS)).toContain("masses equal");
+      expect(describeModePhysics(ResonatorConfigMode.SAME_SPRING_CONSTANT)).toContain("spring constants equal");
+      expect(describeModePhysics(ResonatorConfigMode.SAME_FREQUENCY)).toContain("frequencies equal");
     });
 
     it("should be usable as object keys", () => {

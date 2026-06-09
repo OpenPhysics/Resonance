@@ -12,9 +12,9 @@
  * the amplitude, with nodal lines (where φ = 0) appearing as white.
  */
 
-import { CanvasNode, CanvasNodeOptions } from "scenerystack/scenery";
-import { DerivedProperty, Property } from "scenerystack/axon";
+import { DerivedProperty, type Property } from "scenerystack/axon";
 import { Bounds2 } from "scenerystack/dot";
+import { CanvasNode, type CanvasNodeOptions } from "scenerystack/scenery";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
 
 /**
@@ -43,7 +43,6 @@ const MODAL_SHAPE_OPACITY = 0.5;
  */
 export class ModalShapeNode extends CanvasNode {
   private readonly selectedModeProperty: Property<ModeSelection>;
-  private waveNumber: number;
   private plateWidth: number;
   private plateHeight: number;
 
@@ -56,7 +55,6 @@ export class ModalShapeNode extends CanvasNode {
     plateWidth: number,
     plateHeight: number,
     selectedModeProperty: Property<ModeSelection>,
-    waveNumber: number,
     options?: CanvasNodeOptions,
   ) {
     super({
@@ -67,7 +65,6 @@ export class ModalShapeNode extends CanvasNode {
     this.plateWidth = plateWidth;
     this.plateHeight = plateHeight;
     this.selectedModeProperty = selectedModeProperty;
-    this.waveNumber = waveNumber;
 
     // Listen for mode changes
     this.selectedModeProperty.link(() => {
@@ -77,22 +74,14 @@ export class ModalShapeNode extends CanvasNode {
     // PDOM accessibility
     this.tagName = "div";
     this.ariaRole = "img";
-    this.accessibleName =
-      ResonanceStrings.chladni.a11y.modalShapeLabelStringProperty;
+    this.accessibleName = ResonanceStrings.chladni.a11y.modalShapeLabelStringProperty;
 
     // Dynamic description that updates with mode selection
-    const descriptionProperty = new DerivedProperty(
-      [selectedModeProperty],
-      (mode) => {
-        // Build description with mode values substituted
-        const template =
-          ResonanceStrings.chladni.a11y.modalShapeDescriptionStringProperty
-            .value;
-        return template
-          .replace("{{m}}", mode.m.toString())
-          .replace("{{n}}", mode.n.toString());
-      },
-    );
+    const descriptionProperty = new DerivedProperty([selectedModeProperty], (mode) => {
+      // Build description with mode values substituted
+      const template = ResonanceStrings.chladni.a11y.modalShapeDescriptionStringProperty.value;
+      return template.replace("{{m}}", mode.m.toString()).replace("{{n}}", mode.n.toString());
+    });
     this.descriptionContent = descriptionProperty;
     // Listen for visibility changes to trigger repaint when becoming visible
     this.visibleProperty.lazyLink((visible) => {
@@ -105,12 +94,7 @@ export class ModalShapeNode extends CanvasNode {
   /**
    * Update the dimensions of the modal shape visualization.
    */
-  public updateDimensions(
-    viewWidth: number,
-    viewHeight: number,
-    plateWidth: number,
-    plateHeight: number,
-  ): void {
+  public updateDimensions(viewWidth: number, viewHeight: number, plateWidth: number, plateHeight: number): void {
     this.plateWidth = plateWidth;
     this.plateHeight = plateHeight;
 
@@ -118,13 +102,6 @@ export class ModalShapeNode extends CanvasNode {
     // Reset imageData to force reallocation at new size
     this.imageData = null;
     this.update();
-  }
-
-  /**
-   * Set the wave number for modal calculations.
-   */
-  public setWaveNumber(waveNumber: number): void {
-    this.waveNumber = waveNumber;
   }
 
   /**
@@ -204,11 +181,7 @@ export class ModalShapeNode extends CanvasNode {
     const sampleHeight = Math.ceil(height / SAMPLE_RESOLUTION);
 
     // Allocate or reuse ImageData
-    if (
-      !this.imageData ||
-      this.imageData.width !== sampleWidth ||
-      this.imageData.height !== sampleHeight
-    ) {
+    if (!this.imageData || this.imageData.width !== sampleWidth || this.imageData.height !== sampleHeight) {
       this.imageData = context.createImageData(sampleWidth, sampleHeight);
     }
 

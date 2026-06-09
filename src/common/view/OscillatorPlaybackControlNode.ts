@@ -8,14 +8,14 @@
  * - Phase Analysis
  */
 
-import { Text, HBox } from "scenerystack/scenery";
+import type { Bounds2 } from "scenerystack/dot";
+import { HBox, Text } from "scenerystack/scenery";
 import { PlayPauseStepButtonGroup } from "scenerystack/scenery-phet";
 import { AquaRadioButtonGroup } from "scenerystack/sun";
-import { Bounds2 } from "scenerystack/dot";
-import { BaseOscillatorScreenModel } from "../model/BaseOscillatorScreenModel.js";
-import ResonanceConstants from "../ResonanceConstants.js";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
+import type { BaseOscillatorScreenModel } from "../model/BaseOscillatorScreenModel.js";
 import ResonanceColors from "../ResonanceColors.js";
+import ResonanceConstants from "../ResonanceConstants.js";
 
 export class OscillatorPlaybackControlNode extends HBox {
   public constructor(model: BaseOscillatorScreenModel, layoutBounds: Bounds2) {
@@ -39,48 +39,38 @@ export class OscillatorPlaybackControlNode extends HBox {
       },
     ];
 
-    const speedControl = new AquaRadioButtonGroup(
-      model.resonanceModel.timeSpeedProperty,
-      speedButtons,
-      {
-        orientation: "horizontal",
-        spacing: ResonanceConstants.SPEED_CONTROL_SPACING,
-        radioButtonOptions: {
-          radius: ResonanceConstants.SPEED_RADIO_BUTTON_RADIUS,
-        },
-        // Accessibility
-        accessibleName:
-          ResonanceStrings.a11y.playbackControl.speedControlLabelStringProperty,
+    const speedControl = new AquaRadioButtonGroup(model.resonanceModel.timeSpeedProperty, speedButtons, {
+      orientation: "horizontal",
+      spacing: ResonanceConstants.SPEED_CONTROL_SPACING,
+      radioButtonOptions: {
+        radius: ResonanceConstants.SPEED_RADIO_BUTTON_RADIUS,
       },
-    );
+      // Accessibility
+      accessibleName: ResonanceStrings.a11y.playbackControl.speedControlLabelStringProperty,
+    });
 
     // Play/Pause/Step buttons
-    const playPauseStepButtonGroup = new PlayPauseStepButtonGroup(
-      model.resonanceModel.isPlayingProperty,
-      {
-        includeStepBackwardButton: true,
-        stepForwardButtonOptions: {
-          listener: () => {
-            model.resonanceModel.step(ResonanceConstants.STEP_DT, true);
-            const count = model.resonatorCountProperty.value;
-            for (let i = 1; i < count; i++) {
-              model.getResonatorModel(i).step(ResonanceConstants.STEP_DT, true);
-            }
-          },
-        },
-        stepBackwardButtonOptions: {
-          listener: () => {
-            model.resonanceModel.step(-ResonanceConstants.STEP_DT, true);
-            const count = model.resonatorCountProperty.value;
-            for (let i = 1; i < count; i++) {
-              model
-                .getResonatorModel(i)
-                .step(-ResonanceConstants.STEP_DT, true);
-            }
-          },
+    const playPauseStepButtonGroup = new PlayPauseStepButtonGroup(model.resonanceModel.isPlayingProperty, {
+      includeStepBackwardButton: true,
+      stepForwardButtonOptions: {
+        listener: () => {
+          model.resonanceModel.step(ResonanceConstants.STEP_DT, true);
+          const count = model.resonatorCountProperty.value;
+          for (let i = 1; i < count; i++) {
+            model.getResonatorModel(i).step(ResonanceConstants.STEP_DT, true);
+          }
         },
       },
-    );
+      stepBackwardButtonOptions: {
+        listener: () => {
+          model.resonanceModel.step(-ResonanceConstants.STEP_DT, true);
+          const count = model.resonatorCountProperty.value;
+          for (let i = 1; i < count; i++) {
+            model.getResonatorModel(i).step(-ResonanceConstants.STEP_DT, true);
+          }
+        },
+      },
+    });
 
     super({
       children: [speedControl, playPauseStepButtonGroup],
@@ -91,8 +81,7 @@ export class OscillatorPlaybackControlNode extends HBox {
       tagName: "div",
       labelTagName: "h3",
       labelContent: ResonanceStrings.a11y.playbackControl.labelStringProperty,
-      descriptionContent:
-        ResonanceStrings.a11y.playbackControl.descriptionStringProperty,
+      descriptionContent: ResonanceStrings.a11y.playbackControl.descriptionStringProperty,
     });
   }
 }

@@ -5,14 +5,14 @@
  * Includes the frequency slider and sweep button.
  */
 
-import { VBox } from "scenerystack/scenery";
 import { DerivedProperty } from "scenerystack/axon";
-import { ChladniModel } from "../../model/ChladniModel.js";
+import { VBox } from "scenerystack/scenery";
 import ResonanceColors from "../../../common/ResonanceColors.js";
 import ResonanceConstants from "../../../common/ResonanceConstants.js";
-import { ResonanceStrings } from "../../../i18n/ResonanceStrings.js";
 import { NumberControlFactory } from "../../../common/view/NumberControlFactory.js";
 import { SweepButton } from "../../../common/view/SweepButton.js";
+import { ResonanceStrings } from "../../../i18n/ResonanceStrings.js";
+import type { ChladniModel } from "../../model/ChladniModel.js";
 
 export class FrequencySection extends VBox {
   public constructor(model: ChladniModel) {
@@ -40,9 +40,7 @@ export class FrequencySection extends VBox {
       toggleSweep: () => {
         model.toggleSweep();
       },
-      accessibleName:
-        ResonanceStrings.chladni.a11y.controlPanel
-          .sweepButtonLabelStringProperty,
+      accessibleName: ResonanceStrings.chladni.a11y.controlPanel.sweepButtonLabelStringProperty,
     });
 
     super({

@@ -16,38 +16,29 @@
  * - Trace mode (strip-chart recording of mass motion)
  */
 
-import { ScreenView, ScreenViewOptions } from "scenerystack/sim";
-import { Utterance } from "scenerystack/utterance-queue";
-import { utteranceQueue } from "../util/utteranceQueue.js";
-import { BaseOscillatorScreenModel } from "../model/BaseOscillatorScreenModel.js";
-import {
-  ResetAllButton,
-  RulerNode,
-  ParametricSpringNode,
-} from "scenerystack/scenery-phet";
-import { Rectangle, Node, Line, Text } from "scenerystack/scenery";
-import { DragListener, KeyboardDragListener } from "scenerystack/scenery";
+import { Property } from "scenerystack/axon";
+import { Bounds2, Vector2, Vector2Property } from "scenerystack/dot";
 import { ModelViewTransform2 } from "scenerystack/phetcommon";
-import { Bounds2, Vector2 } from "scenerystack/dot";
-import { Vector2Property } from "scenerystack/dot";
+import { DragListener, KeyboardDragListener, Line, Node, Rectangle, Text } from "scenerystack/scenery";
+import { type ParametricSpringNode, ResetAllButton, RulerNode } from "scenerystack/scenery-phet";
+import { ScreenView, type ScreenViewOptions } from "scenerystack/sim";
+import { Checkbox } from "scenerystack/sun";
+import { Utterance } from "scenerystack/utterance-queue";
+import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
+import type { BaseOscillatorScreenModel } from "../model/BaseOscillatorScreenModel.js";
+import { TraceDataModel } from "../model/TraceDataModel.js";
 import ResonanceColors from "../ResonanceColors.js";
 import ResonanceConstants from "../ResonanceConstants.js";
-import { Property } from "scenerystack/axon";
-import { OscillatorDriverControlNode } from "./OscillatorDriverControlNode.js";
-import {
-  OscillatorControlPanel,
-  OscillatorControlPanelOptions,
-} from "./OscillatorControlPanel.js";
-import { OscillatorPlaybackControlNode } from "./OscillatorPlaybackControlNode.js";
-import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
-import { OscillatorResonatorNodeBuilder } from "./OscillatorResonatorNodeBuilder.js";
-import { OscillatorMeasurementLinesNode } from "./OscillatorMeasurementLinesNode.js";
-import { OscillatorGridNode } from "./OscillatorGridNode.js";
-import { TraceDataModel } from "../model/TraceDataModel.js";
-import { OscillatorTraceNode } from "./OscillatorTraceNode.js";
-import { Checkbox } from "scenerystack/sun";
+import { utteranceQueue } from "../util/utteranceQueue.js";
 import ConfigurableGraph from "./graph/ConfigurableGraph.js";
 import type { PlottableProperty } from "./graph/PlottableProperty.js";
+import { OscillatorControlPanel, type OscillatorControlPanelOptions } from "./OscillatorControlPanel.js";
+import { OscillatorDriverControlNode } from "./OscillatorDriverControlNode.js";
+import { OscillatorGridNode } from "./OscillatorGridNode.js";
+import { OscillatorMeasurementLinesNode } from "./OscillatorMeasurementLinesNode.js";
+import { OscillatorPlaybackControlNode } from "./OscillatorPlaybackControlNode.js";
+import { OscillatorResonatorNodeBuilder } from "./OscillatorResonatorNodeBuilder.js";
+import { OscillatorTraceNode } from "./OscillatorTraceNode.js";
 
 // ===== Layout and grid constants =====
 const GRID_MAJOR_SPACING = 0.05; // 5 cm between major grid lines (model meters)
@@ -93,10 +84,7 @@ export class BaseOscillatorScreenView extends ScreenView {
   protected readonly traceDataModel: TraceDataModel;
   protected readonly traceNode: OscillatorTraceNode;
 
-  public constructor(
-    model: BaseOscillatorScreenModel,
-    options?: ScreenViewOptions,
-  ) {
+  public constructor(model: BaseOscillatorScreenModel, options?: ScreenViewOptions) {
     super(options);
 
     this.model = model;
@@ -104,27 +92,19 @@ export class BaseOscillatorScreenView extends ScreenView {
     // Initialize ModelViewTransform with isometric scaling and inverted Y axis
     // Model origin (0, 0) = equilibrium position of single mass
     // Positive Y in model = upward on screen (natural physics convention)
-    this.modelViewTransform =
-      ModelViewTransform2.createSinglePointScaleInvertedYMapping(
-        new Vector2(0, 0), // Model equilibrium point
-        new Vector2(
-          ResonanceConstants.EQUILIBRIUM_VIEW_X,
-          ResonanceConstants.EQUILIBRIUM_VIEW_Y,
-        ), // View equilibrium point
-        ResonanceConstants.MODEL_VIEW_SCALE, // pixels per meter (isometric)
-      );
+    this.modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
+      new Vector2(0, 0), // Model equilibrium point
+      new Vector2(ResonanceConstants.EQUILIBRIUM_VIEW_X, ResonanceConstants.EQUILIBRIUM_VIEW_Y), // View equilibrium point
+      ResonanceConstants.MODEL_VIEW_SCALE, // pixels per meter (isometric)
+    );
 
     // Initialize ruler properties
     this.rulerVisibleProperty = new Property<boolean>(false);
-    const initialViewX =
-      this.layoutBounds.left + ResonanceConstants.RULER_LEFT_MARGIN;
-    const initialViewY =
-      this.layoutBounds.top + ResonanceConstants.RULER_TOP_MARGIN;
+    const initialViewX = this.layoutBounds.left + ResonanceConstants.RULER_LEFT_MARGIN;
+    const initialViewY = this.layoutBounds.top + ResonanceConstants.RULER_TOP_MARGIN;
     const initialModelX = this.modelViewTransform.viewToModelX(initialViewX);
     const initialModelY = this.modelViewTransform.viewToModelY(initialViewY);
-    this.rulerPositionProperty = new Vector2Property(
-      new Vector2(initialModelX, initialModelY),
-    );
+    this.rulerPositionProperty = new Vector2Property(new Vector2(initialModelX, initialModelY));
 
     // Initialize grid properties
     this.gridVisibleProperty = new Property<boolean>(false);
@@ -139,28 +119,21 @@ export class BaseOscillatorScreenView extends ScreenView {
     // Position driver box using model coordinates so the driver plate, connection rod,
     // and driver box are all positioned consistently through the model-view transform
     this.driverNode = new OscillatorDriverControlNode(model);
-    this.driverNode.centerX =
-      this.layoutBounds.centerX + ResonanceConstants.DRIVER_CENTER_X_OFFSET;
+    this.driverNode.centerX = this.layoutBounds.centerX + ResonanceConstants.DRIVER_CENTER_X_OFFSET;
     // Position driver box top using model Y coordinate
-    const driverBoxTopViewY = this.modelViewTransform.modelToViewY(
-      ResonanceConstants.DRIVER_BOX_TOP_MODEL_Y,
-    );
+    const driverBoxTopViewY = this.modelViewTransform.modelToViewY(ResonanceConstants.DRIVER_BOX_TOP_MODEL_Y);
     this.driverNode.top = driverBoxTopViewY;
 
     // ===== GRID =====
     // Added FIRST to be behind everything else
-    this.gridNode = new OscillatorGridNode(
-      this.modelViewTransform,
-      this.layoutBounds,
-      {
-        majorSpacing: GRID_MAJOR_SPACING,
-        minorDivisionsPerMajor: GRID_MINOR_DIVISIONS_PER_MAJOR,
-        gridWidth: GRID_WIDTH,
-        gridTopModel: GRID_TOP_MODEL,
-        gridBottomModel: GRID_BOTTOM_MODEL,
-        gridCenterX: this.driverNode.centerX,
-      },
-    );
+    this.gridNode = new OscillatorGridNode(this.modelViewTransform, this.layoutBounds, {
+      majorSpacing: GRID_MAJOR_SPACING,
+      minorDivisionsPerMajor: GRID_MINOR_DIVISIONS_PER_MAJOR,
+      gridWidth: GRID_WIDTH,
+      gridTopModel: GRID_TOP_MODEL,
+      gridBottomModel: GRID_BOTTOM_MODEL,
+      gridCenterX: this.driverNode.centerX,
+    });
     this.gridNode.visible = false;
     simulationArea.addChild(this.gridNode);
 
@@ -171,19 +144,14 @@ export class BaseOscillatorScreenView extends ScreenView {
     const gridBottomModel = GRID_BOTTOM_MODEL;
     const gridWidth = GRID_WIDTH;
 
-    this.traceNode = new OscillatorTraceNode(
-      this.modelViewTransform,
-      this.traceDataModel,
-      this.layoutBounds,
-      {
-        penViewX: this.driverNode.centerX,
-        gridWidth: gridWidth,
-        gridTopModel: gridTopModel,
-        gridBottomModel: gridBottomModel,
-        gridCenterX: this.driverNode.centerX,
-        timeSpeedProperty: model.resonanceModel.timeSpeedProperty,
-      },
-    );
+    this.traceNode = new OscillatorTraceNode(this.modelViewTransform, this.traceDataModel, this.layoutBounds, {
+      penViewX: this.driverNode.centerX,
+      gridWidth: gridWidth,
+      gridTopModel: gridTopModel,
+      gridBottomModel: gridBottomModel,
+      gridCenterX: this.driverNode.centerX,
+      timeSpeedProperty: model.resonanceModel.timeSpeedProperty,
+    });
     this.traceNode.visible = false;
     simulationArea.addChild(this.traceNode);
 
@@ -242,20 +210,15 @@ export class BaseOscillatorScreenView extends ScreenView {
       listener: () => {
         model.reset();
         this.reset();
-        this.controlPanel.gravityEnabledProperty.value =
-          model.resonanceModel.gravityProperty.value > 0;
+        this.controlPanel.gravityEnabledProperty.value = model.resonanceModel.gravityProperty.value > 0;
       },
       right: this.layoutBounds.maxX - ResonanceConstants.RESET_ALL_RIGHT_MARGIN,
-      bottom:
-        this.layoutBounds.maxY - ResonanceConstants.RESET_ALL_BOTTOM_MARGIN,
+      bottom: this.layoutBounds.maxY - ResonanceConstants.RESET_ALL_BOTTOM_MARGIN,
     });
     this.addChild(resetAllButton);
 
     // ===== PLAYBACK CONTROLS =====
-    const playbackControls = new OscillatorPlaybackControlNode(
-      model,
-      this.layoutBounds,
-    );
+    const playbackControls = new OscillatorPlaybackControlNode(model, this.layoutBounds);
     this.addChild(playbackControls);
 
     // ===== RULER =====
@@ -336,10 +299,7 @@ export class BaseOscillatorScreenView extends ScreenView {
 
     // Announce gravity toggle
     this.model.resonanceModel.gravityProperty.lazyLink((gravity: number) => {
-      const alertString =
-        gravity > 0
-          ? alerts.gravityOnStringProperty.value
-          : alerts.gravityOffStringProperty.value;
+      const alertString = gravity > 0 ? alerts.gravityOnStringProperty.value : alerts.gravityOffStringProperty.value;
       utteranceQueue.addToBack(
         new Utterance({
           alert: alertString,
@@ -351,10 +311,7 @@ export class BaseOscillatorScreenView extends ScreenView {
     // Announce resonator count changes (only for multi-oscillator screens)
     if (!this.model.singleOscillatorMode) {
       this.model.resonatorCountProperty.lazyLink((count: number) => {
-        const alertString = alerts.resonatorCountStringProperty.value.replace(
-          "{{count}}",
-          String(count),
-        );
+        const alertString = alerts.resonatorCountStringProperty.value.replace("{{count}}", String(count));
         utteranceQueue.addToBack(
           new Utterance({
             alert: alertString,
@@ -374,16 +331,13 @@ export class BaseOscillatorScreenView extends ScreenView {
 
     // Calculate rod position using model coordinates
     // Rod top: bottom of driver plate (plate top + plate height in model)
-    const rodTopModelY =
-      ResonanceConstants.DRIVER_PLATE_REST_MODEL_Y -
-      ResonanceConstants.DRIVER_PLATE_HEIGHT_MODEL;
+    const rodTopModelY = ResonanceConstants.DRIVER_PLATE_REST_MODEL_Y - ResonanceConstants.DRIVER_PLATE_HEIGHT_MODEL;
     // Rod bottom: top of driver box (with overlap so box covers it)
     const rodBottomModelY = ResonanceConstants.DRIVER_BOX_TOP_MODEL_Y - CONNECTION_ROD_OVERLAP; // 2cm overlap into box
 
     // Convert to view coordinates
     const rodTopViewY = this.modelViewTransform.modelToViewY(rodTopModelY);
-    const rodBottomViewY =
-      this.modelViewTransform.modelToViewY(rodBottomModelY);
+    const rodBottomViewY = this.modelViewTransform.modelToViewY(rodBottomModelY);
     const rodHeightView = rodBottomViewY - rodTopViewY;
 
     // Connection rod between control box and plate (rectangle with no corner radius)
@@ -406,13 +360,9 @@ export class BaseOscillatorScreenView extends ScreenView {
     const rodWidth = ResonanceConstants.CONNECTION_ROD_WIDTH;
 
     // Calculate plate position using model coordinates
-    const plateTopViewY = this.modelViewTransform.modelToViewY(
-      ResonanceConstants.DRIVER_PLATE_REST_MODEL_Y,
-    );
+    const plateTopViewY = this.modelViewTransform.modelToViewY(ResonanceConstants.DRIVER_PLATE_REST_MODEL_Y);
     const plateHeightView = Math.abs(
-      this.modelViewTransform.modelToViewDeltaY(
-        ResonanceConstants.DRIVER_PLATE_HEIGHT_MODEL,
-      ),
+      this.modelViewTransform.modelToViewDeltaY(ResonanceConstants.DRIVER_PLATE_HEIGHT_MODEL),
     );
 
     // Marker line across the connection rod - moves with driver plate to show motion
@@ -449,15 +399,10 @@ export class BaseOscillatorScreenView extends ScreenView {
     }
 
     // Convert ruler length from model (meters) to view pixels
-    const rulerLengthView = Math.abs(
-      this.modelViewTransform.modelToViewDeltaY(
-        ResonanceConstants.RULER_LENGTH_MODEL,
-      ),
-    );
+    const rulerLengthView = Math.abs(this.modelViewTransform.modelToViewDeltaY(ResonanceConstants.RULER_LENGTH_MODEL));
 
     // Major tick spacing: ruler length / (num ticks - 1)
-    const majorTickWidth =
-      rulerLengthView / (ResonanceConstants.RULER_NUM_MAJOR_TICKS - 1);
+    const majorTickWidth = rulerLengthView / (ResonanceConstants.RULER_NUM_MAJOR_TICKS - 1);
 
     const rulerNode = new RulerNode(
       rulerLengthView,
@@ -497,8 +442,7 @@ export class BaseOscillatorScreenView extends ScreenView {
     );
 
     // Convert to model bounds for the drag listener
-    const dragBoundsModel =
-      this.modelViewTransform.viewToModelBounds(dragBounds);
+    const dragBoundsModel = this.modelViewTransform.viewToModelBounds(dragBounds);
 
     const dragListener = new DragListener({
       targetNode: rulerNode,
@@ -539,10 +483,7 @@ export class BaseOscillatorScreenView extends ScreenView {
       selectedResonatorIndexProperty: this.model.selectedResonatorIndexProperty,
     };
 
-    const result = OscillatorResonatorNodeBuilder.buildResonators(
-      this.model.resonatorModels,
-      context,
-    );
+    const result = OscillatorResonatorNodeBuilder.buildResonators(this.model.resonatorModels, context);
 
     this.springNodes = result.springNodes;
     this.massNodes = result.massNodes;
@@ -604,23 +545,19 @@ export class BaseOscillatorScreenView extends ScreenView {
     }
 
     // Convert driver plate top from model to view using transform directly
-    const driverTopViewY =
-      this.modelViewTransform.modelToViewY(driverTopModelY);
+    const driverTopViewY = this.modelViewTransform.modelToViewY(driverTopModelY);
 
     // Position driver plate (its .y property is its top edge)
     this.driverPlate.y = driverTopViewY;
 
     // Calculate plate bottom in model and view coordinates
-    const plateBottomModelY =
-      driverTopModelY - ResonanceConstants.DRIVER_PLATE_HEIGHT_MODEL;
-    const plateBottomViewY =
-      this.modelViewTransform.modelToViewY(plateBottomModelY);
+    const plateBottomModelY = driverTopModelY - ResonanceConstants.DRIVER_PLATE_HEIGHT_MODEL;
+    const plateBottomViewY = this.modelViewTransform.modelToViewY(plateBottomModelY);
 
     // Update connection rod to stretch/compress with driver movement
     // Rod connects plate bottom to driver box top (using model coordinates)
     const rodBottomModelY = ResonanceConstants.DRIVER_BOX_TOP_MODEL_Y - CONNECTION_ROD_OVERLAP; // 2cm overlap
-    const rodBottomViewY =
-      this.modelViewTransform.modelToViewY(rodBottomModelY);
+    const rodBottomViewY = this.modelViewTransform.modelToViewY(rodBottomModelY);
     const rodHeight = Math.max(MIN_ROD_HEIGHT_VIEW, rodBottomViewY - plateBottomViewY);
 
     // Position marker line about 1/3 down the rod at rest, moves with plate
@@ -634,12 +571,7 @@ export class BaseOscillatorScreenView extends ScreenView {
     const plateDisplacementView = plateBottomViewY - restPlateBottomViewY;
     this.connectionRodMarker.y = markerRestY + plateDisplacementView;
 
-    this.connectionRod.setRect(
-      0,
-      0,
-      ResonanceConstants.CONNECTION_ROD_WIDTH,
-      rodHeight,
-    );
+    this.connectionRod.setRect(0, 0, ResonanceConstants.CONNECTION_ROD_WIDTH, rodHeight);
     this.connectionRod.top = plateBottomViewY;
 
     // Position springs and masses
@@ -648,22 +580,15 @@ export class BaseOscillatorScreenView extends ScreenView {
 
     // Spring stem lengths in view coordinates (use modelToViewDeltaY for lengths)
     const leftEndLengthView = Math.abs(
-      this.modelViewTransform.modelToViewDeltaY(
-        ResonanceConstants.SPRING_LEFT_END_LENGTH_MODEL,
-      ),
+      this.modelViewTransform.modelToViewDeltaY(ResonanceConstants.SPRING_LEFT_END_LENGTH_MODEL),
     );
     const rightEndLengthView = Math.abs(
-      this.modelViewTransform.modelToViewDeltaY(
-        ResonanceConstants.SPRING_RIGHT_END_LENGTH_MODEL,
-      ),
+      this.modelViewTransform.modelToViewDeltaY(ResonanceConstants.SPRING_RIGHT_END_LENGTH_MODEL),
     );
     const endLengths = leftEndLengthView + rightEndLengthView;
 
     for (let i = 0; i < count; i++) {
-      const xCenter =
-        driverCenterX -
-        ResonanceConstants.DRIVER_BOX_WIDTH / 2 +
-        spacing * (i + 1);
+      const xCenter = driverCenterX - ResonanceConstants.DRIVER_BOX_WIDTH / 2 + spacing * (i + 1);
 
       const resonatorModel = this.model.getResonatorModel(i);
 
@@ -682,21 +607,16 @@ export class BaseOscillatorScreenView extends ScreenView {
 
       // Configure spring
       const springNode = this.springNodes[i]!;
-      const loopsTimesRadius =
-        ResonanceConstants.SPRING_LOOPS * ResonanceConstants.SPRING_RADIUS;
+      const loopsTimesRadius = ResonanceConstants.SPRING_LOOPS * ResonanceConstants.SPRING_RADIUS;
 
       // Spring length in view - use absolute value for rendering
-      const springLengthView =
-        Math.abs(springLengthModel) * ResonanceConstants.MODEL_VIEW_SCALE;
+      const springLengthView = Math.abs(springLengthModel) * ResonanceConstants.MODEL_VIEW_SCALE;
 
       // Calculate xScale to make spring coils fill the visual distance
       // With phase=π, the ParametricSpringNode total length is:
       //   totalLength = leftEndLength + xScale × loops × radius + rightEndLength
       // So: xScale = (springLengthView - endLengths) / (loops × radius)
-      const xScale = Math.max(
-        ResonanceConstants.MIN_SPRING_XSCALE,
-        (springLengthView - endLengths) / loopsTimesRadius,
-      );
+      const xScale = Math.max(ResonanceConstants.MIN_SPRING_XSCALE, (springLengthView - endLengths) / loopsTimesRadius);
 
       springNode.xScaleProperty.value = xScale;
 
@@ -741,23 +661,16 @@ export class BaseOscillatorScreenView extends ScreenView {
     this.updateSpringAndMass();
 
     // Record trace data and update the trace visualization
-    if (
-      this.traceDataModel.traceEnabledProperty.value &&
-      this.model.isPlayingProperty.value
-    ) {
+    if (this.traceDataModel.traceEnabledProperty.value && this.model.isPlayingProperty.value) {
       // Record the position of the first (selected) resonator
       const selectedIndex = this.model.selectedResonatorIndexProperty.value;
-      const position =
-        this.model.getResonatorModel(selectedIndex).positionProperty.value;
+      const position = this.model.getResonatorModel(selectedIndex).positionProperty.value;
       // Pass current scroll offset so points maintain position when speed changes
       this.traceDataModel.addPoint(this.traceNode.getScrollOffset(), position);
     }
 
     // Step the trace node only when playing (grid stops when paused)
-    if (
-      this.traceDataModel.traceEnabledProperty.value &&
-      this.model.isPlayingProperty.value
-    ) {
+    if (this.traceDataModel.traceEnabledProperty.value && this.model.isPlayingProperty.value) {
       this.traceNode.step(dt);
     }
   }
@@ -801,21 +714,18 @@ export class BaseOscillatorScreenView extends ScreenView {
       initialYProperty,
       graphWidth,
       graphHeight,
-      maxDataPoints,
       comboBoxListParent,
+      maxDataPoints,
     );
 
     if (initiallyVisible) {
       graph.getGraphVisibleProperty().value = true;
     }
 
-    const checkboxLabel = new Text(
-      ResonanceStrings.controls.graphStringProperty,
-      {
-        font: ResonanceConstants.CONTROL_FONT,
-        fill: ResonanceColors.textProperty,
-      },
-    );
+    const checkboxLabel = new Text(ResonanceStrings.controls.graphStringProperty, {
+      font: ResonanceConstants.CONTROL_FONT,
+      fill: ResonanceColors.textProperty,
+    });
     const checkbox = new Checkbox(graph.getGraphVisibleProperty(), checkboxLabel, {
       boxWidth: GRAPH_CHECKBOX_BOX_WIDTH,
       spacing: GRAPH_CHECKBOX_SPACING,

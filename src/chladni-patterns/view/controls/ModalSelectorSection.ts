@@ -5,10 +5,10 @@
  * Includes checkbox to show modal shape overlay and controls for selecting the mode (m, n).
  */
 
-import { HBox, Text, VBox } from "scenerystack/scenery";
-import { Checkbox, NumberSpinner } from "scenerystack/sun";
 import { NumberProperty, Property } from "scenerystack/axon";
 import { Range } from "scenerystack/dot";
+import { HBox, Text, VBox } from "scenerystack/scenery";
+import { Checkbox, NumberSpinner } from "scenerystack/sun";
 import ResonanceColors from "../../../common/ResonanceColors.js";
 import ResonanceConstants from "../../../common/ResonanceConstants.js";
 import { ResonanceStrings } from "../../../i18n/ResonanceStrings.js";

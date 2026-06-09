@@ -4,12 +4,8 @@
  * P2 Priority: Tests for string organization and accessibility.
  */
 
-import { describe, it, expect } from "vitest";
-import {
-  ResonanceStrings,
-  resonanceStringManager,
-  StringManager,
-} from "../ResonanceStrings.js";
+import { describe, expect, it } from "vitest";
+import { ResonanceStrings, resonanceStringManager, StringManager } from "../ResonanceStrings.js";
 
 describe("ResonanceStrings", () => {
   describe("exports", () => {
@@ -37,9 +33,7 @@ describe("ResonanceStrings", () => {
     });
 
     it("should have non-empty title", () => {
-      expect(ResonanceStrings.titleStringProperty.value.length).toBeGreaterThan(
-        0,
-      );
+      expect(ResonanceStrings.titleStringProperty.value.length).toBeGreaterThan(0);
     });
   });
 
@@ -55,9 +49,7 @@ describe("ResonanceStrings", () => {
     });
 
     it("should have non-empty screen names", () => {
-      expect(
-        ResonanceStrings.screens.simStringProperty.value.length,
-      ).toBeGreaterThan(0);
+      expect(ResonanceStrings.screens.simStringProperty.value.length).toBeGreaterThan(0);
     });
   });
 
@@ -75,9 +67,7 @@ describe("ResonanceStrings", () => {
     });
 
     it("should have spring constant control labels", () => {
-      expect(
-        ResonanceStrings.controls.springConstantStringProperty,
-      ).toBeDefined();
+      expect(ResonanceStrings.controls.springConstantStringProperty).toBeDefined();
     });
 
     it("should have reset control label", () => {
@@ -85,12 +75,8 @@ describe("ResonanceStrings", () => {
     });
 
     it("should have non-empty control labels", () => {
-      expect(
-        ResonanceStrings.controls.frequencyStringProperty.value.length,
-      ).toBeGreaterThan(0);
-      expect(
-        ResonanceStrings.controls.amplitudeStringProperty.value.length,
-      ).toBeGreaterThan(0);
+      expect(ResonanceStrings.controls.frequencyStringProperty.value.length).toBeGreaterThan(0);
+      expect(ResonanceStrings.controls.amplitudeStringProperty.value.length).toBeGreaterThan(0);
     });
   });
 
@@ -136,17 +122,13 @@ describe("ResonanceStrings", () => {
     });
 
     it("should have preset name properties", () => {
-      expect(
-        ResonanceStrings.presets.lightAndBouncyStringProperty,
-      ).toBeDefined();
+      expect(ResonanceStrings.presets.lightAndBouncyStringProperty).toBeDefined();
       expect(ResonanceStrings.presets.heavyAndSlowStringProperty).toBeDefined();
       expect(ResonanceStrings.presets.underdampedStringProperty).toBeDefined();
     });
 
     it("should have non-empty preset names", () => {
-      expect(
-        ResonanceStrings.presets.lightAndBouncyStringProperty.value.length,
-      ).toBeGreaterThan(0);
+      expect(ResonanceStrings.presets.lightAndBouncyStringProperty.value.length).toBeGreaterThan(0);
     });
   });
 
@@ -169,15 +151,11 @@ describe("ResonanceStrings", () => {
     });
 
     it("should have spring constant unit pattern", () => {
-      expect(
-        ResonanceStrings.units.newtonPerMeterPatternStringProperty,
-      ).toBeDefined();
+      expect(ResonanceStrings.units.newtonPerMeterPatternStringProperty).toBeDefined();
     });
 
     it("should have damping unit pattern", () => {
-      expect(
-        ResonanceStrings.units.dampingUnitsPatternStringProperty,
-      ).toBeDefined();
+      expect(ResonanceStrings.units.dampingUnitsPatternStringProperty).toBeDefined();
     });
   });
 
@@ -197,10 +175,7 @@ describe("ResonanceStrings", () => {
     });
 
     it("should have non-empty solver names", () => {
-      expect(
-        ResonanceStrings.common.solverNames.solverRK4StringProperty.value
-          .length,
-      ).toBeGreaterThan(0);
+      expect(ResonanceStrings.common.solverNames.solverRK4StringProperty.value.length).toBeGreaterThan(0);
     });
   });
 
@@ -248,9 +223,7 @@ describe("ResonanceStrings", () => {
       ];
 
       categories.forEach((category) => {
-        expect(
-          ResonanceStrings[category as keyof typeof ResonanceStrings],
-        ).toBeDefined();
+        expect(ResonanceStrings[category as keyof typeof ResonanceStrings]).toBeDefined();
       });
     });
 

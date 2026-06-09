@@ -199,8 +199,7 @@ export const GRAPH_WINDOW_WIDTH = 500;
  * Precomputed resonance curve resolution (samples per Hz)
  */
 export const CURVE_SAMPLES_PER_HZ = 4;
-export const TOTAL_CURVE_SAMPLES =
-  (FREQUENCY_MAX - FREQUENCY_MIN) * CURVE_SAMPLES_PER_HZ;
+export const TOTAL_CURVE_SAMPLES = (FREQUENCY_MAX - FREQUENCY_MIN) * CURVE_SAMPLES_PER_HZ;
 
 // ============================================================================
 // GRAIN COUNT OPTIONS
@@ -238,8 +237,7 @@ export const GRAIN_COUNT_OPTIONS: readonly GrainCountOption[] = [
  * Default grain count index in GRAIN_COUNT_OPTIONS array
  */
 export const DEFAULT_GRAIN_COUNT_INDEX = 2; // 10,000
-export const DEFAULT_GRAIN_COUNT =
-  GRAIN_COUNT_OPTIONS[DEFAULT_GRAIN_COUNT_INDEX]!;
+export const DEFAULT_GRAIN_COUNT = GRAIN_COUNT_OPTIONS[DEFAULT_GRAIN_COUNT_INDEX]!;
 
 // ============================================================================
 // CONVENIENCE EXPORTS

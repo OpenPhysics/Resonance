@@ -13,10 +13,10 @@
  */
 
 import { BooleanProperty, NumberProperty, Property } from "scenerystack/axon";
-import { ODESolver, ODEModel, SubStepCallback } from "./ODESolver.js";
-import { RungeKuttaSolver } from "./RungeKuttaSolver.js";
 import { AdaptiveRK45Solver } from "./AdaptiveRK45Solver.js";
 import { AnalyticalSolver } from "./AnalyticalSolver.js";
+import type { ODEModel, ODESolver, SubStepCallback } from "./ODESolver.js";
+import { RungeKuttaSolver } from "./RungeKuttaSolver.js";
 import { SolverType } from "./SolverType.js";
 
 export type TimeSpeed = "slow" | "normal" | "fast";
@@ -88,7 +88,7 @@ export abstract class BaseModel implements ODEModel {
         return new AnalyticalSolver();
 
       default:
-        console.warn(`Unknown solver type: ${String(solverType)}, using RK4`);
+        // Unknown solver type; fall back to RK4
         return new RungeKuttaSolver(0.001);
     }
   }
@@ -100,7 +100,7 @@ export abstract class BaseModel implements ODEModel {
    */
   public step(dt: number, forceStep: boolean = false): void {
     // Only step if playing or forced
-    if (!this.isPlayingProperty.value && !forceStep) {
+    if (!(this.isPlayingProperty.value || forceStep)) {
       return;
     }
 
@@ -110,8 +110,7 @@ export abstract class BaseModel implements ODEModel {
     // Apply time speed multiplier (only when playing automatically)
     let adjustedDt = cappedDt;
     if (!forceStep) {
-      const speedMultiplier =
-        this.timeSpeedMultipliers[this.timeSpeedProperty.value];
+      const speedMultiplier = this.timeSpeedMultipliers[this.timeSpeedProperty.value];
       adjustedDt = cappedDt * speedMultiplier;
     }
 

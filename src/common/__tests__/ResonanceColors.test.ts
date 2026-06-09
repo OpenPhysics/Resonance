@@ -4,100 +4,60 @@
  * P2 Priority: Validates that all colors are valid and accessible.
  */
 
-import { describe, it, expect } from "vitest";
-import ResonanceColors from "../ResonanceColors.js";
 import { ProfileColorProperty } from "scenerystack/scenery";
+import { describe, expect, it } from "vitest";
+import ResonanceColors from "../ResonanceColors.js";
 
 describe("ResonanceColors", () => {
   describe("color property definitions", () => {
     it("should have background color property", () => {
       expect(ResonanceColors.backgroundProperty).toBeDefined();
-      expect(ResonanceColors.backgroundProperty).toBeInstanceOf(
-        ProfileColorProperty,
-      );
+      expect(ResonanceColors.backgroundProperty).toBeInstanceOf(ProfileColorProperty);
     });
 
     it("should have panel colors", () => {
-      expect(ResonanceColors.panelFillProperty).toBeInstanceOf(
-        ProfileColorProperty,
-      );
-      expect(ResonanceColors.panelStrokeProperty).toBeInstanceOf(
-        ProfileColorProperty,
-      );
+      expect(ResonanceColors.panelFillProperty).toBeInstanceOf(ProfileColorProperty);
+      expect(ResonanceColors.panelStrokeProperty).toBeInstanceOf(ProfileColorProperty);
     });
 
     it("should have text colors", () => {
       expect(ResonanceColors.textProperty).toBeInstanceOf(ProfileColorProperty);
-      expect(ResonanceColors.textSecondaryProperty).toBeInstanceOf(
-        ProfileColorProperty,
-      );
+      expect(ResonanceColors.textSecondaryProperty).toBeInstanceOf(ProfileColorProperty);
     });
 
     it("should have spring and mass colors", () => {
-      expect(ResonanceColors.springProperty).toBeInstanceOf(
-        ProfileColorProperty,
-      );
+      expect(ResonanceColors.springProperty).toBeInstanceOf(ProfileColorProperty);
       expect(ResonanceColors.massProperty).toBeInstanceOf(ProfileColorProperty);
-      expect(ResonanceColors.massStrokeProperty).toBeInstanceOf(
-        ProfileColorProperty,
-      );
-      expect(ResonanceColors.massLabelProperty).toBeInstanceOf(
-        ProfileColorProperty,
-      );
+      expect(ResonanceColors.massStrokeProperty).toBeInstanceOf(ProfileColorProperty);
+      expect(ResonanceColors.massLabelProperty).toBeInstanceOf(ProfileColorProperty);
     });
 
     it("should have driver colors", () => {
-      expect(ResonanceColors.driverFillProperty).toBeInstanceOf(
-        ProfileColorProperty,
-      );
-      expect(ResonanceColors.driverStrokeProperty).toBeInstanceOf(
-        ProfileColorProperty,
-      );
-      expect(ResonanceColors.driverTextProperty).toBeInstanceOf(
-        ProfileColorProperty,
-      );
+      expect(ResonanceColors.driverFillProperty).toBeInstanceOf(ProfileColorProperty);
+      expect(ResonanceColors.driverStrokeProperty).toBeInstanceOf(ProfileColorProperty);
+      expect(ResonanceColors.driverTextProperty).toBeInstanceOf(ProfileColorProperty);
     });
 
     it("should have control panel colors", () => {
-      expect(ResonanceColors.controlPanelFillProperty).toBeInstanceOf(
-        ProfileColorProperty,
-      );
-      expect(ResonanceColors.controlPanelStrokeProperty).toBeInstanceOf(
-        ProfileColorProperty,
-      );
+      expect(ResonanceColors.controlPanelFillProperty).toBeInstanceOf(ProfileColorProperty);
+      expect(ResonanceColors.controlPanelStrokeProperty).toBeInstanceOf(ProfileColorProperty);
     });
 
     it("should have energy colors", () => {
-      expect(ResonanceColors.kineticEnergyProperty).toBeInstanceOf(
-        ProfileColorProperty,
-      );
-      expect(ResonanceColors.potentialEnergyProperty).toBeInstanceOf(
-        ProfileColorProperty,
-      );
-      expect(ResonanceColors.totalEnergyProperty).toBeInstanceOf(
-        ProfileColorProperty,
-      );
+      expect(ResonanceColors.kineticEnergyProperty).toBeInstanceOf(ProfileColorProperty);
+      expect(ResonanceColors.potentialEnergyProperty).toBeInstanceOf(ProfileColorProperty);
+      expect(ResonanceColors.totalEnergyProperty).toBeInstanceOf(ProfileColorProperty);
     });
 
     it("should have plot colors", () => {
-      expect(ResonanceColors.plot1Property).toBeInstanceOf(
-        ProfileColorProperty,
-      );
-      expect(ResonanceColors.plot2Property).toBeInstanceOf(
-        ProfileColorProperty,
-      );
-      expect(ResonanceColors.plot3Property).toBeInstanceOf(
-        ProfileColorProperty,
-      );
+      expect(ResonanceColors.plot1Property).toBeInstanceOf(ProfileColorProperty);
+      expect(ResonanceColors.plot2Property).toBeInstanceOf(ProfileColorProperty);
+      expect(ResonanceColors.plot3Property).toBeInstanceOf(ProfileColorProperty);
     });
 
     it("should have phase colors", () => {
-      expect(ResonanceColors.inPhaseProperty).toBeInstanceOf(
-        ProfileColorProperty,
-      );
-      expect(ResonanceColors.outOfPhaseProperty).toBeInstanceOf(
-        ProfileColorProperty,
-      );
+      expect(ResonanceColors.inPhaseProperty).toBeInstanceOf(ProfileColorProperty);
+      expect(ResonanceColors.outOfPhaseProperty).toBeInstanceOf(ProfileColorProperty);
     });
   });
 
@@ -162,9 +122,9 @@ describe("ResonanceColors", () => {
   describe("color contrast", () => {
     function getLuminance(r: number, g: number, b: number): number {
       // Relative luminance formula
-      const mapped = [r, g, b].map((v) => {
-        v /= 255;
-        return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+      const mapped = [r, g, b].map((channel) => {
+        const v = channel / 255;
+        return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
       });
       const [rs, gs, bs] = [mapped[0]!, mapped[1]!, mapped[2]!];
       return 0.2126 * rs + 0.7152 * gs + 0.0722 * bs;
@@ -209,19 +169,13 @@ describe("ResonanceColors", () => {
 
       // Colors should differ significantly
       const colorDistance12 = Math.sqrt(
-        Math.pow(plot1.red - plot2.red, 2) +
-          Math.pow(plot1.green - plot2.green, 2) +
-          Math.pow(plot1.blue - plot2.blue, 2),
+        (plot1.red - plot2.red) ** 2 + (plot1.green - plot2.green) ** 2 + (plot1.blue - plot2.blue) ** 2,
       );
       const colorDistance23 = Math.sqrt(
-        Math.pow(plot2.red - plot3.red, 2) +
-          Math.pow(plot2.green - plot3.green, 2) +
-          Math.pow(plot2.blue - plot3.blue, 2),
+        (plot2.red - plot3.red) ** 2 + (plot2.green - plot3.green) ** 2 + (plot2.blue - plot3.blue) ** 2,
       );
       const colorDistance13 = Math.sqrt(
-        Math.pow(plot1.red - plot3.red, 2) +
-          Math.pow(plot1.green - plot3.green, 2) +
-          Math.pow(plot1.blue - plot3.blue, 2),
+        (plot1.red - plot3.red) ** 2 + (plot1.green - plot3.green) ** 2 + (plot1.blue - plot3.blue) ** 2,
       );
 
       // Each pair should have significant difference (at least 100 in color space)
@@ -255,15 +209,11 @@ describe("ResonanceColors", () => {
 
   describe("sub-panel colors", () => {
     it("should have sub-panel fill color", () => {
-      expect(ResonanceColors.subPanelFillProperty).toBeInstanceOf(
-        ProfileColorProperty,
-      );
+      expect(ResonanceColors.subPanelFillProperty).toBeInstanceOf(ProfileColorProperty);
     });
 
     it("should have sub-panel stroke color", () => {
-      expect(ResonanceColors.subPanelStrokeProperty).toBeInstanceOf(
-        ProfileColorProperty,
-      );
+      expect(ResonanceColors.subPanelStrokeProperty).toBeInstanceOf(ProfileColorProperty);
     });
 
     it("should have distinguishable sub-panel from main panel", () => {
@@ -271,11 +221,7 @@ describe("ResonanceColors", () => {
       const sub = ResonanceColors.subPanelFillProperty.value;
 
       // Calculate color difference
-      const diff = Math.sqrt(
-        Math.pow(main.red - sub.red, 2) +
-          Math.pow(main.green - sub.green, 2) +
-          Math.pow(main.blue - sub.blue, 2),
-      );
+      const diff = Math.sqrt((main.red - sub.red) ** 2 + (main.green - sub.green) ** 2 + (main.blue - sub.blue) ** 2);
 
       // Should be visually distinguishable
       expect(diff).toBeGreaterThan(20);
@@ -284,15 +230,11 @@ describe("ResonanceColors", () => {
 
   describe("mass label colors", () => {
     it("should have normal mass label color", () => {
-      expect(ResonanceColors.massLabelProperty).toBeInstanceOf(
-        ProfileColorProperty,
-      );
+      expect(ResonanceColors.massLabelProperty).toBeInstanceOf(ProfileColorProperty);
     });
 
     it("should have dragging mass label color", () => {
-      expect(ResonanceColors.massLabelDraggingProperty).toBeInstanceOf(
-        ProfileColorProperty,
-      );
+      expect(ResonanceColors.massLabelDraggingProperty).toBeInstanceOf(ProfileColorProperty);
     });
 
     it("should have distinguishable dragging state", () => {
@@ -354,9 +296,7 @@ describe("ResonanceColors", () => {
       ];
 
       expectedColors.forEach((colorName) => {
-        expect(
-          ResonanceColors[colorName as keyof typeof ResonanceColors],
-        ).toBeDefined();
+        expect(ResonanceColors[colorName as keyof typeof ResonanceColors]).toBeDefined();
       });
     });
   });

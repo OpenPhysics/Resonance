@@ -16,16 +16,16 @@
  */
 
 import {
-  NumberProperty,
-  Property,
   BooleanProperty,
   DerivedProperty,
-  TReadOnlyProperty,
-  ReadOnlyProperty,
+  NumberProperty,
+  Property,
+  type ReadOnlyProperty,
+  type TReadOnlyProperty,
 } from "scenerystack/axon";
-import { BaseModel, SubStepDataPoint } from "./BaseModel.js";
-import { SolverType } from "./SolverType.js";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
+import { BaseModel, type SubStepDataPoint } from "./BaseModel.js";
+import type { SolverType } from "./SolverType.js";
 
 export class ResonanceModel extends BaseModel {
   // State variables
@@ -248,14 +248,8 @@ export class ResonanceModel extends BaseModel {
     // (Spring potential + gravitational potential with reference at equilibrium)
     // With positive x = upward, gravitational PE increases with height: U_g = mgx
     this.potentialEnergyProperty = new DerivedProperty(
-      [
-        this.springConstantProperty,
-        this.positionProperty,
-        this.massProperty,
-        this.gravityProperty,
-      ],
-      (k: number, x: number, m: number, g: number) =>
-        0.5 * k * x * x + m * g * x,
+      [this.springConstantProperty, this.positionProperty, this.massProperty, this.gravityProperty],
+      (k: number, x: number, m: number, g: number) => 0.5 * k * x * x + m * g * x,
     );
 
     // Compute total energy: E = KE + PE
@@ -288,8 +282,8 @@ export class ResonanceModel extends BaseModel {
         phase: number,
         enabled: boolean,
       ) => {
-        const F_drive = enabled ? k * A * Math.sin(phase) : 0;
-        return (-k * x - b * v - m * g + F_drive) / m;
+        const FDrive = enabled ? k * A * Math.sin(phase) : 0;
+        return (-k * x - b * v - m * g + FDrive) / m;
       },
     );
 
@@ -302,7 +296,9 @@ export class ResonanceModel extends BaseModel {
         this.drivingEnabledProperty,
       ],
       (k: number, A: number, phase: number, enabled: boolean) => {
-        if (!enabled) return 0;
+        if (!enabled) {
+          return 0;
+        }
         return k * A * Math.sin(phase);
       },
     );
@@ -365,13 +361,11 @@ export class ResonanceModel extends BaseModel {
 
     // Compute driver plate position: x_driver = A * sin(phase)
     this.driverPositionProperty = new DerivedProperty(
-      [
-        this.drivingAmplitudeProperty,
-        this.drivingPhaseProperty,
-        this.drivingEnabledProperty,
-      ],
+      [this.drivingAmplitudeProperty, this.drivingPhaseProperty, this.drivingEnabledProperty],
       (A: number, phase: number, enabled: boolean) => {
-        if (!enabled) return 0;
+        if (!enabled) {
+          return 0;
+        }
         return A * Math.sin(phase);
       },
     );
@@ -380,7 +374,9 @@ export class ResonanceModel extends BaseModel {
     this.frequencyRatioProperty = new DerivedProperty(
       [this.drivingFrequencyProperty, this.naturalFrequencyHzProperty],
       (fDrive: number, fNatural: number) => {
-        if (fNatural < 1e-10) return 0;
+        if (fNatural < 1e-10) {
+          return 0;
+        }
         return fDrive / fNatural;
       },
     );
@@ -399,7 +395,9 @@ export class ResonanceModel extends BaseModel {
         this.drivingEnabledProperty,
       ],
       (freqHz: number, k: number, m: number, b: number, enabled: boolean) => {
-        if (!enabled) return 0;
+        if (!enabled) {
+          return 0;
+        }
 
         const omega = freqHz * 2 * Math.PI; // Convert Hz to rad/s
         const numerator = b * omega;
@@ -438,15 +436,10 @@ export class ResonanceModel extends BaseModel {
         this.dampingProperty,
         this.drivingEnabledProperty,
       ],
-      (
-        A: number,
-        freqHz: number,
-        k: number,
-        m: number,
-        b: number,
-        enabled: boolean,
-      ) => {
-        if (!enabled) return 0;
+      (A: number, freqHz: number, k: number, m: number, b: number, enabled: boolean) => {
+        if (!enabled) {
+          return 0;
+        }
 
         const omega = freqHz * 2 * Math.PI;
         const F0 = k * A; // Driving force amplitude
@@ -484,13 +477,11 @@ export class ResonanceModel extends BaseModel {
 
     // Driving force amplitude: F₀ = k × A (spring constant × driver amplitude)
     this.forceAmplitudeProperty = new DerivedProperty(
-      [
-        this.springConstantProperty,
-        this.drivingAmplitudeProperty,
-        this.drivingEnabledProperty,
-      ],
+      [this.springConstantProperty, this.drivingAmplitudeProperty, this.drivingEnabledProperty],
       (k: number, A: number, enabled: boolean) => {
-        if (!enabled) return 0;
+        if (!enabled) {
+          return 0;
+        }
         return k * A;
       },
     );
@@ -498,13 +489,11 @@ export class ResonanceModel extends BaseModel {
     // Compute amplitude ratio (magnification factor): X₀ / A_static
     // where A_static = F₀ / k = A (the static deflection under driving force amplitude)
     this.amplitudeRatioProperty = new DerivedProperty(
-      [
-        this.displacementAmplitudeProperty,
-        this.drivingAmplitudeProperty,
-        this.drivingEnabledProperty,
-      ],
+      [this.displacementAmplitudeProperty, this.drivingAmplitudeProperty, this.drivingEnabledProperty],
       (X0: number, A: number, enabled: boolean) => {
-        if (!enabled || A < 1e-15) return 0;
+        if (!enabled || A < 1e-15) {
+          return 0;
+        }
         return X0 / A;
       },
     );
@@ -512,16 +501,17 @@ export class ResonanceModel extends BaseModel {
     // Velocity phase: leads displacement by 90° (π/2)
     // Since x(t) = X₀ cos(ωt - φ), v(t) = -ωX₀ sin(ωt - φ) = ωX₀ cos(ωt - φ + π/2)
     // So velocity phase relative to driving force = φ - π/2
-    this.velocityPhaseProperty = new DerivedProperty(
-      [this.displacementPhaseProperty],
-      (displacementPhase: number) => {
-        // Normalize to [-π, π]
-        let phase = displacementPhase - Math.PI / 2;
-        while (phase < -Math.PI) phase += 2 * Math.PI;
-        while (phase > Math.PI) phase -= 2 * Math.PI;
-        return phase;
-      },
-    );
+    this.velocityPhaseProperty = new DerivedProperty([this.displacementPhaseProperty], (displacementPhase: number) => {
+      // Normalize to [-π, π]
+      let phase = displacementPhase - Math.PI / 2;
+      while (phase < -Math.PI) {
+        phase += 2 * Math.PI;
+      }
+      while (phase > Math.PI) {
+        phase -= 2 * Math.PI;
+      }
+      return phase;
+    });
 
     // Acceleration phase: leads displacement by 180° (π)
     // Since a(t) = -ω²X₀ cos(ωt - φ) = ω²X₀ cos(ωt - φ + π)
@@ -531,18 +521,19 @@ export class ResonanceModel extends BaseModel {
       (displacementPhase: number) => {
         // Normalize to [-π, π]
         let phase = displacementPhase - Math.PI;
-        while (phase < -Math.PI) phase += 2 * Math.PI;
-        while (phase > Math.PI) phase -= 2 * Math.PI;
+        while (phase < -Math.PI) {
+          phase += 2 * Math.PI;
+        }
+        while (phase > Math.PI) {
+          phase -= 2 * Math.PI;
+        }
         return phase;
       },
     );
 
     // Applied force phase: always 0 (this is our reference)
     // The driving force is F(t) = F₀ sin(ωt) or F₀ cos(ωt)
-    this.appliedForcePhaseProperty = new DerivedProperty(
-      [this.drivingEnabledProperty],
-      (_enabled: boolean) => 0,
-    );
+    this.appliedForcePhaseProperty = new DerivedProperty([this.drivingEnabledProperty], (_enabled: boolean) => 0);
 
     // Spring force phase: F_spring = -kx is anti-phase to displacement
     // Phase relative to driving force = displacement phase ± π
@@ -551,22 +542,23 @@ export class ResonanceModel extends BaseModel {
       (displacementPhase: number) => {
         // Add π and normalize to [-π, π]
         let phase = displacementPhase + Math.PI;
-        while (phase > Math.PI) phase -= 2 * Math.PI;
+        while (phase > Math.PI) {
+          phase -= 2 * Math.PI;
+        }
         return phase;
       },
     );
 
     // Damping force phase: F_damp = -bv is anti-phase to velocity
     // Phase relative to driving force = velocity phase ± π
-    this.dampingForcePhaseProperty = new DerivedProperty(
-      [this.velocityPhaseProperty],
-      (velocityPhase: number) => {
-        // Add π and normalize to [-π, π]
-        let phase = velocityPhase + Math.PI;
-        while (phase > Math.PI) phase -= 2 * Math.PI;
-        return phase;
-      },
-    );
+    this.dampingForcePhaseProperty = new DerivedProperty([this.velocityPhaseProperty], (velocityPhase: number) => {
+      // Add π and normalize to [-π, π]
+      let phase = velocityPhase + Math.PI;
+      while (phase > Math.PI) {
+        phase -= 2 * Math.PI;
+      }
+      return phase;
+    });
 
     // ============================================
     // Mechanical impedance analysis
@@ -580,14 +572,11 @@ export class ResonanceModel extends BaseModel {
     // Negative below resonance (stiffness-dominated, "capacitive")
     // Zero at resonance (purely resistive)
     this.mechanicalReactanceProperty = new DerivedProperty(
-      [
-        this.massProperty,
-        this.springConstantProperty,
-        this.drivingFrequencyProperty,
-        this.drivingEnabledProperty,
-      ],
+      [this.massProperty, this.springConstantProperty, this.drivingFrequencyProperty, this.drivingEnabledProperty],
       (m: number, k: number, freqHz: number, enabled: boolean) => {
-        if (!enabled || freqHz < 1e-15) return 0;
+        if (!enabled || freqHz < 1e-15) {
+          return 0;
+        }
         const omega = freqHz * 2 * Math.PI;
         return m * omega - k / omega;
       },
@@ -596,13 +585,11 @@ export class ResonanceModel extends BaseModel {
     // Impedance magnitude: |Z| = √(b² + (mω - k/ω)²) = √(R² + X²) (N·s/m)
     // Minimum at resonance where |Z| = b (purely resistive)
     this.impedanceMagnitudeProperty = new DerivedProperty(
-      [
-        this.dampingProperty,
-        this.mechanicalReactanceProperty,
-        this.drivingEnabledProperty,
-      ],
+      [this.dampingProperty, this.mechanicalReactanceProperty, this.drivingEnabledProperty],
       (b: number, X: number, enabled: boolean) => {
-        if (!enabled) return 0;
+        if (!enabled) {
+          return 0;
+        }
         return Math.sqrt(b * b + X * X);
       },
     );
@@ -614,10 +601,16 @@ export class ResonanceModel extends BaseModel {
     this.impedancePhaseProperty = new DerivedProperty(
       [this.displacementPhaseProperty, this.drivingEnabledProperty],
       (phi: number, enabled: boolean) => {
-        if (!enabled) return 0;
+        if (!enabled) {
+          return 0;
+        }
         let phase = phi - Math.PI / 2;
-        while (phase < -Math.PI) phase += 2 * Math.PI;
-        while (phase > Math.PI) phase -= 2 * Math.PI;
+        while (phase < -Math.PI) {
+          phase += 2 * Math.PI;
+        }
+        while (phase > Math.PI) {
+          phase -= 2 * Math.PI;
+        }
         return phase;
       },
     );
@@ -628,7 +621,9 @@ export class ResonanceModel extends BaseModel {
     this.powerFactorProperty = new DerivedProperty(
       [this.phaseAngleProperty, this.drivingEnabledProperty],
       (phi: number, enabled: boolean) => {
-        if (!enabled) return 0;
+        if (!enabled) {
+          return 0;
+        }
         return Math.sin(phi);
       },
     );
@@ -643,7 +638,9 @@ export class ResonanceModel extends BaseModel {
     this.qualityFactorProperty = new DerivedProperty(
       [this.massProperty, this.springConstantProperty, this.dampingProperty],
       (m: number, k: number, b: number) => {
-        if (b < 1e-15) return Infinity;
+        if (b < 1e-15) {
+          return Infinity;
+        }
         return Math.sqrt(m * k) / b;
       },
     );
@@ -654,7 +651,9 @@ export class ResonanceModel extends BaseModel {
       [this.naturalFrequencyProperty, this.dampingRatioProperty],
       (omega0: number, zeta: number) => {
         const zetaSq = zeta * zeta;
-        if (zetaSq >= 1) return 0;
+        if (zetaSq >= 1) {
+          return 0;
+        }
         return omega0 * Math.sqrt(1 - zetaSq);
       },
     );
@@ -668,21 +667,22 @@ export class ResonanceModel extends BaseModel {
     // Logarithmic decrement: δ = 2πζ/√(1-ζ²)
     // Ratio of successive peak amplitudes in free decay: A_n/A_{n+1} = e^δ
     // Only meaningful for underdamped systems (ζ < 1). Returns Infinity for critically/overdamped.
-    this.logarithmicDecrementProperty = new DerivedProperty(
-      [this.dampingRatioProperty],
-      (zeta: number) => {
-        const zetaSq = zeta * zeta;
-        if (zetaSq >= 1) return Infinity;
-        return (2 * Math.PI * zeta) / Math.sqrt(1 - zetaSq);
-      },
-    );
+    this.logarithmicDecrementProperty = new DerivedProperty([this.dampingRatioProperty], (zeta: number) => {
+      const zetaSq = zeta * zeta;
+      if (zetaSq >= 1) {
+        return Infinity;
+      }
+      return (2 * Math.PI * zeta) / Math.sqrt(1 - zetaSq);
+    });
 
     // Decay time constant: τ = 2m/b
     // The envelope of free oscillations decays as e^{-t/τ}
     this.decayTimeConstantProperty = new DerivedProperty(
       [this.massProperty, this.dampingProperty],
       (m: number, b: number) => {
-        if (b < 1e-15) return Infinity;
+        if (b < 1e-15) {
+          return Infinity;
+        }
         return (2 * m) / b;
       },
     );
@@ -692,7 +692,9 @@ export class ResonanceModel extends BaseModel {
     this.bandwidthProperty = new DerivedProperty(
       [this.naturalFrequencyHzProperty, this.qualityFactorProperty],
       (f0: number, Q: number) => {
-        if (!isFinite(Q) || Q < 1e-15) return f0 > 0 ? Infinity : 0;
+        if (!isFinite(Q) || Q < 1e-15) {
+          return f0 > 0 ? Infinity : 0;
+        }
         return f0 / Q;
       },
     );
@@ -707,7 +709,9 @@ export class ResonanceModel extends BaseModel {
         this.drivingEnabledProperty,
       ],
       (b: number, freqHz: number, X0: number, enabled: boolean) => {
-        if (!enabled) return 0;
+        if (!enabled) {
+          return 0;
+        }
         const omega = freqHz * 2 * Math.PI;
         return 0.5 * b * omega * omega * X0 * X0;
       },
@@ -726,7 +730,9 @@ export class ResonanceModel extends BaseModel {
         this.drivingEnabledProperty,
       ],
       (m: number, k: number, freqHz: number, X0: number, enabled: boolean) => {
-        if (!enabled) return 0;
+        if (!enabled) {
+          return 0;
+        }
         const omega = freqHz * 2 * Math.PI;
         return 0.25 * (m * omega * omega + k) * X0 * X0;
       },
@@ -736,15 +742,15 @@ export class ResonanceModel extends BaseModel {
     // The driving frequency that produces maximum displacement amplitude.
     // Only exists for ζ < 1/√2. For higher damping, amplitude is maximized at f=0.
     this.peakResponseFrequencyProperty = new DerivedProperty(
-      [
-        this.naturalFrequencyHzProperty,
-        this.dampingRatioProperty,
-        this.drivingEnabledProperty,
-      ],
+      [this.naturalFrequencyHzProperty, this.dampingRatioProperty, this.drivingEnabledProperty],
       (f0: number, zeta: number, enabled: boolean) => {
-        if (!enabled) return 0;
+        if (!enabled) {
+          return 0;
+        }
         const term = 1 - 2 * zeta * zeta;
-        if (term <= 0) return 0; // No resonance peak for ζ ≥ 1/√2
+        if (term <= 0) {
+          return 0; // No resonance peak for ζ ≥ 1/√2
+        }
         return f0 * Math.sqrt(term);
       },
     );
@@ -759,7 +765,9 @@ export class ResonanceModel extends BaseModel {
         this.drivingEnabledProperty,
       ],
       (A: number, k: number, zeta: number, enabled: boolean) => {
-        if (!enabled) return 0;
+        if (!enabled) {
+          return 0;
+        }
         const term = 1 - zeta * zeta;
         if (zeta * zeta >= 0.5 || term <= 0) {
           // No resonance peak; maximum is at DC. Return static deflection F₀/k = A
@@ -807,7 +815,9 @@ export class ResonanceModel extends BaseModel {
         this.drivingEnabledProperty,
       ],
       (m: number, freqHz: number, X0: number, enabled: boolean) => {
-        if (!enabled) return 0;
+        if (!enabled) {
+          return 0;
+        }
         const omega = freqHz * 2 * Math.PI;
         return 0.25 * m * omega * omega * X0 * X0;
       },
@@ -817,13 +827,11 @@ export class ResonanceModel extends BaseModel {
     // For x(t) = X₀sin(ωt - φ), <x²> = X₀²/2
     // Counterpart to instantaneous springPotentialEnergyProperty (½kx²)
     this.steadyStatePotentialEnergyProperty = new DerivedProperty(
-      [
-        this.springConstantProperty,
-        this.displacementAmplitudeProperty,
-        this.drivingEnabledProperty,
-      ],
+      [this.springConstantProperty, this.displacementAmplitudeProperty, this.drivingEnabledProperty],
       (k: number, X0: number, enabled: boolean) => {
-        if (!enabled) return 0;
+        if (!enabled) {
+          return 0;
+        }
         return 0.25 * k * X0 * X0;
       },
     );
@@ -841,14 +849,10 @@ export class ResonanceModel extends BaseModel {
         this.phaseAngleProperty,
         this.drivingEnabledProperty,
       ],
-      (
-        F0: number,
-        freqHz: number,
-        X0: number,
-        phi: number,
-        enabled: boolean,
-      ) => {
-        if (!enabled) return 0;
+      (F0: number, freqHz: number, X0: number, phi: number, enabled: boolean) => {
+        if (!enabled) {
+          return 0;
+        }
         const omega = freqHz * 2 * Math.PI;
         return 0.5 * F0 * omega * X0 * Math.sin(phi);
       },
@@ -865,7 +869,9 @@ export class ResonanceModel extends BaseModel {
         this.drivingEnabledProperty,
       ],
       (b: number, freqHz: number, X0: number, enabled: boolean) => {
-        if (!enabled) return 0;
+        if (!enabled) {
+          return 0;
+        }
         const omega = freqHz * 2 * Math.PI;
         return -0.5 * b * omega * omega * X0 * X0;
       },
@@ -1013,21 +1019,21 @@ export class ResonanceModel extends BaseModel {
     // Calculate driving force using phase for smooth frequency changes
     // For displacement-driven oscillator: F_drive = k * A * sin(phase)
     // where A is the driver amplitude (displacement in meters)
-    let F_drive = 0;
+    let FDrive = 0;
     let phaseDerivative = 0;
     if (this.drivingEnabledProperty.value) {
       const A = this.drivingAmplitudeProperty.value; // Driver amplitude in meters
       const omega = this.drivingFrequencyProperty.value * 2 * Math.PI; // Convert Hz to rad/s
-      F_drive = k * A * Math.sin(phase); // Effective force from moving base
+      FDrive = k * A * Math.sin(phase); // Effective force from moving base
       phaseDerivative = omega; // dphase/dt = ω
     }
 
     // Calculate acceleration: a = F_total / m
     // F_total = -k*x (spring) - b*v (damping) - m*g (gravity, downward in upward-positive coords) + F_drive
-    const acceleration = (-k * x - b * v - m * g + F_drive) / m;
+    const acceleration = (-k * x - b * v - m * g + FDrive) / m;
 
     // Cumulative energy derivatives
-    const dDriverEnergy = F_drive * v; // Power input from driver (can be negative)
+    const dDriverEnergy = FDrive * v; // Power input from driver (can be negative)
     const dThermalEnergy = b * v * v; // Power dissipated as heat (always non-negative)
 
     return [
@@ -1090,7 +1096,9 @@ export class ResonanceModel extends BaseModel {
    * @param state - The state vector [position, velocity, phase, ...]
    */
   public collectSubStepData(state: number[]): void {
-    if (!this.subStepCollectionEnabled) return;
+    if (!this.subStepCollectionEnabled) {
+      return;
+    }
 
     const position = state[0]!;
     const velocity = state[1]!;
@@ -1102,15 +1110,9 @@ export class ResonanceModel extends BaseModel {
     const A = this.drivingAmplitudeProperty.value;
 
     // Compute acceleration and applied force at this state
-    const appliedForce = this.drivingEnabledProperty.value
-      ? k * A * Math.sin(phase)
-      : 0;
+    const appliedForce = this.drivingEnabledProperty.value ? k * A * Math.sin(phase) : 0;
     const acceleration =
-      (-k * position -
-        this.dampingProperty.value * velocity -
-        m * this.gravityProperty.value +
-        appliedForce) /
-      m;
+      (-k * position - this.dampingProperty.value * velocity - m * this.gravityProperty.value + appliedForce) / m;
 
     this.subStepDataBuffer.push({
       time: this.timeProperty.value,
@@ -1156,13 +1158,7 @@ export class ResonanceModel extends BaseModel {
  * Configuration preset for the resonance model
  */
 export type ResonancePreset = {
-  nameKey:
-    | "lightAndBouncy"
-    | "heavyAndSlow"
-    | "underdamped"
-    | "criticallyDamped"
-    | "overdamped"
-    | "resonanceDemo"; // Key for localized name
+  nameKey: "lightAndBouncy" | "heavyAndSlow" | "underdamped" | "criticallyDamped" | "overdamped" | "resonanceDemo"; // Key for localized name
   mass: number; // kg
   springConstant: number; // N/m
   damping: number; // N·s/m
@@ -1175,14 +1171,9 @@ export type ResonancePreset = {
 /**
  * Get the localized name for a preset
  */
-export function getPresetName(
-  preset: ResonancePreset,
-): ReadOnlyProperty<string> {
+export function getPresetName(preset: ResonancePreset): ReadOnlyProperty<string> {
   const propertyName = `${preset.nameKey}StringProperty`;
-  const presetsMap = ResonanceStrings.presets as Record<
-    string,
-    ReadOnlyProperty<string>
-  >;
+  const presetsMap = ResonanceStrings.presets as Record<string, ReadOnlyProperty<string>>;
   return presetsMap[propertyName]!;
 }
 

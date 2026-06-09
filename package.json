@@ -6,9 +6,14 @@
   "phet": {
     "simulation": true,
     "runnable": true,
-    "supportedBrands": ["made-with-scenerystack"],
+    "supportedBrands": [
+      "made-with-scenerystack"
+    ],
     "simFeatures": {
-      "colorProfiles": ["default", "projector"],
+      "colorProfiles": [
+        "default",
+        "projector"
+      ],
       "supportsDynamicLocale": true,
       "supportsInteractiveDescription": true,
       "supportsInteractiveHighlights": true,
@@ -18,40 +23,40 @@
     }
   },
   "scripts": {
-    "start": "npx vite",
-    "build": "npx tsc && npx vite build",
-    "preview": "npx vite preview",
-    "lint": "npx eslint .",
-    "format": "npx prettier --write .",
-    "fix": "npx eslint --fix . && npx prettier --write .",
+    "start": "vite",
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint": "biome check .",
+    "format": "biome format --write .",
+    "fix": "biome check --write .",
     "release": "npm version patch && git push && git push --tags",
-    "check": "npx tsc --noEmit",
-    "serve": "npx serve -s dist",
-    "watch": "npx tsc --watch",
+    "check": "tsc --noEmit",
+    "serve": "serve -s dist",
+    "watch": "tsc --watch",
     "clean": "rm -rf dist",
     "test": "vitest",
     "test:coverage": "vitest --coverage",
-    "test:fuzz": "npx playwright test --project=chromium",
-    "test:fuzz:headed": "npx playwright test --project=chromium --headed",
-    "test:fuzz:quick": "FUZZ_DURATION=30 npx playwright test --project=chromium fuzz.spec.ts",
-    "test:fuzz:long": "FUZZ_DURATION=300 npx playwright test --project=chromium fuzz.spec.ts"
+    "test:fuzz": "playwright test --project=chromium",
+    "test:fuzz:headed": "playwright test --project=chromium --headed",
+    "test:fuzz:quick": "FUZZ_DURATION=30 playwright test --project=chromium fuzz.spec.ts",
+    "test:fuzz:long": "FUZZ_DURATION=300 playwright test --project=chromium fuzz.spec.ts"
   },
   "dependencies": {
     "scenerystack": "^3.0.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.2",
+    "@biomejs/biome": "^2.4.16",
     "@playwright/test": "^1.58.0",
     "@vitest/coverage-v8": "^4.1.8",
     "canvas": "^3.2.0",
-    "eslint": "^9.39.2",
-    "globals": "^15.15.0",
     "jsdom": "^27.4.0",
-    "prettier": "^3.8.1",
     "serve": "^14.2.5",
-    "typescript": "~5.9.3",
-    "typescript-eslint": "^8.18.2",
+    "typescript": "^6.0.3",
     "vite": "^8.0.16",
     "vitest": "^4.1.8"
+  },
+  "engines": {
+    "node": ">=22.0.0"
   }
 }

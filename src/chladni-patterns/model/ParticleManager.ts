@@ -11,16 +11,16 @@
  * - Swap-remove: O(1) particle removal instead of O(n) splice
  */
 
+import { NumberProperty, type TReadOnlyProperty } from "scenerystack/axon";
 import { Vector2 } from "scenerystack/dot";
-import { NumberProperty, TReadOnlyProperty } from "scenerystack/axon";
 import {
-  TWO_PI,
+  type BoundaryMode,
+  GRAIN_COUNT_OPTIONS,
+  type GrainCountOption,
   PARTICLE_STEP_SCALE,
   STEP_TIME_SCALE,
   TARGET_FPS,
-  BoundaryMode,
-  GrainCountOption,
-  GRAIN_COUNT_OPTIONS,
+  TWO_PI,
 } from "./ChladniConstants.js";
 
 /**
@@ -40,8 +40,7 @@ export interface ParticleManagerOptions {
 }
 
 // Maximum particles (from GRAIN_COUNT_OPTIONS)
-const MAX_PARTICLE_COUNT =
-  GRAIN_COUNT_OPTIONS[GRAIN_COUNT_OPTIONS.length - 1]!.value;
+const MAX_PARTICLE_COUNT = GRAIN_COUNT_OPTIONS[GRAIN_COUNT_OPTIONS.length - 1]!.value;
 
 /**
  * ParticleManager handles all particle-related operations for the Chladni simulation.
@@ -172,8 +171,7 @@ export class ParticleManager {
       const displacement = Math.abs(psiFunction(x, y));
 
       // Random walk with step size proportional to displacement
-      const stepSize =
-        PARTICLE_STEP_SCALE * displacement * timeScale * STEP_TIME_SCALE;
+      const stepSize = PARTICLE_STEP_SCALE * displacement * timeScale * STEP_TIME_SCALE;
       const angle = Math.random() * TWO_PI;
 
       // Update position

@@ -24,33 +24,28 @@
  * - PlaybackStateMachine: Animation state management
  */
 
+import { Multilink, NumberProperty, Property, StringUnionProperty } from "scenerystack/axon";
+import { Range, Vector2 } from "scenerystack/dot";
+import { FrequencySweepController } from "../../common/model/FrequencySweepController.js";
 import {
-  Property,
-  NumberProperty,
-  Multilink,
-  StringUnionProperty,
-} from "scenerystack/axon";
-import { Vector2, Range } from "scenerystack/dot";
-import { Material, MaterialType } from "./Material.js";
+  type BoundaryMode,
+  DEFAULT_BOUNDARY_MODE,
+  DEFAULT_EXCITATION_X,
+  DEFAULT_EXCITATION_Y,
+  DEFAULT_GRAIN_COUNT,
+  FREQUENCY_DEFAULT,
+  FREQUENCY_MAX,
+  FREQUENCY_MIN,
+  GRAIN_COUNT_OPTIONS,
+  type GrainCountOption,
+  SWEEP_RATE,
+} from "./ChladniConstants.js";
+import { Material, type MaterialType } from "./Material.js";
 import { ModalCalculator } from "./ModalCalculator.js";
 import { ParticleManager } from "./ParticleManager.js";
 import { PlateGeometry } from "./PlateGeometry.js";
+import { type PlaybackState, PlaybackStateMachine } from "./PlaybackStateMachine.js";
 import { ResonanceCurveCalculator } from "./ResonanceCurveCalculator.js";
-import { FrequencySweepController } from "../../common/model/FrequencySweepController.js";
-import { PlaybackStateMachine, PlaybackState } from "./PlaybackStateMachine.js";
-import {
-  BoundaryMode,
-  GrainCountOption,
-  GRAIN_COUNT_OPTIONS,
-  DEFAULT_GRAIN_COUNT,
-  FREQUENCY_MIN,
-  FREQUENCY_MAX,
-  FREQUENCY_DEFAULT,
-  DEFAULT_EXCITATION_X,
-  DEFAULT_EXCITATION_Y,
-  DEFAULT_BOUNDARY_MODE,
-  SWEEP_RATE,
-} from "./ChladniConstants.js";
 
 // Re-export types for backward compatibility
 export type { BoundaryMode, GrainCountOption };
@@ -171,27 +166,18 @@ export class ChladniModel {
     });
 
     // Initialize time speed
-    this.timeSpeedProperty = new StringUnionProperty<ChladniTimeSpeed>(
-      "normal",
-      {
-        validValues: ChladniTimeSpeedValues,
-      },
-    );
+    this.timeSpeedProperty = new StringUnionProperty<ChladniTimeSpeed>("normal", {
+      validValues: ChladniTimeSpeedValues,
+    });
 
     // Initialize excitation position at center of plate
-    this.excitationPositionProperty = new Property<Vector2>(
-      new Vector2(DEFAULT_EXCITATION_X, DEFAULT_EXCITATION_Y),
-    );
+    this.excitationPositionProperty = new Property<Vector2>(new Vector2(DEFAULT_EXCITATION_X, DEFAULT_EXCITATION_Y));
 
     // Initialize grain count to default (10,000)
-    this.grainCountProperty = new Property<GrainCountOption>(
-      DEFAULT_GRAIN_COUNT,
-    );
+    this.grainCountProperty = new Property<GrainCountOption>(DEFAULT_GRAIN_COUNT);
 
     // Initialize boundary mode
-    this.boundaryModeProperty = new Property<BoundaryMode>(
-      DEFAULT_BOUNDARY_MODE,
-    );
+    this.boundaryModeProperty = new Property<BoundaryMode>(DEFAULT_BOUNDARY_MODE);
 
     // --- Initialize Extracted Modules ---
 
@@ -252,16 +238,13 @@ export class ChladniModel {
     });
 
     // Expose actual particle count from particle manager
-    this.actualParticleCountProperty =
-      this.particleManager.actualParticleCountProperty;
+    this.actualParticleCountProperty = this.particleManager.actualParticleCountProperty;
 
     // Initialize particles
     this.particleManager.initialize();
 
     // Cache initial wave number
-    this.cachedWaveNumber = this.modalCalculator.calculateWaveNumber(
-      this.frequencyProperty.value,
-    );
+    this.cachedWaveNumber = this.modalCalculator.calculateWaveNumber(this.frequencyProperty.value);
 
     // Initialize precomputed resonance curve
     this.resonanceCurveCalculator.recompute();
@@ -270,16 +253,12 @@ export class ChladniModel {
 
     // Update cached wave number when frequency changes
     this.frequencyProperty.link(() => {
-      this.cachedWaveNumber = this.modalCalculator.calculateWaveNumber(
-        this.frequencyProperty.value,
-      );
+      this.cachedWaveNumber = this.modalCalculator.calculateWaveNumber(this.frequencyProperty.value);
     });
 
     // Recompute resonance curve when material or excitation position changes
     this.materialProperty.link(() => {
-      this.cachedWaveNumber = this.modalCalculator.calculateWaveNumber(
-        this.frequencyProperty.value,
-      );
+      this.cachedWaveNumber = this.modalCalculator.calculateWaveNumber(this.frequencyProperty.value);
       this.modalCalculator.invalidateModeCache();
       this.resonanceCurveCalculator.recompute();
     });
@@ -295,17 +274,12 @@ export class ChladniModel {
     });
 
     // Recompute when plate dimensions change - using Multilink for coordinated updates
-    Multilink.lazyMultilink(
-      [this.plateGeometry.widthProperty, this.plateGeometry.heightProperty],
-      () => {
-        this.modalCalculator.updateCachedDamping();
-        this.resonanceCurveCalculator.recompute();
-        this.particleManager.clampToBounds();
-        this.plateGeometry.clampExcitationPosition(
-          this.excitationPositionProperty,
-        );
-      },
-    );
+    Multilink.lazyMultilink([this.plateGeometry.widthProperty, this.plateGeometry.heightProperty], () => {
+      this.modalCalculator.updateCachedDamping();
+      this.resonanceCurveCalculator.recompute();
+      this.particleManager.clampToBounds();
+      this.plateGeometry.clampExcitationPosition(this.excitationPositionProperty);
+    });
   }
 
   /**
@@ -313,10 +287,7 @@ export class ChladniModel {
    * Returns an array of {frequency, normalizedStrength} points ready for plotting.
    */
   public getResonanceCurveData(sampleCount: number): Vector2[] {
-    return this.resonanceCurveCalculator.getData(
-      this.frequencyProperty.value,
-      sampleCount,
-    );
+    return this.resonanceCurveCalculator.getData(this.frequencyProperty.value, sampleCount);
   }
 
   /**
@@ -324,9 +295,7 @@ export class ChladniModel {
    * Returns a window centered on the current frequency.
    */
   public getGraphWindowRange(): Range {
-    return this.resonanceCurveCalculator.getGraphWindowRange(
-      this.frequencyProperty.value,
-    );
+    return this.resonanceCurveCalculator.getGraphWindowRange(this.frequencyProperty.value);
   }
 
   /**
@@ -400,9 +369,7 @@ export class ChladniModel {
     this.particleManager.initialize();
 
     // Update cached values
-    this.cachedWaveNumber = this.modalCalculator.calculateWaveNumber(
-      this.frequencyProperty.value,
-    );
+    this.cachedWaveNumber = this.modalCalculator.calculateWaveNumber(this.frequencyProperty.value);
     this.modalCalculator.updateCachedDamping();
   }
 

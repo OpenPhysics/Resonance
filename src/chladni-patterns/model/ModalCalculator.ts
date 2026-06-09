@@ -16,17 +16,17 @@
  * - Only modes that pass SOURCE_THRESHOLD are included in the cache
  */
 
-import { Vector2 } from "scenerystack/dot";
-import { TReadOnlyProperty } from "scenerystack/axon";
-import { MaterialType } from "./Material.js";
+import type { TReadOnlyProperty } from "scenerystack/axon";
+import type { Vector2 } from "scenerystack/dot";
 import {
+  DAMPING_COEFFICIENT,
   MAX_MODE,
   MODE_STEP,
+  NORMALIZATION_NUMERATOR,
   SOURCE_THRESHOLD,
   SOURCE_THRESHOLD_SQUARED,
-  NORMALIZATION_NUMERATOR,
-  DAMPING_COEFFICIENT,
 } from "./ChladniConstants.js";
+import type { MaterialType } from "./Material.js";
 
 /**
  * Options for creating a ModalCalculator
@@ -172,7 +172,9 @@ export class ModalCalculator {
 
       for (let n = 0; n <= MAX_MODE; n += MODE_STEP) {
         // Skip the (0,0) mode
-        if (m === 0 && n === 0) continue;
+        if (m === 0 && n === 0) {
+          continue;
+        }
 
         // Source term: cos(mπx'/a)cos(nπy'/b)
         const nPi = n * Math.PI;
@@ -180,7 +182,9 @@ export class ModalCalculator {
         const sourceTerm = sourceX * sourceY;
 
         // Skip modes with negligible source contribution
-        if (Math.abs(sourceTerm) < SOURCE_THRESHOLD) continue;
+        if (Math.abs(sourceTerm) < SOURCE_THRESHOLD) {
+          continue;
+        }
 
         // Modal wave number: k_{m,n} = π√((m/a)² + (n/b)²)
         const nPiOverB = n * piOverB;
@@ -259,9 +263,7 @@ export class ModalCalculator {
     }
 
     // Return magnitude of complex sum with cached normalization
-    return (
-      this.cacheNormalization * Math.sqrt(sumReal * sumReal + sumImag * sumImag)
-    );
+    return this.cacheNormalization * Math.sqrt(sumReal * sumReal + sumImag * sumImag);
   }
 
   /**
@@ -300,19 +302,21 @@ export class ModalCalculator {
 
       for (let n = 0; n <= MAX_MODE; n += MODE_STEP) {
         // Skip (0,0) mode
-        if (m === 0 && n === 0) continue;
+        if (m === 0 && n === 0) {
+          continue;
+        }
 
         // |φₘₙ(x',y')|² = (4/ab) cos²(mπx'/a) cos²(nπy'/b)
         const cosY = Math.cos((n * Math.PI * excitY) / b);
         const phiSquared = normFactor * cosXSquared * cosY * cosY;
 
         // Skip modes with negligible source contribution
-        if (phiSquared < SOURCE_THRESHOLD_SQUARED) continue;
+        if (phiSquared < SOURCE_THRESHOLD_SQUARED) {
+          continue;
+        }
 
         // Modal wave number for rectangular plate: k_{m,n} = π√((m/a)² + (n/b)²)
-        const kmn = Math.sqrt(
-          m * mOverA * (m * mOverA) + n * nOverB * (n * nOverB),
-        );
+        const kmn = Math.sqrt(m * mOverA * (m * mOverA) + n * nOverB * (n * nOverB));
         const kmnSquared = kmn * kmn;
 
         // Resonance denominator: (k² - kmn²)² + 4(γk)²

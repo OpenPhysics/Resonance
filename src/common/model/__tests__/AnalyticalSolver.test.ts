@@ -5,13 +5,13 @@
  * the driven, damped harmonic oscillator across all three damping regimes.
  */
 
-import { describe, it, expect, beforeEach } from "vitest";
+import { Property } from "scenerystack/axon";
+import { beforeEach, describe, expect, it } from "vitest";
 import { AnalyticalSolver } from "../AnalyticalSolver.js";
 import { ODESolver } from "../ODESolver.js";
-import { RungeKuttaSolver } from "../RungeKuttaSolver.js";
 import { ResonanceModel } from "../ResonanceModel.js";
+import { RungeKuttaSolver } from "../RungeKuttaSolver.js";
 import { SolverType } from "../SolverType.js";
-import { Property } from "scenerystack/axon";
 
 describe("AnalyticalSolver", () => {
   describe("API conformance", () => {
@@ -37,9 +37,7 @@ describe("AnalyticalSolver", () => {
     let model: ResonanceModel;
 
     beforeEach(() => {
-      const solverTypeProperty = new Property<SolverType>(
-        SolverType.ANALYTICAL,
-      );
+      const solverTypeProperty = new Property<SolverType>(SolverType.ANALYTICAL);
       model = new ResonanceModel({ solverTypeProperty });
     });
 
@@ -94,9 +92,7 @@ describe("AnalyticalSolver", () => {
     let model: ResonanceModel;
 
     beforeEach(() => {
-      const solverTypeProperty = new Property<SolverType>(
-        SolverType.ANALYTICAL,
-      );
+      const solverTypeProperty = new Property<SolverType>(SolverType.ANALYTICAL);
       model = new ResonanceModel({ solverTypeProperty });
       // Set up underdamped case: ζ = 0.1
       model.massProperty.value = 1.0;
@@ -141,9 +137,7 @@ describe("AnalyticalSolver", () => {
       // Analytical solution for x(t) with x0=1, v0=0
       const C1 = 1.0;
       const C2 = (zeta * omega0 * C1) / omegaD;
-      const expected =
-        Math.exp(-zeta * omega0 * t) *
-        (C1 * Math.cos(omegaD * t) + C2 * Math.sin(omegaD * t));
+      const expected = Math.exp(-zeta * omega0 * t) * (C1 * Math.cos(omegaD * t) + C2 * Math.sin(omegaD * t));
 
       expect(model.positionProperty.value).toBeCloseTo(expected, 8);
     });
@@ -153,9 +147,7 @@ describe("AnalyticalSolver", () => {
     let model: ResonanceModel;
 
     beforeEach(() => {
-      const solverTypeProperty = new Property<SolverType>(
-        SolverType.ANALYTICAL,
-      );
+      const solverTypeProperty = new Property<SolverType>(SolverType.ANALYTICAL);
       model = new ResonanceModel({ solverTypeProperty });
       // Set up critical damping: ζ = 1
       model.massProperty.value = 1.0;
@@ -208,9 +200,7 @@ describe("AnalyticalSolver", () => {
     let model: ResonanceModel;
 
     beforeEach(() => {
-      const solverTypeProperty = new Property<SolverType>(
-        SolverType.ANALYTICAL,
-      );
+      const solverTypeProperty = new Property<SolverType>(SolverType.ANALYTICAL);
       model = new ResonanceModel({ solverTypeProperty });
       // Set up overdamped: ζ = 2
       model.massProperty.value = 1.0;
@@ -244,9 +234,7 @@ describe("AnalyticalSolver", () => {
     let model: ResonanceModel;
 
     beforeEach(() => {
-      const solverTypeProperty = new Property<SolverType>(
-        SolverType.ANALYTICAL,
-      );
+      const solverTypeProperty = new Property<SolverType>(SolverType.ANALYTICAL);
       model = new ResonanceModel({ solverTypeProperty });
       model.massProperty.value = 1.0;
       model.springConstantProperty.value = 100;
@@ -289,9 +277,7 @@ describe("AnalyticalSolver", () => {
     let model: ResonanceModel;
 
     beforeEach(() => {
-      const solverTypeProperty = new Property<SolverType>(
-        SolverType.ANALYTICAL,
-      );
+      const solverTypeProperty = new Property<SolverType>(SolverType.ANALYTICAL);
       model = new ResonanceModel({ solverTypeProperty });
     });
 
@@ -328,8 +314,7 @@ describe("AnalyticalSolver", () => {
       const velBeforeChange = model.velocityProperty.value;
 
       // Change spring constant
-      model.springConstantProperty.value =
-        model.springConstantProperty.value * 1.5;
+      model.springConstantProperty.value = model.springConstantProperty.value * 1.5;
 
       solver.step(0.001, model);
       const velAfterChange = model.velocityProperty.value;
@@ -341,9 +326,7 @@ describe("AnalyticalSolver", () => {
 
   describe("cross-solver agreement", () => {
     it("should agree with RK4 for simple oscillation", () => {
-      const analyticalSolverType = new Property<SolverType>(
-        SolverType.ANALYTICAL,
-      );
+      const analyticalSolverType = new Property<SolverType>(SolverType.ANALYTICAL);
       const rk4SolverType = new Property<SolverType>(SolverType.RUNGE_KUTTA_4);
 
       const analyticalModel = new ResonanceModel({
@@ -375,14 +358,8 @@ describe("AnalyticalSolver", () => {
       }
 
       // Results should agree closely
-      expect(analyticalModel.positionProperty.value).toBeCloseTo(
-        rk4Model.positionProperty.value,
-        3,
-      );
-      expect(analyticalModel.velocityProperty.value).toBeCloseTo(
-        rk4Model.velocityProperty.value,
-        3,
-      );
+      expect(analyticalModel.positionProperty.value).toBeCloseTo(rk4Model.positionProperty.value, 3);
+      expect(analyticalModel.velocityProperty.value).toBeCloseTo(rk4Model.velocityProperty.value, 3);
     });
   });
 });

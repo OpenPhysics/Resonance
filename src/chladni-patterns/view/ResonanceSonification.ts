@@ -12,12 +12,8 @@
  * This follows SceneryStack's audio patterns and respects the global audio enabled state.
  */
 
-import {
-  DerivedProperty,
-  Property,
-  TReadOnlyProperty,
-} from "scenerystack/axon";
-import { ChladniModel } from "../model/ChladniModel.js";
+import { DerivedProperty, Property, type TReadOnlyProperty } from "scenerystack/axon";
+import type { ChladniModel } from "../model/ChladniModel.js";
 
 /**
  * Threshold for considering the simulation to be "at resonance"
@@ -55,7 +51,6 @@ const VOLUME_SMOOTHING_TIME = 0.05;
  */
 export class ResonanceSonification {
   private readonly model: ChladniModel;
-  private readonly audioEnabledProperty: TReadOnlyProperty<boolean>;
 
   // Web Audio API components
   private audioContext: AudioContext | null = null;
@@ -71,12 +66,8 @@ export class ResonanceSonification {
   private maxStrength: number = 1;
   private strengthSampleCount: number = 0;
 
-  public constructor(
-    model: ChladniModel,
-    audioEnabledProperty: TReadOnlyProperty<boolean>,
-  ) {
+  public constructor(model: ChladniModel, audioEnabledProperty: TReadOnlyProperty<boolean>) {
     this.model = model;
-    this.audioEnabledProperty = audioEnabledProperty;
 
     // Create derived properties for resonance state
     this.normalizedStrengthProperty = new Property<number>(0);
@@ -135,8 +126,7 @@ export class ResonanceSonification {
     }
 
     // Normalize strength
-    const normalizedStrength =
-      this.maxStrength > 0 ? Math.min(strength / this.maxStrength, 1) : 0;
+    const normalizedStrength = this.maxStrength > 0 ? Math.min(strength / this.maxStrength, 1) : 0;
 
     this.normalizedStrengthProperty.value = normalizedStrength;
     this.isAtResonanceProperty.value = normalizedStrength > RESONANCE_THRESHOLD;
@@ -151,7 +141,9 @@ export class ResonanceSonification {
    * Initialize and start the audio
    */
   private startAudio(): void {
-    if (this.isPlaying) return;
+    if (this.isPlaying) {
+      return;
+    }
 
     try {
       // Create audio context on first use (must be triggered by user interaction)
@@ -161,7 +153,9 @@ export class ResonanceSonification {
 
       // Resume context if suspended
       if (this.audioContext.state === "suspended") {
-        void this.audioContext.resume();
+        this.audioContext.resume().catch(() => {
+          /* resume may reject if called before a user gesture */
+        });
       }
 
       // Create oscillator
@@ -182,9 +176,8 @@ export class ResonanceSonification {
 
       // Update with current state
       this.updateResonanceState();
-    } catch (e) {
+    } catch {
       // Audio might not be available in some environments
-      console.warn("ResonanceSonification: Could not start audio", e);
     }
   }
 
@@ -192,15 +185,14 @@ export class ResonanceSonification {
    * Stop and clean up audio
    */
   private stopAudio(): void {
-    if (!this.isPlaying) return;
+    if (!this.isPlaying) {
+      return;
+    }
 
     try {
       // Fade out quickly to avoid clicking
       if (this.gainNode && this.audioContext) {
-        this.gainNode.gain.linearRampToValueAtTime(
-          0,
-          this.audioContext.currentTime + 0.02,
-        );
+        this.gainNode.gain.linearRampToValueAtTime(0, this.audioContext.currentTime + 0.02);
       }
 
       // Stop oscillator after fade
@@ -217,48 +209,37 @@ export class ResonanceSonification {
       }, 30);
 
       this.isPlaying = false;
-    } catch (e) {
-      console.warn("ResonanceSonification: Error stopping audio", e);
+    } catch {
+      // Ignore errors while stopping audio
     }
   }
 
   /**
    * Update audio parameters based on current frequency and strength
    */
-  private updateAudioParameters(
-    frequency: number,
-    normalizedStrength: number,
-  ): void {
-    if (!this.oscillator || !this.gainNode || !this.audioContext) return;
+  private updateAudioParameters(frequency: number, normalizedStrength: number): void {
+    if (!(this.oscillator && this.gainNode && this.audioContext)) {
+      return;
+    }
 
     // Map simulation frequency (50-4000 Hz) to audio frequency
     const freqRange = this.model.frequencyRange;
     const freqT = (frequency - freqRange.min) / (freqRange.max - freqRange.min);
-    const audioFreq =
-      MIN_AUDIO_FREQUENCY + freqT * (MAX_AUDIO_FREQUENCY - MIN_AUDIO_FREQUENCY);
+    const audioFreq = MIN_AUDIO_FREQUENCY + freqT * (MAX_AUDIO_FREQUENCY - MIN_AUDIO_FREQUENCY);
 
     // Set oscillator frequency
-    this.oscillator.frequency.setValueAtTime(
-      audioFreq,
-      this.audioContext.currentTime,
-    );
+    this.oscillator.frequency.setValueAtTime(audioFreq, this.audioContext.currentTime);
 
     // Calculate volume based on strength
     let targetVolume = 0;
     if (normalizedStrength > MIN_STRENGTH_FOR_SOUND) {
       // Map strength to volume with exponential curve for better perception
-      const strengthT =
-        (normalizedStrength - MIN_STRENGTH_FOR_SOUND) /
-        (1 - MIN_STRENGTH_FOR_SOUND);
-      targetVolume =
-        MIN_VOLUME + strengthT * strengthT * (MAX_VOLUME - MIN_VOLUME);
+      const strengthT = (normalizedStrength - MIN_STRENGTH_FOR_SOUND) / (1 - MIN_STRENGTH_FOR_SOUND);
+      targetVolume = MIN_VOLUME + strengthT * strengthT * (MAX_VOLUME - MIN_VOLUME);
     }
 
     // Smooth volume transition
-    this.gainNode.gain.linearRampToValueAtTime(
-      targetVolume,
-      this.audioContext.currentTime + VOLUME_SMOOTHING_TIME,
-    );
+    this.gainNode.gain.linearRampToValueAtTime(targetVolume, this.audioContext.currentTime + VOLUME_SMOOTHING_TIME);
   }
 
   /**
@@ -267,7 +248,9 @@ export class ResonanceSonification {
   public dispose(): void {
     this.stopAudio();
     if (this.audioContext) {
-      void this.audioContext.close();
+      this.audioContext.close().catch(() => {
+        /* ignore close errors */
+      });
       this.audioContext = null;
     }
   }

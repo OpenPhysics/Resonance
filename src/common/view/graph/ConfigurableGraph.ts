@@ -3,38 +3,21 @@
  * This provides a flexible way to explore relationships between any two quantities.
  */
 
-import {
-  Node,
-  HBox,
-  Text,
-  Rectangle,
-  FireListener,
-} from "scenerystack/scenery";
-import {
-  ChartRectangle,
-  ChartTransform,
-  LinePlot,
-  GridLineSet,
-  TickMarkSet,
-  TickLabelSet,
-} from "scenerystack/bamboo";
+import { BooleanProperty, Property, type TReadOnlyProperty } from "scenerystack/axon";
+import { ChartRectangle, ChartTransform, GridLineSet, LinePlot, TickLabelSet, TickMarkSet } from "scenerystack/bamboo";
 import { Range } from "scenerystack/dot";
-import {
-  Property,
-  BooleanProperty,
-  type TReadOnlyProperty,
-} from "scenerystack/axon";
-import { Orientation } from "scenerystack/phet-core";
 import { Shape } from "scenerystack/kite";
-import type { PlottableProperty } from "./PlottableProperty.js";
+import { Orientation } from "scenerystack/phet-core";
+import { FireListener, HBox, Node, Rectangle, Text } from "scenerystack/scenery";
+import { PhetFont } from "scenerystack/scenery-phet";
 import type { SubStepDataPoint } from "../../model/BaseModel.js";
 import ResonanceColors from "../../ResonanceColors.js";
 import ResonanceConstants from "../../ResonanceConstants.js";
-import { PhetFont } from "scenerystack/scenery-phet";
+import resonance from "../../ResonanceNamespace.js";
+import GraphControlsPanel from "./GraphControlsPanel.js";
 import GraphDataManager from "./GraphDataManager.js";
 import GraphInteractionHandler from "./GraphInteractionHandler.js";
-import GraphControlsPanel from "./GraphControlsPanel.js";
-import resonance from "../../ResonanceNamespace.js";
+import type { PlottableProperty } from "./PlottableProperty.js";
 
 // Grid line styling
 const GRID_LINE_WIDTH = 0.5;
@@ -134,8 +117,8 @@ export default class ConfigurableGraph extends Node {
     initialYProperty: PlottableProperty,
     width: number,
     height: number,
-    maxDataPoints: number = 2000,
     listParent: Node,
+    maxDataPoints: number = 2000,
   ) {
     super();
 
@@ -176,84 +159,52 @@ export default class ConfigurableGraph extends Node {
     this.graphContentNode.addChild(this.chartRectangle);
 
     // Create grid lines, tick marks, and tick labels
-    const initialSpacing = GraphDataManager.calculateTickSpacing(
-      initialRange.getLength(),
-    );
+    const initialSpacing = GraphDataManager.calculateTickSpacing(initialRange.getLength());
 
-    this.verticalGridLineSet = new GridLineSet(
-      this.chartTransform,
-      Orientation.VERTICAL,
-      initialSpacing,
-      {
-        stroke: ResonanceColors.gridLinesProperty,
-        lineWidth: GRID_LINE_WIDTH,
-      },
-    );
+    this.verticalGridLineSet = new GridLineSet(this.chartTransform, Orientation.VERTICAL, initialSpacing, {
+      stroke: ResonanceColors.gridLinesProperty,
+      lineWidth: GRID_LINE_WIDTH,
+    });
     this.graphContentNode.addChild(this.verticalGridLineSet);
 
-    this.horizontalGridLineSet = new GridLineSet(
-      this.chartTransform,
-      Orientation.HORIZONTAL,
-      initialSpacing,
-      {
-        stroke: ResonanceColors.gridLinesProperty,
-        lineWidth: GRID_LINE_WIDTH,
-      },
-    );
+    this.horizontalGridLineSet = new GridLineSet(this.chartTransform, Orientation.HORIZONTAL, initialSpacing, {
+      stroke: ResonanceColors.gridLinesProperty,
+      lineWidth: GRID_LINE_WIDTH,
+    });
     this.graphContentNode.addChild(this.horizontalGridLineSet);
 
-    this.xTickMarkSet = new TickMarkSet(
-      this.chartTransform,
-      Orientation.HORIZONTAL,
-      initialSpacing,
-      {
-        edge: "min",
-        extent: TICK_EXTENT,
-        stroke: ResonanceColors.controlPanelStrokeProperty,
-      },
-    );
+    this.xTickMarkSet = new TickMarkSet(this.chartTransform, Orientation.HORIZONTAL, initialSpacing, {
+      edge: "min",
+      extent: TICK_EXTENT,
+      stroke: ResonanceColors.controlPanelStrokeProperty,
+    });
     this.graphContentNode.addChild(this.xTickMarkSet);
 
-    this.yTickMarkSet = new TickMarkSet(
-      this.chartTransform,
-      Orientation.VERTICAL,
-      initialSpacing,
-      {
-        edge: "min",
-        extent: TICK_EXTENT,
-        stroke: ResonanceColors.controlPanelStrokeProperty,
-      },
-    );
+    this.yTickMarkSet = new TickMarkSet(this.chartTransform, Orientation.VERTICAL, initialSpacing, {
+      edge: "min",
+      extent: TICK_EXTENT,
+      stroke: ResonanceColors.controlPanelStrokeProperty,
+    });
     this.graphContentNode.addChild(this.yTickMarkSet);
 
-    this.xTickLabelSet = new TickLabelSet(
-      this.chartTransform,
-      Orientation.HORIZONTAL,
-      initialSpacing,
-      {
-        edge: "min",
-        createLabel: (value: number) =>
-          new Text(value.toFixed(TICK_LABEL_DECIMALS), {
-            font: TICK_LABEL_FONT,
-            fill: ResonanceColors.textProperty,
-          }),
-      },
-    );
+    this.xTickLabelSet = new TickLabelSet(this.chartTransform, Orientation.HORIZONTAL, initialSpacing, {
+      edge: "min",
+      createLabel: (value: number) =>
+        new Text(value.toFixed(TICK_LABEL_DECIMALS), {
+          font: TICK_LABEL_FONT,
+          fill: ResonanceColors.textProperty,
+        }),
+    });
     this.graphContentNode.addChild(this.xTickLabelSet);
 
-    this.yTickLabelSet = new TickLabelSet(
-      this.chartTransform,
-      Orientation.VERTICAL,
-      initialSpacing,
-      {
-        edge: "min",
-        createLabel: (value: number) =>
-          new Text(value.toFixed(TICK_LABEL_DECIMALS), {
-            font: TICK_LABEL_FONT,
-            fill: ResonanceColors.textProperty,
-          }),
-      },
-    );
+    this.yTickLabelSet = new TickLabelSet(this.chartTransform, Orientation.VERTICAL, initialSpacing, {
+      edge: "min",
+      createLabel: (value: number) =>
+        new Text(value.toFixed(TICK_LABEL_DECIMALS), {
+          font: TICK_LABEL_FONT,
+          fill: ResonanceColors.textProperty,
+        }),
+    });
     this.graphContentNode.addChild(this.yTickLabelSet);
 
     // Create invisible interaction regions for axis controls
@@ -263,29 +214,17 @@ export default class ConfigurableGraph extends Node {
     const axisInteractionHeight = X_AXIS_INTERACTION_HEIGHT;
 
     // Y-axis interaction region (left side of graph, covering full height)
-    this.yAxisInteractionRegion = new Rectangle(
-      -axisInteractionWidth,
-      0,
-      axisInteractionWidth,
-      height,
-      {
-        fill: "transparent",
-        pickable: true,
-      },
-    );
+    this.yAxisInteractionRegion = new Rectangle(-axisInteractionWidth, 0, axisInteractionWidth, height, {
+      fill: "transparent",
+      pickable: true,
+    });
     this.graphContentNode.addChild(this.yAxisInteractionRegion);
 
     // X-axis interaction region (bottom of graph, covering full width)
-    this.xAxisInteractionRegion = new Rectangle(
-      0,
-      height,
-      width,
-      axisInteractionHeight,
-      {
-        fill: "transparent",
-        pickable: true,
-      },
-    );
+    this.xAxisInteractionRegion = new Rectangle(0, height, width, axisInteractionHeight, {
+      fill: "transparent",
+      pickable: true,
+    });
     this.graphContentNode.addChild(this.xAxisInteractionRegion);
 
     // Create line plot
@@ -323,20 +262,14 @@ export default class ConfigurableGraph extends Node {
     this.graphContentNode.addChild(this.yAxisLabelNode);
 
     // Initialize data manager
-    this.dataManager = new GraphDataManager(
-      this.chartTransform,
-      this.linePlot,
-      this.trailNode,
-      maxDataPoints,
-      {
-        verticalGridLineSet: this.verticalGridLineSet,
-        horizontalGridLineSet: this.horizontalGridLineSet,
-        xTickMarkSet: this.xTickMarkSet,
-        yTickMarkSet: this.yTickMarkSet,
-        xTickLabelSet: this.xTickLabelSet,
-        yTickLabelSet: this.yTickLabelSet,
-      },
-    );
+    this.dataManager = new GraphDataManager(this.chartTransform, this.linePlot, this.trailNode, maxDataPoints, {
+      verticalGridLineSet: this.verticalGridLineSet,
+      horizontalGridLineSet: this.horizontalGridLineSet,
+      xTickMarkSet: this.xTickMarkSet,
+      yTickMarkSet: this.yTickMarkSet,
+      xTickLabelSet: this.xTickLabelSet,
+      yTickLabelSet: this.yTickLabelSet,
+    });
 
     // Create controls panel helper
     const controlsPanel = new GraphControlsPanel(
@@ -364,19 +297,11 @@ export default class ConfigurableGraph extends Node {
         fill: ResonanceColors.controlPanelStrokeProperty,
       });
 
-      const buttonBackground = new Rectangle(
-        0,
-        0,
-        buttonSize,
-        buttonSize,
-        BUTTON_CORNER_RADIUS,
-        BUTTON_CORNER_RADIUS,
-        {
-          fill: ResonanceColors.controlPanelFillProperty,
-          stroke: ResonanceColors.controlPanelStrokeProperty,
-          cursor: "pointer",
-        },
-      );
+      const buttonBackground = new Rectangle(0, 0, buttonSize, buttonSize, BUTTON_CORNER_RADIUS, BUTTON_CORNER_RADIUS, {
+        fill: ResonanceColors.controlPanelFillProperty,
+        stroke: ResonanceColors.controlPanelStrokeProperty,
+        cursor: "pointer",
+      });
 
       const button = new Node({
         children: [buttonBackground, buttonText],
@@ -509,7 +434,9 @@ export default class ConfigurableGraph extends Node {
 
     // Create and add resize handles
     const resizeHandles = this.interactionHandler.createResizeHandles();
-    resizeHandles.forEach((handle) => this.addChild(handle));
+    resizeHandles.forEach((handle) => {
+      this.addChild(handle);
+    });
 
     // Link visibility property to the content node, header bar, and resize handles
     this.graphVisibleProperty.link((visible) => {
@@ -569,18 +496,8 @@ export default class ConfigurableGraph extends Node {
     // Update invisible interaction regions
     const axisInteractionWidth = 60;
     const axisInteractionHeight = 30;
-    this.yAxisInteractionRegion.setRect(
-      -axisInteractionWidth,
-      0,
-      axisInteractionWidth,
-      newHeight,
-    );
-    this.xAxisInteractionRegion.setRect(
-      0,
-      newHeight,
-      newWidth,
-      axisInteractionHeight,
-    );
+    this.yAxisInteractionRegion.setRect(-axisInteractionWidth, 0, axisInteractionWidth, newHeight);
+    this.xAxisInteractionRegion.setRect(0, newHeight, newWidth, axisInteractionHeight);
 
     // Update axis labels positions
     this.xAxisLabelNode.centerX = newWidth / 2;
@@ -588,9 +505,7 @@ export default class ConfigurableGraph extends Node {
     this.yAxisLabelNode.centerY = newHeight / 2;
 
     // Update title panel position
-    const titlePanel = this.graphContentNode.children.find(
-      (child) => child instanceof HBox,
-    );
+    const titlePanel = this.graphContentNode.children.find((child) => child instanceof HBox);
     if (titlePanel) {
       titlePanel.centerX = newWidth / 2;
     }
@@ -628,7 +543,9 @@ export default class ConfigurableGraph extends Node {
    * @param subStepData - Array of sub-step data points from the model
    */
   public addDataPointsFromSubSteps(subStepData: SubStepDataPoint[]): void {
-    if (subStepData.length === 0) return;
+    if (subStepData.length === 0) {
+      return;
+    }
 
     const xProperty = this.xPropertyProperty.value;
     const yProperty = this.yPropertyProperty.value;
@@ -663,10 +580,7 @@ export default class ConfigurableGraph extends Node {
    * Uses the type-safe subStepAccessor when available, otherwise falls back
    * to the current property value for derived quantities (energy, RMS, etc.).
    */
-  private getValueForAxis(
-    axisProperty: PlottableProperty,
-    point: SubStepDataPoint,
-  ): number | null {
+  private getValueForAxis(axisProperty: PlottableProperty, point: SubStepDataPoint): number | null {
     if (axisProperty.subStepAccessor) {
       return axisProperty.subStepAccessor(point);
     }
@@ -706,10 +620,7 @@ export default class ConfigurableGraph extends Node {
     this.graphVisibleProperty.reset();
 
     // Reset graph size to initial dimensions if it has been resized
-    if (
-      this.graphWidth !== this.initialWidth ||
-      this.graphHeight !== this.initialHeight
-    ) {
+    if (this.graphWidth !== this.initialWidth || this.graphHeight !== this.initialHeight) {
       this.resizeGraph(this.initialWidth, this.initialHeight);
     }
 

@@ -5,18 +5,11 @@
  * Uses SceneryStack's Sprites system for efficient rendering of many particles.
  */
 
-import {
-  Node,
-  Sprite,
-  SpriteImage,
-  SpriteInstance,
-  SpriteInstanceTransformType,
-  Sprites,
-} from "scenerystack/scenery";
 import { Bounds2, Vector2 } from "scenerystack/dot";
-import { ModelViewTransform2 } from "scenerystack/phetcommon";
+import type { ModelViewTransform2 } from "scenerystack/phetcommon";
+import { Node, Sprite, SpriteImage, SpriteInstance, SpriteInstanceTransformType, Sprites } from "scenerystack/scenery";
 import ResonanceColors from "../../../common/ResonanceColors.js";
-import { ParticleRenderer } from "./ParticleRenderer.js";
+import type { ParticleRenderer } from "./ParticleRenderer.js";
 
 // Particle rendering size in pixels
 const PARTICLE_SIZE = 2;
@@ -32,17 +25,10 @@ export class WebGLParticleRenderer implements ParticleRenderer {
   private spritesNode: Sprites | null = null;
   private sprite: Sprite | null = null;
   private spriteInstances: SpriteInstance[] = [];
-  private particles: Vector2[] = [];
-  private transform: ModelViewTransform2;
 
-  public constructor(
-    width: number,
-    height: number,
-    transform: ModelViewTransform2,
-  ) {
+  public constructor(width: number, height: number, transform: ModelViewTransform2) {
     this.width = width;
     this.height = height;
-    this.transform = transform;
     this.containerNode = new Node();
     this.initialize();
   }
@@ -83,10 +69,7 @@ export class WebGLParticleRenderer implements ParticleRenderer {
     context.fill();
 
     // Create sprite image with center offset
-    const spriteImage = new SpriteImage(
-      canvas,
-      new Vector2(size / 2, size / 2),
-    );
+    const spriteImage = new SpriteImage(canvas, new Vector2(size / 2, size / 2));
     return new Sprite(spriteImage);
   }
 
@@ -139,9 +122,6 @@ export class WebGLParticleRenderer implements ParticleRenderer {
   }
 
   public update(particles: Vector2[], transform: ModelViewTransform2): void {
-    this.particles = particles;
-    this.transform = transform;
-
     // Sync instance count
     const needsRecreate = this.syncSpriteInstances(particles.length);
     if (needsRecreate) {
@@ -159,14 +139,9 @@ export class WebGLParticleRenderer implements ParticleRenderer {
     this.spritesNode?.invalidatePaint();
   }
 
-  public resize(
-    width: number,
-    height: number,
-    transform: ModelViewTransform2,
-  ): void {
+  public resize(width: number, height: number, transform: ModelViewTransform2): void {
     this.width = width;
     this.height = height;
-    this.transform = transform;
     this.recreateSpritesNode();
   }
 

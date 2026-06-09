@@ -4,13 +4,13 @@
  * P1 Priority: Core infrastructure for time management and solver switching.
  */
 
-import { describe, it, expect, beforeEach } from "vitest";
 import { Property } from "scenerystack/axon";
-import { BaseModel, TimeSpeed } from "../BaseModel.js";
-import { SolverType } from "../SolverType.js";
-import { RungeKuttaSolver } from "../RungeKuttaSolver.js";
+import { beforeEach, describe, expect, it } from "vitest";
 import { AdaptiveRK45Solver } from "../AdaptiveRK45Solver.js";
 import { AnalyticalSolver } from "../AnalyticalSolver.js";
+import { BaseModel, type TimeSpeed } from "../BaseModel.js";
+import { RungeKuttaSolver } from "../RungeKuttaSolver.js";
+import { SolverType } from "../SolverType.js";
 
 /**
  * Concrete implementation of BaseModel for testing

@@ -1,4 +1,4 @@
-import { ReadOnlyProperty } from "scenerystack/axon";
+import type { ReadOnlyProperty } from "scenerystack/axon";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
 
 /**
@@ -15,26 +15,17 @@ export enum SolverType {
  * @unused Not referenced in production code; only used in tests.
  */
 export const SolverTypeName: Record<SolverType, ReadOnlyProperty<string>> = {
-  [SolverType.RUNGE_KUTTA_4]:
-    ResonanceStrings.common.solverNames.solverRK4StringProperty,
-  [SolverType.ADAPTIVE_RK45]:
-    ResonanceStrings.common.solverNames.solverAdaptiveRK45StringProperty,
-  [SolverType.ANALYTICAL]:
-    ResonanceStrings.common.solverNames.solverAnalyticalStringProperty,
+  [SolverType.RUNGE_KUTTA_4]: ResonanceStrings.common.solverNames.solverRK4StringProperty,
+  [SolverType.ADAPTIVE_RK45]: ResonanceStrings.common.solverNames.solverAdaptiveRK45StringProperty,
+  [SolverType.ANALYTICAL]: ResonanceStrings.common.solverNames.solverAnalyticalStringProperty,
 };
 
 /**
  * Human-readable descriptions for solver types (localized)
  * @unused Not referenced in production code; only used in tests.
  */
-export const SolverTypeDescription: Record<
-  SolverType,
-  ReadOnlyProperty<string>
-> = {
-  [SolverType.RUNGE_KUTTA_4]:
-    ResonanceStrings.preferences.solvers.rk4DescriptionStringProperty,
-  [SolverType.ADAPTIVE_RK45]:
-    ResonanceStrings.preferences.solvers.adaptiveRK45DescriptionStringProperty,
-  [SolverType.ANALYTICAL]:
-    ResonanceStrings.preferences.solvers.analyticalDescriptionStringProperty,
+export const SolverTypeDescription: Record<SolverType, ReadOnlyProperty<string>> = {
+  [SolverType.RUNGE_KUTTA_4]: ResonanceStrings.preferences.solvers.rk4DescriptionStringProperty,
+  [SolverType.ADAPTIVE_RK45]: ResonanceStrings.preferences.solvers.adaptiveRK45DescriptionStringProperty,
+  [SolverType.ANALYTICAL]: ResonanceStrings.preferences.solvers.analyticalDescriptionStringProperty,
 };

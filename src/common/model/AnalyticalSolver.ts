@@ -17,7 +17,7 @@
  * - Overdamped (ζ > 1): Slow exponential decay
  */
 
-import { ODESolver, ODEModel, SubStepCallback } from "./ODESolver.js";
+import { type ODEModel, ODESolver, type SubStepCallback } from "./ODESolver.js";
 
 /**
  * Extended model interface for direct parameter access.
@@ -49,7 +49,7 @@ interface OscillatorParams {
 /**
  * Damping regime enumeration
  */
-const enum DampingRegime {
+enum DampingRegime {
   UNDERDAMPED,
   CRITICALLY_DAMPED,
   OVERDAMPED,
@@ -106,12 +106,10 @@ export class AnalyticalSolver extends ODESolver {
    * This is the ONLY public method — same signature as RungeKuttaSolver.step().
    * @param onSubStep - optional callback invoked at synthetic sub-step intervals
    */
-  public override step(
-    dt: number,
-    model: ODEModel,
-    onSubStep?: SubStepCallback,
-  ): void {
-    if (dt === 0) return; // No-op for zero timestep
+  public override step(dt: number, model: ODEModel, onSubStep?: SubStepCallback): void {
+    if (dt === 0) {
+      return; // No-op for zero timestep
+    }
 
     // 1. Detect parameter changes (uses extension interface internally)
     if (this.cachedParams === null || this.parametersChanged(model)) {
@@ -123,56 +121,48 @@ export class AnalyticalSolver extends ODESolver {
     const tauMid = this.localTime + dt / 2;
     const tau1 = this.localTime + dt;
 
-    const x_at_0 = this.computePosition(tau0);
-    const v_at_0 = this.computeVelocity(tau0);
-    const x_at_mid = this.computePosition(tauMid);
-    const v_at_mid = this.computeVelocity(tauMid);
-    const x_at_1 = this.computePosition(tau1);
-    const v_at_1 = this.computeVelocity(tau1);
+    const xAt0 = this.computePosition(tau0);
+    const vAt0 = this.computeVelocity(tau0);
+    const xAtMid = this.computePosition(tauMid);
+    const vAtMid = this.computeVelocity(tauMid);
+    const xAt1 = this.computePosition(tau1);
+    const vAt1 = this.computeVelocity(tau1);
 
     // 3. Advance local time
     this.localTime = tau1;
 
     // 4. Compute driving phase at quadrature points
-    const phase_at_1 = this.computePhase(tau1);
-    const phase_at_mid = this.computePhase(tauMid);
-    const phase_at_0 = this.computePhase(tau0);
+    const phaseAt1 = this.computePhase(tau1);
+    const phaseAtMid = this.computePhase(tauMid);
+    const phaseAt0 = this.computePhase(tau0);
 
     // 5. Accumulate cumulative integrals via Simpson's rule
     //    ∫f(τ)dτ ≈ (Δt/6)[f(τ₀) + 4f(τ_mid) + f(τ₁)]
-    const sixth_dt = dt / 6;
+    const sixthDt = dt / 6;
 
     // Driver energy: ∫ F_drive · v dt
     if (this.drivingEnabled) {
       const k = this.springConstant;
       const A = this.drivingAmplitude;
-      const Fd0 = k * A * Math.sin(phase_at_0);
-      const FdMid = k * A * Math.sin(phase_at_mid);
-      const Fd1 = k * A * Math.sin(phase_at_1);
-      this.cumDriverEnergy +=
-        sixth_dt * (Fd0 * v_at_0 + 4 * FdMid * v_at_mid + Fd1 * v_at_1);
+      const Fd0 = k * A * Math.sin(phaseAt0);
+      const FdMid = k * A * Math.sin(phaseAtMid);
+      const Fd1 = k * A * Math.sin(phaseAt1);
+      this.cumDriverEnergy += sixthDt * (Fd0 * vAt0 + 4 * FdMid * vAtMid + Fd1 * vAt1);
     }
 
     // Thermal energy: ∫ b·v² dt
     const b = this.dampingCoeff;
-    this.cumThermalEnergy +=
-      sixth_dt *
-      (b * v_at_0 * v_at_0 + 4 * b * v_at_mid * v_at_mid + b * v_at_1 * v_at_1);
+    this.cumThermalEnergy += sixthDt * (b * vAt0 * vAt0 + 4 * b * vAtMid * vAtMid + b * vAt1 * vAt1);
 
     // Sum squared displacement: ∫ x² dt
-    this.cumSumX2 +=
-      sixth_dt * (x_at_0 * x_at_0 + 4 * x_at_mid * x_at_mid + x_at_1 * x_at_1);
+    this.cumSumX2 += sixthDt * (xAt0 * xAt0 + 4 * xAtMid * xAtMid + xAt1 * xAt1);
 
     // Sum squared velocity: ∫ v² dt
-    this.cumSumV2 +=
-      sixth_dt * (v_at_0 * v_at_0 + 4 * v_at_mid * v_at_mid + v_at_1 * v_at_1);
+    this.cumSumV2 += sixthDt * (vAt0 * vAt0 + 4 * vAtMid * vAtMid + vAt1 * vAt1);
 
     // 6. Generate synthetic sub-steps for graph data collection
     if (onSubStep) {
-      const numSubSteps = Math.max(
-        1,
-        Math.ceil(dt / AnalyticalSolver.SUB_STEP_INTERVAL),
-      );
+      const numSubSteps = Math.max(1, Math.ceil(dt / AnalyticalSolver.SUB_STEP_INTERVAL));
       const subStepDt = dt / numSubSteps;
 
       for (let i = 1; i <= numSubSteps; i++) {
@@ -197,19 +187,11 @@ export class AnalyticalSolver extends ODESolver {
     }
 
     // 7. Write new state back through the standard API
-    model.setState([
-      x_at_1,
-      v_at_1,
-      phase_at_1,
-      this.cumDriverEnergy,
-      this.cumThermalEnergy,
-      this.cumSumX2,
-      this.cumSumV2,
-    ]);
+    model.setState([xAt1, vAt1, phaseAt1, this.cumDriverEnergy, this.cumThermalEnergy, this.cumSumX2, this.cumSumV2]);
 
     // 8. Track the state we wrote so we can detect external modifications
-    this.lastWrittenPosition = x_at_1;
-    this.lastWrittenVelocity = v_at_1;
+    this.lastWrittenPosition = xAt1;
+    this.lastWrittenVelocity = vAt1;
   }
 
   /**
@@ -243,17 +225,17 @@ export class AnalyticalSolver extends ODESolver {
 
     const m = this.cachedParams.mass;
     const k = this.cachedParams.springConstant;
-    const b_val = this.cachedParams.damping;
+    const bVal = this.cachedParams.damping;
     const g = this.cachedParams.gravity;
 
     this.springConstant = k;
-    this.dampingCoeff = b_val;
+    this.dampingCoeff = bVal;
     this.drivingEnabled = this.cachedParams.drivingEnabled;
     this.drivingAmplitude = this.cachedParams.drivingAmplitude;
 
     // Derived quantities
     this.omega0 = Math.sqrt(k / m);
-    this.zeta = b_val / (2 * Math.sqrt(m * k));
+    this.zeta = bVal / (2 * Math.sqrt(m * k));
     this.xEq = k > 1e-15 ? (-m * g) / k : 0;
 
     // Determine damping regime
@@ -275,7 +257,7 @@ export class AnalyticalSolver extends ODESolver {
       this.omegaDrive = this.cachedParams.drivingFrequency * 2 * Math.PI;
       const F0 = k * this.drivingAmplitude;
       const term1 = k - m * this.omegaDrive * this.omegaDrive;
-      const term2 = b_val * this.omegaDrive;
+      const term2 = bVal * this.omegaDrive;
       const denom = Math.sqrt(term1 * term1 + term2 * term2);
       this.X0ss = denom > 1e-10 ? F0 / denom : F0 / 1e-10;
 
@@ -284,7 +266,9 @@ export class AnalyticalSolver extends ODESolver {
         this.phiSS = Math.PI / 2;
       } else {
         this.phiSS = Math.atan(term2 / term1);
-        if (term1 < 0) this.phiSS += Math.PI;
+        if (term1 < 0) {
+          this.phiSS += Math.PI;
+        }
       }
     } else {
       this.omegaDrive = 0;
@@ -296,12 +280,8 @@ export class AnalyticalSolver extends ODESolver {
     // x0 = xEq + C1·h1(0) + C2·h2(0) + xp(0)
     // v0 = C1·h1'(0) + C2·h2'(0) + xp'(0)
 
-    const xp0 = this.drivingEnabled
-      ? this.X0ss * Math.sin(this.phase0 - this.phiSS)
-      : 0;
-    const xpDot0 = this.drivingEnabled
-      ? this.X0ss * this.omegaDrive * Math.cos(this.phase0 - this.phiSS)
-      : 0;
+    const xp0 = this.drivingEnabled ? this.X0ss * Math.sin(this.phase0 - this.phiSS) : 0;
+    const xpDot0 = this.drivingEnabled ? this.X0ss * this.omegaDrive * Math.cos(this.phase0 - this.phiSS) : 0;
 
     const residualX = this.x0 - xp0 - this.xEq;
     const residualV = this.v0 - xpDot0;
@@ -326,9 +306,7 @@ export class AnalyticalSolver extends ODESolver {
         // At τ = 0: x_h(0) = C₁ + C₂ = residualX
         // ẋ_h(0) = -α C₁ - β C₂ = residualV
         // Solving: C₁ = (residualX·β + residualV) / (β - α)
-        this.C1 =
-          (residualX * this.betaExp + residualV) /
-          (this.betaExp - this.alphaExp);
+        this.C1 = (residualX * this.betaExp + residualV) / (this.betaExp - this.alphaExp);
         this.C2 = residualX - this.C1;
         break;
     }
@@ -343,10 +321,7 @@ export class AnalyticalSolver extends ODESolver {
     switch (this.regime) {
       case DampingRegime.UNDERDAMPED: {
         const decay = Math.exp(-this.zeta * this.omega0 * tau);
-        xh =
-          decay *
-          (this.C1 * Math.cos(this.omegaD * tau) +
-            this.C2 * Math.sin(this.omegaD * tau));
+        xh = decay * (this.C1 * Math.cos(this.omegaD * tau) + this.C2 * Math.sin(this.omegaD * tau));
         break;
       }
       case DampingRegime.CRITICALLY_DAMPED: {
@@ -355,9 +330,7 @@ export class AnalyticalSolver extends ODESolver {
         break;
       }
       case DampingRegime.OVERDAMPED: {
-        xh =
-          this.C1 * Math.exp(-this.alphaExp * tau) +
-          this.C2 * Math.exp(-this.betaExp * tau);
+        xh = this.C1 * Math.exp(-this.alphaExp * tau) + this.C2 * Math.exp(-this.betaExp * tau);
         break;
       }
     }
@@ -447,14 +420,13 @@ export class AnalyticalSolver extends ODESolver {
    * modifications (mouse drag, keyboard input, accessibility actions, presets, etc.).
    */
   private parametersChanged(model: ODEModel): boolean {
-    if (!this.cachedParams) return true;
+    if (!this.cachedParams) {
+      return true;
+    }
 
     // Check if position or velocity was modified externally since our last step
     const state = model.getState();
-    if (
-      state[0] !== this.lastWrittenPosition ||
-      state[1] !== this.lastWrittenVelocity
-    ) {
+    if (state[0] !== this.lastWrittenPosition || state[1] !== this.lastWrittenVelocity) {
       return true;
     }
 

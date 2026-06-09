@@ -11,7 +11,7 @@
  * Final update: y_new = y + (k1 + 2*k2 + 2*k3 + k4) * dt/6
  */
 
-import { ODESolver, ODEModel, SubStepCallback } from "./ODESolver.js";
+import { type ODEModel, ODESolver, type SubStepCallback } from "./ODESolver.js";
 
 export class RungeKuttaSolver extends ODESolver {
   private fixedTimestep: number;
@@ -40,11 +40,7 @@ export class RungeKuttaSolver extends ODESolver {
    * If dt > fixedTimestep, subdivides into smaller steps
    * @param onSubStep - optional callback invoked after each sub-step with elapsed time and state
    */
-  public override step(
-    dt: number,
-    model: ODEModel,
-    onSubStep?: SubStepCallback,
-  ): void {
+  public override step(dt: number, model: ODEModel, onSubStep?: SubStepCallback): void {
     // Handle negative dt for stepping backward in time
     const sign = dt >= 0 ? 1 : -1;
     const absDt = Math.abs(dt);
@@ -101,10 +97,7 @@ export class RungeKuttaSolver extends ODESolver {
     for (let i = 0; i < n; i++) {
       this.tempState[i] = state[i]! + this.k1[i]! * halfDt;
     }
-    const k2Derivatives = model.getDerivatives(
-      halfDt,
-      Array.from(this.tempState),
-    );
+    const k2Derivatives = model.getDerivatives(halfDt, Array.from(this.tempState));
     for (let i = 0; i < n; i++) {
       this.k2[i] = k2Derivatives[i]!;
     }
@@ -113,10 +106,7 @@ export class RungeKuttaSolver extends ODESolver {
     for (let i = 0; i < n; i++) {
       this.tempState[i] = state[i]! + this.k2[i]! * halfDt;
     }
-    const k3Derivatives = model.getDerivatives(
-      halfDt,
-      Array.from(this.tempState),
-    );
+    const k3Derivatives = model.getDerivatives(halfDt, Array.from(this.tempState));
     for (let i = 0; i < n; i++) {
       this.k3[i] = k3Derivatives[i]!;
     }
@@ -132,10 +122,7 @@ export class RungeKuttaSolver extends ODESolver {
 
     // Update: y_new = y + (k1 + 2*k2 + 2*k3 + k4) * dt/6
     for (let i = 0; i < n; i++) {
-      this.newState[i] =
-        state[i]! +
-        (this.k1[i]! + 2 * this.k2[i]! + 2 * this.k3[i]! + this.k4[i]!) *
-          sixthDt;
+      this.newState[i] = state[i]! + (this.k1[i]! + 2 * this.k2[i]! + 2 * this.k3[i]! + this.k4[i]!) * sixthDt;
     }
 
     model.setState(Array.from(this.newState));

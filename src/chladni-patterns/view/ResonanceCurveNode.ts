@@ -10,22 +10,15 @@
  */
 
 import { DerivedProperty, Multilink } from "scenerystack/axon";
-import { Node, Line, Text, Rectangle } from "scenerystack/scenery";
-import {
-  ChartTransform,
-  ChartRectangle,
-  LinePlot,
-  GridLineSet,
-  TickMarkSet,
-  TickLabelSet,
-} from "scenerystack/bamboo";
-import { Orientation } from "scenerystack/phet-core";
-import { Range, Bounds2 } from "scenerystack/dot";
+import { ChartRectangle, ChartTransform, GridLineSet, LinePlot, TickLabelSet, TickMarkSet } from "scenerystack/bamboo";
+import { Bounds2, Range } from "scenerystack/dot";
 import { Shape } from "scenerystack/kite";
-import { ChladniModel } from "../model/ChladniModel.js";
+import { Orientation } from "scenerystack/phet-core";
+import { Line, Node, Rectangle, Text } from "scenerystack/scenery";
 import ResonanceColors from "../../common/ResonanceColors.js";
 import ResonanceConstants from "../../common/ResonanceConstants.js";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
+import type { ChladniModel } from "../model/ChladniModel.js";
 
 // Chart dimensions
 const CHART_WIDTH = 220;
@@ -96,35 +89,23 @@ export class ResonanceCurveNode extends Node {
 
     // Create a clipped container for the chart content (grid, curve, marker)
     // This prevents the curve and grid from rendering outside the chart area
-    const chartClipArea = Shape.bounds(
-      new Bounds2(0, 0, CHART_WIDTH, CHART_HEIGHT),
-    );
+    const chartClipArea = Shape.bounds(new Bounds2(0, 0, CHART_WIDTH, CHART_HEIGHT));
     const clippedChartContent = new Node({
       clipArea: chartClipArea,
     });
 
     // Grid lines
     const gridSpacingX = this.calculateGridSpacing(this.currentWindowRange);
-    this.verticalGridLines = new GridLineSet(
-      this.chartTransform,
-      Orientation.VERTICAL,
-      gridSpacingX,
-      {
-        stroke: ResonanceColors.gridLinesProperty,
-        lineWidth: 0.5,
-      },
-    );
+    this.verticalGridLines = new GridLineSet(this.chartTransform, Orientation.VERTICAL, gridSpacingX, {
+      stroke: ResonanceColors.gridLinesProperty,
+      lineWidth: 0.5,
+    });
     clippedChartContent.addChild(this.verticalGridLines);
 
-    this.horizontalGridLines = new GridLineSet(
-      this.chartTransform,
-      Orientation.HORIZONTAL,
-      0.2,
-      {
-        stroke: ResonanceColors.gridLinesProperty,
-        lineWidth: 0.5,
-      },
-    );
+    this.horizontalGridLines = new GridLineSet(this.chartTransform, Orientation.HORIZONTAL, 0.2, {
+      stroke: ResonanceColors.gridLinesProperty,
+      lineWidth: 0.5,
+    });
     clippedChartContent.addChild(this.horizontalGridLines);
 
     // Create the line plot for resonance curve using precomputed data
@@ -146,34 +127,24 @@ export class ResonanceCurveNode extends Node {
     this.fixedContainer.addChild(clippedChartContent);
 
     // X-axis tick marks (outside clip area, at the bottom edge)
-    this.xTickMarks = new TickMarkSet(
-      this.chartTransform,
-      Orientation.HORIZONTAL,
-      gridSpacingX,
-      {
-        edge: "min",
-        stroke: ResonanceColors.textProperty,
-        lineWidth: 1,
-        extent: 6,
-      },
-    );
+    this.xTickMarks = new TickMarkSet(this.chartTransform, Orientation.HORIZONTAL, gridSpacingX, {
+      edge: "min",
+      stroke: ResonanceColors.textProperty,
+      lineWidth: 1,
+      extent: 6,
+    });
     this.fixedContainer.addChild(this.xTickMarks);
 
     // X-axis tick labels with fixed-width formatting to prevent layout shifts
-    this.xTickLabels = new TickLabelSet(
-      this.chartTransform,
-      Orientation.HORIZONTAL,
-      gridSpacingX,
-      {
-        edge: "min",
-        createLabel: (value: number) =>
-          new Text(Math.round(value).toString(), {
-            font: ResonanceConstants.TICK_LABEL_FONT,
-            fill: ResonanceColors.textProperty,
-            maxWidth: 40, // Fixed max width to prevent layout shifts
-          }),
-      },
-    );
+    this.xTickLabels = new TickLabelSet(this.chartTransform, Orientation.HORIZONTAL, gridSpacingX, {
+      edge: "min",
+      createLabel: (value: number) =>
+        new Text(Math.round(value).toString(), {
+          font: ResonanceConstants.TICK_LABEL_FONT,
+          fill: ResonanceColors.textProperty,
+          maxWidth: 40, // Fixed max width to prevent layout shifts
+        }),
+    });
     this.fixedContainer.addChild(this.xTickLabels);
 
     // Hz label at fixed position
@@ -201,12 +172,7 @@ export class ResonanceCurveNode extends Node {
     // (model recomputes the full curve, we just need to display the window)
     // Using Multilink to consolidate multiple properties triggering the same action
     Multilink.multilink(
-      [
-        model.materialProperty,
-        model.excitationPositionProperty,
-        model.plateWidthProperty,
-        model.plateHeightProperty,
-      ],
+      [model.materialProperty, model.excitationPositionProperty, model.plateWidthProperty, model.plateHeightProperty],
       () => {
         this.updateCurveFromPrecomputed();
       },
@@ -215,8 +181,7 @@ export class ResonanceCurveNode extends Node {
     // --- Accessibility (PDOM) Setup ---
     this.tagName = "div";
     this.ariaRole = "img";
-    this.accessibleName =
-      ResonanceStrings.chladni.a11y.resonanceCurveLabelStringProperty;
+    this.accessibleName = ResonanceStrings.chladni.a11y.resonanceCurveLabelStringProperty;
 
     // Create dynamic description that updates with frequency and resonance state
     const descriptionProperty = new DerivedProperty(
@@ -264,9 +229,7 @@ export class ResonanceCurveNode extends Node {
     let maxStrength = 0;
 
     for (let i = 0; i <= sampleCount; i++) {
-      const freq =
-        windowRange.min +
-        (i / sampleCount) * (windowRange.max - windowRange.min);
+      const freq = windowRange.min + (i / sampleCount) * (windowRange.max - windowRange.min);
       const strength = this.model.strength(freq);
       if (strength > maxStrength) {
         maxStrength = strength;
@@ -281,9 +244,15 @@ export class ResonanceCurveNode extends Node {
    */
   private calculateGridSpacing(range: Range): number {
     const span = range.max - range.min;
-    if (span <= 200) return 50;
-    if (span <= 500) return 100;
-    if (span <= 1000) return 200;
+    if (span <= 200) {
+      return 50;
+    }
+    if (span <= 500) {
+      return 100;
+    }
+    if (span <= 1000) {
+      return 200;
+    }
     return 500;
   }
 
@@ -294,10 +263,7 @@ export class ResonanceCurveNode extends Node {
     const newRange = this.model.getGraphWindowRange();
 
     // Only update if range actually changed
-    if (
-      newRange.min !== this.currentWindowRange.min ||
-      newRange.max !== this.currentWindowRange.max
-    ) {
+    if (newRange.min !== this.currentWindowRange.min || newRange.max !== this.currentWindowRange.max) {
       this.currentWindowRange = newRange;
       this.chartTransform.setModelXRange(newRange);
 

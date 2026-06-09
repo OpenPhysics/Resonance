@@ -8,22 +8,15 @@
  * - Phase Analysis
  */
 
-import {
-  Node,
-  Rectangle,
-  HBox,
-  VBox,
-  Path,
-  TColor,
-} from "scenerystack/scenery";
-import { ToggleSwitch } from "scenerystack/sun";
 import { DerivedProperty, NumberProperty } from "scenerystack/axon";
 import { Range } from "scenerystack/dot";
 import { Shape } from "scenerystack/kite";
-import { BaseOscillatorScreenModel } from "../model/BaseOscillatorScreenModel.js";
+import { HBox, Node, Path, Rectangle, type TColor, VBox } from "scenerystack/scenery";
+import { ToggleSwitch } from "scenerystack/sun";
+import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
+import type { BaseOscillatorScreenModel } from "../model/BaseOscillatorScreenModel.js";
 import ResonanceColors from "../ResonanceColors.js";
 import ResonanceConstants from "../ResonanceConstants.js";
-import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
 import { CircularUpdateGuard } from "../util/index.js";
 import { NumberControlFactory } from "./NumberControlFactory.js";
 import { SweepButton } from "./SweepButton.js";
@@ -43,11 +36,7 @@ const CONTROLS_SPACING = 25;
  * Creates a power symbol (IEC 5009) - a circle with a vertical line through the top.
  * The "I" represents on (binary 1) and "O" represents off (binary 0).
  */
-function createPowerSymbolNode(options: {
-  radius?: number;
-  lineWidth?: number;
-  stroke?: TColor;
-}): Node {
+function createPowerSymbolNode(options: { radius?: number; lineWidth?: number; stroke?: TColor }): Node {
   const radius = options.radius ?? 10;
   const lineWidth = options.lineWidth ?? 2;
   const stroke = options.stroke ?? ResonanceColors.iconStrokeProperty;
@@ -81,9 +70,7 @@ function createPowerSymbolNode(options: {
   });
 
   // Create the vertical line through the top
-  const lineShape = new Shape()
-    .moveTo(0, -radius * POWER_LINE_START_RATIO)
-    .lineTo(0, -radius * POWER_LINE_END_RATIO);
+  const lineShape = new Shape().moveTo(0, -radius * POWER_LINE_START_RATIO).lineTo(0, -radius * POWER_LINE_END_RATIO);
 
   const linePath = new Path(lineShape, {
     stroke: stroke,
@@ -103,8 +90,7 @@ export class OscillatorDriverControlNode extends Node {
       tagName: "div",
       labelTagName: "h3",
       labelContent: ResonanceStrings.a11y.driverControl.labelStringProperty,
-      descriptionContent:
-        ResonanceStrings.a11y.driverControl.descriptionStringProperty,
+      descriptionContent: ResonanceStrings.a11y.driverControl.descriptionStringProperty,
     });
 
     // Grey driver box
@@ -130,20 +116,14 @@ export class OscillatorDriverControlNode extends Node {
       stroke: ResonanceColors.driverTextProperty,
     });
 
-    const powerToggleSwitch = new ToggleSwitch(
-      model.resonanceModel.drivingEnabledProperty,
-      false,
-      true,
-      {
-        trackFillLeft: ResonanceColors.toggleTrackOffProperty,
-        trackFillRight: ResonanceColors.toggleTrackOnProperty,
-        thumbFill: ResonanceColors.toggleThumbProperty,
-        scale: TOGGLE_SWITCH_SCALE,
-        // Accessibility
-        accessibleName:
-          ResonanceStrings.a11y.driverControl.powerToggleLabelStringProperty,
-      },
-    );
+    const powerToggleSwitch = new ToggleSwitch(model.resonanceModel.drivingEnabledProperty, false, true, {
+      trackFillLeft: ResonanceColors.toggleTrackOffProperty,
+      trackFillRight: ResonanceColors.toggleTrackOnProperty,
+      thumbFill: ResonanceColors.toggleThumbProperty,
+      scale: TOGGLE_SWITCH_SCALE,
+      // Accessibility
+      accessibleName: ResonanceStrings.a11y.driverControl.powerToggleLabelStringProperty,
+    });
     const powerToggleBox = new VBox({
       children: [powerSymbol, powerToggleSwitch],
       spacing: ResonanceConstants.POWER_TOGGLE_SPACING,
@@ -169,9 +149,7 @@ export class OscillatorDriverControlNode extends Node {
     frequencyEnabledProperty.linkAttribute(frequencyControl, "enabled");
 
     // Amplitude Control (display in cm, model in meters)
-    const amplitudeCmProperty = new NumberProperty(
-      model.resonanceModel.drivingAmplitudeProperty.value * 100,
-    );
+    const amplitudeCmProperty = new NumberProperty(model.resonanceModel.drivingAmplitudeProperty.value * 100);
 
     // Bidirectional sync: cm <-> meters
     const amplitudeGuard = new CircularUpdateGuard();
@@ -208,18 +186,12 @@ export class OscillatorDriverControlNode extends Node {
         model.toggleSweep();
       },
       iconStroke: ResonanceColors.driverTextProperty,
-      accessibleName:
-        ResonanceStrings.a11y.driverControl.sweepButtonLabelStringProperty,
+      accessibleName: ResonanceStrings.a11y.driverControl.sweepButtonLabelStringProperty,
     });
 
     // Container for all controls in a row
     const controlsBox = new HBox({
-      children: [
-        powerToggleBox,
-        frequencyControl,
-        sweepButton,
-        amplitudeControl,
-      ],
+      children: [powerToggleBox, frequencyControl, sweepButton, amplitudeControl],
       spacing: CONTROLS_SPACING,
     });
     controlsBox.center = driverBox.center;

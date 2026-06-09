@@ -10,11 +10,11 @@
  * - Reused view position vector to reduce allocations
  */
 
-import { CanvasNode, CanvasNodeOptions, Node } from "scenerystack/scenery";
-import { Bounds2, Vector2 } from "scenerystack/dot";
-import { ModelViewTransform2 } from "scenerystack/phetcommon";
+import { Bounds2, type Vector2 } from "scenerystack/dot";
+import type { ModelViewTransform2 } from "scenerystack/phetcommon";
+import { CanvasNode, type CanvasNodeOptions, type Node } from "scenerystack/scenery";
 import ResonanceColors from "../../../common/ResonanceColors.js";
-import { ParticleRenderer } from "./ParticleRenderer.js";
+import type { ParticleRenderer } from "./ParticleRenderer.js";
 
 // Particle rendering size in pixels
 const PARTICLE_SIZE = 2;
@@ -32,9 +32,6 @@ class ParticleCanvasNode extends CanvasNode {
 
   // Dirty region tracking for efficient clearing
   private previousDirtyBounds: Bounds2 | null = null;
-
-  // Reused vector for coordinate transformation (reduces allocations)
-  private readonly tempViewPos: Vector2 = new Vector2(0, 0);
 
   public constructor(
     modelViewTransform: ModelViewTransform2,
@@ -85,10 +82,18 @@ class ParticleCanvasNode extends CanvasNode {
       const viewX = this.modelViewTransform.modelToViewX(particle.x);
       const viewY = this.modelViewTransform.modelToViewY(particle.y);
 
-      if (viewX < minX) minX = viewX;
-      if (viewX > maxX) maxX = viewX;
-      if (viewY < minY) minY = viewY;
-      if (viewY > maxY) maxY = viewY;
+      if (viewX < minX) {
+        minX = viewX;
+      }
+      if (viewX > maxX) {
+        maxX = viewX;
+      }
+      if (viewY < minY) {
+        minY = viewY;
+      }
+      if (viewY > maxY) {
+        maxY = viewY;
+      }
     }
 
     // Add padding for particle radius and anti-aliasing
@@ -111,9 +116,7 @@ class ParticleCanvasNode extends CanvasNode {
     let clearBounds: Bounds2;
     if (this.previousDirtyBounds && currentBounds) {
       // Union of previous and current bounds, clamped to canvas
-      clearBounds = this.previousDirtyBounds
-        .union(currentBounds)
-        .intersection(canvasBounds);
+      clearBounds = this.previousDirtyBounds.union(currentBounds).intersection(canvasBounds);
     } else if (this.previousDirtyBounds) {
       clearBounds = this.previousDirtyBounds.intersection(canvasBounds);
     } else if (currentBounds) {
@@ -165,13 +168,8 @@ class ParticleCanvasNode extends CanvasNode {
  */
 export class CanvasParticleRenderer implements ParticleRenderer {
   private readonly canvasNode: ParticleCanvasNode;
-  private particles: Vector2[] = [];
 
-  public constructor(
-    width: number,
-    height: number,
-    transform: ModelViewTransform2,
-  ) {
+  public constructor(width: number, height: number, transform: ModelViewTransform2) {
     this.canvasNode = new ParticleCanvasNode(transform, width, height);
   }
 
@@ -180,17 +178,12 @@ export class CanvasParticleRenderer implements ParticleRenderer {
   }
 
   public update(particles: Vector2[], transform: ModelViewTransform2): void {
-    this.particles = particles;
     this.canvasNode.setParticles(particles);
     this.canvasNode.setModelViewTransform(transform);
     this.canvasNode.invalidatePaint();
   }
 
-  public resize(
-    width: number,
-    height: number,
-    transform: ModelViewTransform2,
-  ): void {
+  public resize(width: number, height: number, transform: ModelViewTransform2): void {
     this.canvasNode.setCanvasSize(width, height);
     this.canvasNode.setModelViewTransform(transform);
   }

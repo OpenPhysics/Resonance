@@ -22,7 +22,7 @@ The first three screens share common base classes (`BaseOscillatorScreenModel`, 
 - **Vite** - Development server and bundler
 - **Vitest** - Unit testing with jsdom environment
 - **Playwright** - End-to-end and fuzz testing
-- **ESLint** - Type-aware linting for `src/` directory
+- **Biome** - Linting and formatting
 
 ## Quick Start Commands
 
@@ -30,7 +30,7 @@ The first three screens share common base classes (`BaseOscillatorScreenModel`, 
 npm start           # Development server at http://localhost:5173
 npm run build       # Production build (runs tsc then vite build)
 npm run check       # TypeScript type checking without emit
-npm run lint        # ESLint checking
+npm run lint        # Biome lint + format check
 npm test            # Unit tests (Vitest)
 npm run test:fuzz   # Fuzz testing (Playwright, 60s default)
 npm run test:fuzz:quick   # Quick fuzz test (30s)

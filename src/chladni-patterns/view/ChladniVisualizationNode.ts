@@ -11,20 +11,16 @@
  * - Uses ModelViewTransform2 for coordinate conversion
  */
 
-import { Node, NodeOptions, Rectangle } from "scenerystack/scenery";
+import { DerivedProperty, type Property } from "scenerystack/axon";
 import { Bounds2 } from "scenerystack/dot";
-import { ModelViewTransform2 } from "scenerystack/phetcommon";
-import { DerivedProperty, Property } from "scenerystack/axon";
-import { ChladniModel } from "../model/ChladniModel.js";
+import type { ModelViewTransform2 } from "scenerystack/phetcommon";
+import { Node, type NodeOptions, Rectangle } from "scenerystack/scenery";
 import ResonanceColors from "../../common/ResonanceColors.js";
-import { RendererType } from "../../preferences/ResonancePreferencesModel.js";
-import { createChladniTransform } from "./ChladniTransformFactory.js";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
-import {
-  ParticleRenderer,
-  CanvasParticleRenderer,
-  WebGLParticleRenderer,
-} from "./renderers/index.js";
+import { RendererType } from "../../preferences/ResonancePreferencesModel.js";
+import type { ChladniModel } from "../model/ChladniModel.js";
+import { createChladniTransform } from "./ChladniTransformFactory.js";
+import { CanvasParticleRenderer, type ParticleRenderer, WebGLParticleRenderer } from "./renderers/index.js";
 
 export interface ChladniVisualizationNodeOptions extends NodeOptions {
   // Size of the visualization area (deprecated, use visualizationWidth/Height)
@@ -37,7 +33,6 @@ export interface ChladniVisualizationNodeOptions extends NodeOptions {
 
 export class ChladniVisualizationNode extends Node {
   private readonly model: ChladniModel;
-  private readonly rendererTypeProperty: Property<RendererType>;
   private visualizationWidth: number;
   private visualizationHeight: number;
 
@@ -62,17 +57,11 @@ export class ChladniVisualizationNode extends Node {
 
     // Support both legacy visualizationSize and new width/height options
     const defaultSize = 400;
-    const visualizationWidth =
-      providedOptions?.visualizationWidth ??
-      providedOptions?.visualizationSize ??
-      defaultSize;
+    const visualizationWidth = providedOptions?.visualizationWidth ?? providedOptions?.visualizationSize ?? defaultSize;
     const visualizationHeight =
-      providedOptions?.visualizationHeight ??
-      providedOptions?.visualizationSize ??
-      defaultSize;
+      providedOptions?.visualizationHeight ?? providedOptions?.visualizationSize ?? defaultSize;
 
     this.model = model;
-    this.rendererTypeProperty = rendererTypeProperty;
     this.visualizationWidth = visualizationWidth;
     this.visualizationHeight = visualizationHeight;
     this.currentRendererType = rendererTypeProperty.value;
@@ -86,28 +75,16 @@ export class ChladniVisualizationNode extends Node {
     );
 
     // Create background rectangle
-    this.backgroundRect = new Rectangle(
-      0,
-      0,
-      visualizationWidth,
-      visualizationHeight,
-      {
-        fill: ResonanceColors.chladniBackgroundProperty,
-      },
-    );
+    this.backgroundRect = new Rectangle(0, 0, visualizationWidth, visualizationHeight, {
+      fill: ResonanceColors.chladniBackgroundProperty,
+    });
     this.addChild(this.backgroundRect);
 
     // Create border rectangle (outer)
-    this.borderRect = new Rectangle(
-      0,
-      0,
-      visualizationWidth,
-      visualizationHeight,
-      {
-        stroke: ResonanceColors.chladniPlateBorderProperty,
-        lineWidth: 2,
-      },
-    );
+    this.borderRect = new Rectangle(0, 0, visualizationWidth, visualizationHeight, {
+      stroke: ResonanceColors.chladniPlateBorderProperty,
+      lineWidth: 2,
+    });
 
     // Create inner border rectangle (shown only in clamp mode)
     const innerInset = 4;
@@ -151,16 +128,11 @@ export class ChladniVisualizationNode extends Node {
     // Make the visualization accessible to screen readers
     this.tagName = "div";
     this.ariaRole = "img";
-    this.accessibleName =
-      ResonanceStrings.chladni.a11y.visualizationLabelStringProperty;
+    this.accessibleName = ResonanceStrings.chladni.a11y.visualizationLabelStringProperty;
 
     // Create dynamic description that updates with model state
     const descriptionProperty = new DerivedProperty(
-      [
-        model.frequencyProperty,
-        model.materialProperty,
-        model.actualParticleCountProperty,
-      ],
+      [model.frequencyProperty, model.materialProperty, model.actualParticleCountProperty],
       (frequency, material, particleCount) => {
         return `Chladni plate visualization showing ${particleCount} particles on a ${material.name} plate at ${Math.round(frequency)} Hz. Particles gather along nodal lines where the plate has zero displacement.`;
       },
@@ -217,10 +189,7 @@ export class ChladniVisualizationNode extends Node {
    */
   public update(): void {
     if (this.particleRenderer) {
-      this.particleRenderer.update(
-        this.model.particlePositions,
-        this.modelViewTransform,
-      );
+      this.particleRenderer.update(this.model.particlePositions, this.modelViewTransform);
     }
   }
 
@@ -245,20 +214,11 @@ export class ChladniVisualizationNode extends Node {
     this.backgroundRect.setRect(0, 0, newWidth, newHeight);
     this.borderRect.setRect(0, 0, newWidth, newHeight);
     const innerInset = 4;
-    this.innerBorderRect.setRect(
-      innerInset,
-      innerInset,
-      newWidth - 2 * innerInset,
-      newHeight - 2 * innerInset,
-    );
+    this.innerBorderRect.setRect(innerInset, innerInset, newWidth - 2 * innerInset, newHeight - 2 * innerInset);
 
     // Resize the renderer
     if (this.particleRenderer) {
-      this.particleRenderer.resize(
-        newWidth,
-        newHeight,
-        this.modelViewTransform,
-      );
+      this.particleRenderer.resize(newWidth, newHeight, this.modelViewTransform);
     }
 
     // Explicitly set local bounds so they update immediately (even when paused)

@@ -9,15 +9,11 @@
  * - Phase Analysis
  */
 
-import { Node, Line, Rectangle } from "scenerystack/scenery";
-import { DragListener, KeyboardDragListener } from "scenerystack/scenery";
-import { ModelViewTransform2 } from "scenerystack/phetcommon";
-import {
-  MeasurementLineModel,
-  MeasurementLinesModel,
-} from "../model/MeasurementLineModel.js";
-import ResonanceColors from "../ResonanceColors.js";
+import type { ModelViewTransform2 } from "scenerystack/phetcommon";
+import { DragListener, KeyboardDragListener, Line, Node, Rectangle } from "scenerystack/scenery";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
+import { type MeasurementLineModel, MeasurementLinesModel } from "../model/MeasurementLineModel.js";
+import ResonanceColors from "../ResonanceColors.js";
 
 // --- Named constants (hoisted magic numbers) ---
 
@@ -80,19 +76,13 @@ class MeasurementLineNode extends Node {
     // Create a small handle on the left side for dragging
     const handleWidth = 12;
     const handleHeight = 20;
-    const handle = new Rectangle(
-      -handleWidth / 2,
-      -handleHeight / 2,
-      handleWidth,
-      handleHeight,
-      {
-        fill: ResonanceColors.driverFillProperty,
-        stroke: ResonanceColors.textProperty,
-        lineWidth: 1,
-        cornerRadius: 3,
-        cursor: "ns-resize",
-      },
-    );
+    const handle = new Rectangle(-handleWidth / 2, -handleHeight / 2, handleWidth, handleHeight, {
+      fill: ResonanceColors.driverFillProperty,
+      stroke: ResonanceColors.textProperty,
+      lineWidth: 1,
+      cornerRadius: 3,
+      cursor: "ns-resize",
+    });
     handle.left = line.left - handleWidth / 2 - 5;
     this.addChild(handle);
 
@@ -101,7 +91,9 @@ class MeasurementLineNode extends Node {
     // Make focusable for keyboard navigation
     this.tagName = "div";
     this.focusable = true;
-    const measurementLinePattern = ResonanceStrings.a11y.measurementLinePatternStringProperty as unknown as { value: string };
+    const measurementLinePattern = ResonanceStrings.a11y.measurementLinePatternStringProperty as unknown as {
+      value: string;
+    };
     this.accessibleName = measurementLinePattern.value.replace("{{number}}", String(lineNumber));
 
     // Position the node based on model position
@@ -140,11 +132,7 @@ export class OscillatorMeasurementLinesNode extends Node {
   private readonly line2Node: MeasurementLineNode;
   public readonly model: MeasurementLinesModel;
 
-  public constructor(
-    driverCenterX: number,
-    driverWidth: number,
-    modelViewTransform: ModelViewTransform2,
-  ) {
+  public constructor(driverCenterX: number, driverWidth: number, modelViewTransform: ModelViewTransform2) {
     super();
 
     // Calculate displacement range in model coordinates (meters)
@@ -153,29 +141,12 @@ export class OscillatorMeasurementLinesNode extends Node {
     const maxDisplacement = 0.3; // Can go 30cm above equilibrium
 
     // Create the model with displacement bounds (0 cm and 14 cm from equilibrium)
-    this.model = new MeasurementLinesModel(
-      minDisplacement,
-      maxDisplacement,
-      0.0,
-      0.14,
-    );
+    this.model = new MeasurementLinesModel(minDisplacement, maxDisplacement, 0.0, 0.14);
 
     // Create view nodes for each line
     // With isometric transform, equilibrium is handled by modelViewTransform directly
-    this.line1Node = new MeasurementLineNode(
-      this.model.line1,
-      driverWidth,
-      driverCenterX,
-      modelViewTransform,
-      1,
-    );
-    this.line2Node = new MeasurementLineNode(
-      this.model.line2,
-      driverWidth,
-      driverCenterX,
-      modelViewTransform,
-      2,
-    );
+    this.line1Node = new MeasurementLineNode(this.model.line1, driverWidth, driverCenterX, modelViewTransform, 1);
+    this.line2Node = new MeasurementLineNode(this.model.line2, driverWidth, driverCenterX, modelViewTransform, 2);
 
     this.addChild(this.line1Node);
     this.addChild(this.line2Node);

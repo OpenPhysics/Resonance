@@ -11,13 +11,10 @@
  * rather than depending on any specific model type.
  */
 
-import { Node, Path, TColor, Color } from "scenerystack/scenery";
-import {
-  RectangularPushButton,
-  FlatAppearanceStrategy,
-} from "scenerystack/sun";
-import { TReadOnlyProperty } from "scenerystack/axon";
+import type { TReadOnlyProperty } from "scenerystack/axon";
 import { Shape } from "scenerystack/kite";
+import { type Color, type Node, Path, type TColor } from "scenerystack/scenery";
+import { FlatAppearanceStrategy, RectangularPushButton } from "scenerystack/sun";
 import ResonanceColors from "../ResonanceColors.js";
 
 // Icon dimensions
@@ -60,12 +57,7 @@ export interface SweepButtonOptions {
  * Creates a frequency sweep icon - a sinusoidal wave that gets more compressed
  * from left to right, representing increasing frequency during a sweep (chirp).
  */
-function createSweepIconNode(options: {
-  width?: number;
-  height?: number;
-  lineWidth?: number;
-  stroke?: TColor;
-}): Node {
+function createSweepIconNode(options: { width?: number; height?: number; lineWidth?: number; stroke?: TColor }): Node {
   const width = options.width ?? SWEEP_ICON_WIDTH;
   const height = options.height ?? SWEEP_ICON_HEIGHT;
   const lineWidth = options.lineWidth ?? SWEEP_ICON_LINE_WIDTH;
@@ -81,10 +73,7 @@ function createSweepIconNode(options: {
     // Quadratic chirp: frequency increases with position
     // phase = 2pi * (f0 * t + (f1 - f0) * t^2 / 2)
     const phase =
-      2 *
-      Math.PI *
-      (CHIRP_START_FREQUENCY * t +
-        ((CHIRP_END_FREQUENCY - CHIRP_START_FREQUENCY) * t * t) / 2);
+      2 * Math.PI * (CHIRP_START_FREQUENCY * t + ((CHIRP_END_FREQUENCY - CHIRP_START_FREQUENCY) * t * t) / 2);
 
     const y = (height / 2) * Math.sin(phase);
 

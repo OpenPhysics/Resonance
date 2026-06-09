@@ -6,8 +6,8 @@
  * Extends ChladniOverlayNode for common overlay functionality.
  */
 
-import { Line } from "scenerystack/scenery";
 import { StringProperty } from "scenerystack/axon";
+import { Line } from "scenerystack/scenery";
 import ResonanceColors from "../../common/ResonanceColors.js";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
 import { ChladniOverlayNode } from "./ChladniOverlayNode.js";
@@ -27,12 +27,7 @@ export class ChladniGridNode extends ChladniOverlayNode {
     plateWidthMeters: number,
     plateHeightMeters: number,
   ) {
-    super(
-      visualizationWidth,
-      visualizationHeight,
-      plateWidthMeters,
-      plateHeightMeters,
-    );
+    super(visualizationWidth, visualizationHeight, plateWidthMeters, plateHeightMeters);
 
     // PDOM accessibility
     this.tagName = "div";
@@ -41,8 +36,7 @@ export class ChladniGridNode extends ChladniOverlayNode {
 
     // Create description with plate dimensions
     const { widthCm, heightCm } = this.getPlateDimensionsCm();
-    const template =
-      ResonanceStrings.chladni.a11y.gridDescriptionStringProperty.value;
+    const template = ResonanceStrings.chladni.a11y.gridDescriptionStringProperty.value;
     const description = template
       .replace("{{width}}", Math.round(widthCm).toString())
       .replace("{{height}}", Math.round(heightCm).toString());
@@ -66,13 +60,7 @@ export class ChladniGridNode extends ChladniOverlayNode {
   /**
    * Create grid lines (major or minor).
    */
-  private createGridLines(
-    widthCm: number,
-    heightCm: number,
-    pxPerCmX: number,
-    pxPerCmY: number,
-    major: boolean,
-  ): void {
+  private createGridLines(widthCm: number, heightCm: number, pxPerCmX: number, pxPerCmY: number, major: boolean): void {
     const spacing = major ? MAJOR_GRID_SPACING_CM : MINOR_GRID_SPACING_CM;
     const lineWidth = major ? MAJOR_LINE_WIDTH : MINOR_LINE_WIDTH;
     const opacity = major ? MAJOR_LINE_OPACITY : MINOR_LINE_OPACITY;
@@ -80,7 +68,9 @@ export class ChladniGridNode extends ChladniOverlayNode {
     // Vertical lines
     for (let cm = 0; cm <= widthCm; cm += spacing) {
       // Skip minor lines where major lines exist
-      if (!major && cm % MAJOR_GRID_SPACING_CM === 0) continue;
+      if (!major && cm % MAJOR_GRID_SPACING_CM === 0) {
+        continue;
+      }
 
       const x = cm * pxPerCmX;
       const line = new Line(x, 0, x, this.visualizationHeight, {
@@ -94,7 +84,9 @@ export class ChladniGridNode extends ChladniOverlayNode {
     // Horizontal lines
     for (let cm = 0; cm <= heightCm; cm += spacing) {
       // Skip minor lines where major lines exist
-      if (!major && cm % MAJOR_GRID_SPACING_CM === 0) continue;
+      if (!major && cm % MAJOR_GRID_SPACING_CM === 0) {
+        continue;
+      }
 
       const y = this.visualizationHeight - cm * pxPerCmY;
       const line = new Line(0, y, this.visualizationWidth, y, {

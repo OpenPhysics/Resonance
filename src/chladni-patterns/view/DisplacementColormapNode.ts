@@ -10,10 +10,10 @@
  * Red = positive displacement (upward)
  */
 
-import { CanvasNode, CanvasNodeOptions } from "scenerystack/scenery";
 import { Bounds2 } from "scenerystack/dot";
-import { ChladniOverlayNode } from "./ChladniOverlayNode.js";
+import { CanvasNode, type CanvasNodeOptions } from "scenerystack/scenery";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
+import { ChladniOverlayNode } from "./ChladniOverlayNode.js";
 
 /**
  * Type for the displacement function
@@ -64,12 +64,7 @@ class ColormapCanvasNode extends CanvasNode {
     this.psiFunction = psiFunction;
   }
 
-  public setDimensions(
-    width: number,
-    height: number,
-    plateWidthMeters: number,
-    plateHeightMeters: number,
-  ): void {
+  public setDimensions(width: number, height: number, plateWidthMeters: number, plateHeightMeters: number): void {
     this.canvasBounds = new Bounds2(0, 0, width, height);
     this.plateWidthMeters = plateWidthMeters;
     this.plateHeightMeters = plateHeightMeters;
@@ -81,9 +76,7 @@ class ColormapCanvasNode extends CanvasNode {
    * Convert displacement value to RGB color.
    * Blue (-1) -> White (0) -> Red (+1)
    */
-  private displacementToColor(
-    normalizedDisplacement: number,
-  ): [number, number, number] {
+  private displacementToColor(normalizedDisplacement: number): [number, number, number] {
     // Clamp to [-1, 1]
     const d = Math.max(-1, Math.min(1, normalizedDisplacement));
 
@@ -115,11 +108,7 @@ class ColormapCanvasNode extends CanvasNode {
     const sampleHeight = Math.ceil(height / SAMPLE_RESOLUTION);
 
     // Allocate or reuse ImageData
-    if (
-      !this.imageData ||
-      this.imageData.width !== sampleWidth ||
-      this.imageData.height !== sampleHeight
-    ) {
+    if (!this.imageData || this.imageData.width !== sampleWidth || this.imageData.height !== sampleHeight) {
       this.imageData = context.createImageData(sampleWidth, sampleHeight);
     }
 
@@ -129,9 +118,7 @@ class ColormapCanvasNode extends CanvasNode {
 
     // First pass: calculate all displacements to find max for normalization
     let maxDisplacement = 0;
-    const displacements: number[] = new Array<number>(
-      sampleWidth * sampleHeight,
-    );
+    const displacements: number[] = new Array<number>(sampleWidth * sampleHeight);
 
     for (let sy = 0; sy < sampleHeight; sy++) {
       // Convert sample Y to model Y (view Y is top-down, model Y is bottom-up)
@@ -192,7 +179,6 @@ class ColormapCanvasNode extends CanvasNode {
  */
 export class DisplacementColormapNode extends ChladniOverlayNode {
   private readonly canvasNode: ColormapCanvasNode;
-  private psiFunction: DisplacementFunction;
 
   public constructor(
     visualizationWidth: number,
@@ -201,15 +187,7 @@ export class DisplacementColormapNode extends ChladniOverlayNode {
     plateHeightMeters: number,
     psiFunction: DisplacementFunction,
   ) {
-    // Store psiFunction before calling super (which calls create())
-    super(
-      visualizationWidth,
-      visualizationHeight,
-      plateWidthMeters,
-      plateHeightMeters,
-    );
-
-    this.psiFunction = psiFunction;
+    super(visualizationWidth, visualizationHeight, plateWidthMeters, plateHeightMeters);
 
     // Create the canvas node for rendering
     this.canvasNode = new ColormapCanvasNode(
@@ -224,10 +202,8 @@ export class DisplacementColormapNode extends ChladniOverlayNode {
     // PDOM accessibility
     this.tagName = "div";
     this.ariaRole = "img";
-    this.accessibleName =
-      ResonanceStrings.chladni.a11y.displacementColormapLabelStringProperty;
-    this.descriptionContent =
-      ResonanceStrings.chladni.a11y.displacementColormapDescriptionStringProperty;
+    this.accessibleName = ResonanceStrings.chladni.a11y.displacementColormapLabelStringProperty;
+    this.descriptionContent = ResonanceStrings.chladni.a11y.displacementColormapDescriptionStringProperty;
   }
 
   /**
@@ -242,7 +218,6 @@ export class DisplacementColormapNode extends ChladniOverlayNode {
    * Update the displacement function (e.g., when frequency changes).
    */
   public setPsiFunction(psiFunction: DisplacementFunction): void {
-    this.psiFunction = psiFunction;
     this.canvasNode.setPsiFunction(psiFunction);
   }
 
@@ -268,12 +243,7 @@ export class DisplacementColormapNode extends ChladniOverlayNode {
     this.plateWidthMeters = plateWidthMeters;
     this.plateHeightMeters = plateHeightMeters;
 
-    this.canvasNode.setDimensions(
-      visualizationWidth,
-      visualizationHeight,
-      plateWidthMeters,
-      plateHeightMeters,
-    );
+    this.canvasNode.setDimensions(visualizationWidth, visualizationHeight, plateWidthMeters, plateHeightMeters);
     this.canvasNode.invalidatePaint();
   }
 }

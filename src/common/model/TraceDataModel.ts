@@ -40,10 +40,7 @@ export class TraceDataModel {
 
     // Trim old points to keep memory bounded
     if (this.points.length > ResonanceConstants.TRACE_MAX_POINTS) {
-      this.points.splice(
-        0,
-        this.points.length - ResonanceConstants.TRACE_MAX_POINTS,
-      );
+      this.points.splice(0, this.points.length - ResonanceConstants.TRACE_MAX_POINTS);
     }
   }
 

@@ -29,20 +29,11 @@ export function createChladniTransform(
   viewHeight: number,
 ): ModelViewTransform2 {
   // Model bounds: centered coordinates
-  const modelBounds = new Bounds2(
-    -plateWidth / 2,
-    -plateHeight / 2,
-    plateWidth / 2,
-    plateHeight / 2,
-  );
+  const modelBounds = new Bounds2(-plateWidth / 2, -plateHeight / 2, plateWidth / 2, plateHeight / 2);
 
   // View bounds: (0,0) at top-left
   const viewBounds = new Bounds2(0, 0, viewWidth, viewHeight);
 
   // Create transform with Y inversion (model +Y up, view +Y down)
-  return ModelViewTransform2.createRectangleInvertedYMapping(
-    modelBounds,
-    viewBounds,
-  );
+  return ModelViewTransform2.createRectangleInvertedYMapping(modelBounds, viewBounds);
 }
-

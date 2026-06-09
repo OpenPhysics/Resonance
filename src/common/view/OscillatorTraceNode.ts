@@ -12,13 +12,13 @@
  * line don't extend outside the visible area.
  */
 
-import { Node, Path, Circle } from "scenerystack/scenery";
-import { Shape } from "scenerystack/kite";
-import { ModelViewTransform2 } from "scenerystack/phetcommon";
-import { Bounds2 } from "scenerystack/dot";
 import type { TReadOnlyProperty } from "scenerystack/axon";
-import { TraceDataModel } from "../model/TraceDataModel.js";
+import type { Bounds2 } from "scenerystack/dot";
+import { Shape } from "scenerystack/kite";
+import type { ModelViewTransform2 } from "scenerystack/phetcommon";
+import { Circle, Node, Path } from "scenerystack/scenery";
 import type { TimeSpeed } from "../model/BaseModel.js";
+import type { TraceDataModel } from "../model/TraceDataModel.js";
 import ResonanceColors from "../ResonanceColors.js";
 import ResonanceConstants from "../ResonanceConstants.js";
 import { OscillatorGridNode } from "./OscillatorGridNode.js";
@@ -102,9 +102,7 @@ export class OscillatorTraceNode extends Node {
     this.gridLeft = gridCenterX - this.gridWidth / 2;
     this.gridRight = gridCenterX + this.gridWidth / 2;
     this.gridTopView = modelViewTransform.modelToViewY(options.gridTopModel);
-    this.gridBottomView = modelViewTransform.modelToViewY(
-      options.gridBottomModel,
-    );
+    this.gridBottomView = modelViewTransform.modelToViewY(options.gridBottomModel);
 
     // Create a clip area matching the grid bounds
     const clipShape = Shape.rect(
@@ -159,13 +157,10 @@ export class OscillatorTraceNode extends Node {
     }
 
     // Apply time speed multiplier to sync scroll with simulation speed
-    const speedMultiplier = this.timeSpeedProperty
-      ? TIME_SPEED_MULTIPLIERS[this.timeSpeedProperty.value]
-      : 1.0;
+    const speedMultiplier = this.timeSpeedProperty ? TIME_SPEED_MULTIPLIERS[this.timeSpeedProperty.value] : 1.0;
 
     // Update cumulative scroll offset (never wraps, used for point positioning)
-    const scrollDelta =
-      ResonanceConstants.TRACE_SCROLL_SPEED * dt * speedMultiplier;
+    const scrollDelta = ResonanceConstants.TRACE_SCROLL_SPEED * dt * speedMultiplier;
     this.scrollOffset += scrollDelta;
 
     // Update visual grid offset (wraps for seamless tiling)

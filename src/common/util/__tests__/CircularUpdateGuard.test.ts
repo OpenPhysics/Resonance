@@ -4,7 +4,7 @@
  * P2 Priority: Utility class for preventing circular updates in bidirectional bindings.
  */
 
-import { describe, it, expect, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { CircularUpdateGuard } from "../CircularUpdateGuard.js";
 
 describe("CircularUpdateGuard", () => {
@@ -50,7 +50,9 @@ describe("CircularUpdateGuard", () => {
       let innerResult: boolean | undefined;
 
       guard.run(() => {
-        innerResult = guard.run(() => {});
+        innerResult = guard.run(() => {
+          /* no-op */
+        });
       });
 
       expect(innerResult).toBe(false);
@@ -95,7 +97,9 @@ describe("CircularUpdateGuard", () => {
     it("should be false after callback", () => {
       const guard = new CircularUpdateGuard();
 
-      guard.run(() => {});
+      guard.run(() => {
+        /* no-op */
+      });
 
       expect(guard.isUpdating).toBe(false);
     });
@@ -201,9 +205,21 @@ describe("CircularUpdateGuard", () => {
       const guard = new CircularUpdateGuard();
       const results: boolean[] = [];
 
-      results.push(guard.run(() => {}));
-      results.push(guard.run(() => {}));
-      results.push(guard.run(() => {}));
+      results.push(
+        guard.run(() => {
+          /* no-op */
+        }),
+      );
+      results.push(
+        guard.run(() => {
+          /* no-op */
+        }),
+      );
+      results.push(
+        guard.run(() => {
+          /* no-op */
+        }),
+      );
 
       expect(results).toEqual([true, true, true]);
     });

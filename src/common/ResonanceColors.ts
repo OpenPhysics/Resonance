@@ -3,7 +3,7 @@
  * Colors are defined as ProfileColorProperty instances which adapt to different color profiles.
  */
 
-import { ProfileColorProperty, Color } from "scenerystack/scenery";
+import { Color, ProfileColorProperty } from "scenerystack/scenery";
 import resonance from "./ResonanceNamespace.js";
 
 const ResonanceColors = {
@@ -42,23 +42,15 @@ const ResonanceColors = {
   }),
 
   // Preferences text - stays black regardless of color profile
-  preferencesTextProperty: new ProfileColorProperty(
-    resonance,
-    "preferencesText",
-    {
-      default: new Color(0, 0, 0),
-      projector: new Color(0, 0, 0),
-    },
-  ),
+  preferencesTextProperty: new ProfileColorProperty(resonance, "preferencesText", {
+    default: new Color(0, 0, 0),
+    projector: new Color(0, 0, 0),
+  }),
 
-  preferencesTextSecondaryProperty: new ProfileColorProperty(
-    resonance,
-    "preferencesTextSecondary",
-    {
-      default: new Color(102, 102, 102),
-      projector: new Color(102, 102, 102),
-    },
-  ),
+  preferencesTextSecondaryProperty: new ProfileColorProperty(resonance, "preferencesTextSecondary", {
+    default: new Color(102, 102, 102),
+    projector: new Color(102, 102, 102),
+  }),
 
   // Spring and mass
   springProperty: new ProfileColorProperty(resonance, "spring", {
@@ -82,14 +74,10 @@ const ResonanceColors = {
   }),
 
   // Mass label color when being dragged (yellow for visibility)
-  massLabelDraggingProperty: new ProfileColorProperty(
-    resonance,
-    "massLabelDragging",
-    {
-      default: new Color(255, 255, 100),
-      projector: new Color(255, 255, 0), // Bright yellow
-    },
-  ),
+  massLabelDraggingProperty: new ProfileColorProperty(resonance, "massLabelDragging", {
+    default: new Color(255, 255, 100),
+    projector: new Color(255, 255, 0), // Bright yellow
+  }),
 
   equilibriumProperty: new ProfileColorProperty(resonance, "equilibrium", {
     default: new Color(140, 140, 140), // subtle dark gray
@@ -113,23 +101,15 @@ const ResonanceColors = {
   }),
 
   // Control panel
-  controlPanelFillProperty: new ProfileColorProperty(
-    resonance,
-    "controlPanelFill",
-    {
-      default: new Color(30, 80, 30),
-      projector: new Color(204, 255, 204),
-    },
-  ),
+  controlPanelFillProperty: new ProfileColorProperty(resonance, "controlPanelFill", {
+    default: new Color(30, 80, 30),
+    projector: new Color(204, 255, 204),
+  }),
 
-  controlPanelStrokeProperty: new ProfileColorProperty(
-    resonance,
-    "controlPanelStroke",
-    {
-      default: new Color(100, 255, 100),
-      projector: new Color(0, 102, 0),
-    },
-  ),
+  controlPanelStrokeProperty: new ProfileColorProperty(resonance, "controlPanelStroke", {
+    default: new Color(100, 255, 100),
+    projector: new Color(0, 102, 0),
+  }),
 
   // Sub-panel colors (for mass/spring/resonator/frequency sub-panel)
   subPanelFillProperty: new ProfileColorProperty(resonance, "subPanelFill", {
@@ -137,14 +117,10 @@ const ResonanceColors = {
     projector: new Color(200, 230, 255), // Light blue
   }),
 
-  subPanelStrokeProperty: new ProfileColorProperty(
-    resonance,
-    "subPanelStroke",
-    {
-      default: new Color(80, 130, 200), // Lighter blue for default
-      projector: new Color(100, 150, 200), // Medium blue
-    },
-  ),
+  subPanelStrokeProperty: new ProfileColorProperty(resonance, "subPanelStroke", {
+    default: new Color(80, 130, 200), // Lighter blue for default
+    projector: new Color(100, 150, 200), // Medium blue
+  }),
 
   // Energy colors
   kineticEnergyProperty: new ProfileColorProperty(resonance, "kineticEnergy", {
@@ -152,14 +128,10 @@ const ResonanceColors = {
     projector: new Color(255, 152, 0),
   }),
 
-  potentialEnergyProperty: new ProfileColorProperty(
-    resonance,
-    "potentialEnergy",
-    {
-      default: new Color(100, 200, 255),
-      projector: new Color(3, 169, 244),
-    },
-  ),
+  potentialEnergyProperty: new ProfileColorProperty(resonance, "potentialEnergy", {
+    default: new Color(100, 200, 255),
+    projector: new Color(3, 169, 244),
+  }),
 
   totalEnergyProperty: new ProfileColorProperty(resonance, "totalEnergy", {
     default: new Color(200, 100, 255),
@@ -189,14 +161,10 @@ const ResonanceColors = {
   }),
 
   // Graph background (dark by default)
-  graphBackgroundProperty: new ProfileColorProperty(
-    resonance,
-    "graphBackground",
-    {
-      default: new Color(30, 30, 30),
-      projector: new Color(245, 245, 245),
-    },
-  ),
+  graphBackgroundProperty: new ProfileColorProperty(resonance, "graphBackground", {
+    default: new Color(30, 30, 30),
+    projector: new Color(245, 245, 245),
+  }),
 
   // Grid and axes
   gridLinesProperty: new ProfileColorProperty(resonance, "gridLines", {
@@ -226,34 +194,22 @@ const ResonanceColors = {
   }),
 
   // Frequency slider track
-  frequencyTrackProperty: new ProfileColorProperty(
-    resonance,
-    "frequencyTrack",
-    {
-      default: new Color(0, 255, 0),
-      projector: new Color(0, 204, 0),
-    },
-  ),
+  frequencyTrackProperty: new ProfileColorProperty(resonance, "frequencyTrack", {
+    default: new Color(0, 255, 0),
+    projector: new Color(0, 204, 0),
+  }),
 
   // Amplitude slider track
-  amplitudeTrackProperty: new ProfileColorProperty(
-    resonance,
-    "amplitudeTrack",
-    {
-      default: new Color(100, 180, 255),
-      projector: new Color(51, 153, 255),
-    },
-  ),
+  amplitudeTrackProperty: new ProfileColorProperty(resonance, "amplitudeTrack", {
+    default: new Color(100, 180, 255),
+    projector: new Color(51, 153, 255),
+  }),
 
   // Toggle switch colors
-  toggleTrackOffProperty: new ProfileColorProperty(
-    resonance,
-    "toggleTrackOff",
-    {
-      default: new Color(100, 100, 100),
-      projector: new Color(102, 102, 102), // #666666
-    },
-  ),
+  toggleTrackOffProperty: new ProfileColorProperty(resonance, "toggleTrackOff", {
+    default: new Color(100, 100, 100),
+    projector: new Color(102, 102, 102), // #666666
+  }),
 
   toggleTrackOnProperty: new ProfileColorProperty(resonance, "toggleTrackOn", {
     default: new Color(100, 255, 100),
@@ -274,99 +230,59 @@ const ResonanceColors = {
   }),
 
   // Spring back color for high spring constant
-  springStiffBackProperty: new ProfileColorProperty(
-    resonance,
-    "springStiffBack",
-    {
-      default: new Color(100, 40, 140), // darker purple
-      projector: new Color(80, 0, 128),
-    },
-  ),
+  springStiffBackProperty: new ProfileColorProperty(resonance, "springStiffBack", {
+    default: new Color(100, 40, 140), // darker purple
+    projector: new Color(80, 0, 128),
+  }),
 
   // Gravity toggle colors
-  gravityToggleOffProperty: new ProfileColorProperty(
-    resonance,
-    "gravityToggleOff",
-    {
-      default: new Color(100, 100, 100),
-      projector: new Color(153, 153, 153), // #999999
-    },
-  ),
+  gravityToggleOffProperty: new ProfileColorProperty(resonance, "gravityToggleOff", {
+    default: new Color(100, 100, 100),
+    projector: new Color(153, 153, 153), // #999999
+  }),
 
-  gravityToggleOnProperty: new ProfileColorProperty(
-    resonance,
-    "gravityToggleOn",
-    {
-      default: new Color(100, 180, 255),
-      projector: new Color(68, 153, 255), // #4499FF
-    },
-  ),
+  gravityToggleOnProperty: new ProfileColorProperty(resonance, "gravityToggleOn", {
+    default: new Color(100, 180, 255),
+    projector: new Color(68, 153, 255), // #4499FF
+  }),
 
   // Chladni plate visualization
-  chladniParticleProperty: new ProfileColorProperty(
-    resonance,
-    "chladniParticle",
-    {
-      default: new Color(255, 255, 255), // White particles on dark background
-      projector: new Color(40, 40, 40), // Dark particles on light background
-    },
-  ),
+  chladniParticleProperty: new ProfileColorProperty(resonance, "chladniParticle", {
+    default: new Color(255, 255, 255), // White particles on dark background
+    projector: new Color(40, 40, 40), // Dark particles on light background
+  }),
 
-  chladniBackgroundProperty: new ProfileColorProperty(
-    resonance,
-    "chladniBackground",
-    {
-      default: new Color(26, 26, 46), // Dark blue-ish background
-      projector: new Color(240, 240, 245), // Light background for projector
-    },
-  ),
+  chladniBackgroundProperty: new ProfileColorProperty(resonance, "chladniBackground", {
+    default: new Color(26, 26, 46), // Dark blue-ish background
+    projector: new Color(240, 240, 245), // Light background for projector
+  }),
 
-  chladniPlateBorderProperty: new ProfileColorProperty(
-    resonance,
-    "chladniPlateBorder",
-    {
-      default: new Color(68, 68, 102),
-      projector: new Color(100, 100, 120),
-    },
-  ),
+  chladniPlateBorderProperty: new ProfileColorProperty(resonance, "chladniPlateBorder", {
+    default: new Color(68, 68, 102),
+    projector: new Color(100, 100, 120),
+  }),
 
   // Vector arrow colors (for velocity, acceleration, force visualization)
-  velocityVectorProperty: new ProfileColorProperty(
-    resonance,
-    "velocityVector",
-    {
-      default: new Color(0, 255, 0), // Bright green
-      projector: new Color(0, 180, 0),
-    },
-  ),
+  velocityVectorProperty: new ProfileColorProperty(resonance, "velocityVector", {
+    default: new Color(0, 255, 0), // Bright green
+    projector: new Color(0, 180, 0),
+  }),
 
-  accelerationVectorProperty: new ProfileColorProperty(
-    resonance,
-    "accelerationVector",
-    {
-      default: new Color(255, 255, 0), // Yellow
-      projector: new Color(200, 180, 0),
-    },
-  ),
+  accelerationVectorProperty: new ProfileColorProperty(resonance, "accelerationVector", {
+    default: new Color(255, 255, 0), // Yellow
+    projector: new Color(200, 180, 0),
+  }),
 
-  appliedForceVectorProperty: new ProfileColorProperty(
-    resonance,
-    "appliedForceVector",
-    {
-      default: new Color(255, 165, 0), // Orange
-      projector: new Color(255, 140, 0),
-    },
-  ),
+  appliedForceVectorProperty: new ProfileColorProperty(resonance, "appliedForceVector", {
+    default: new Color(255, 165, 0), // Orange
+    projector: new Color(255, 140, 0),
+  }),
 
   // Button disabled color
-  buttonDisabledProperty: new ProfileColorProperty(
-    resonance,
-    "buttonDisabled",
-    {
-      default: new Color(90, 90, 90),
-      projector: new Color(180, 180, 180),
-    },
-  ),
+  buttonDisabledProperty: new ProfileColorProperty(resonance, "buttonDisabled", {
+    default: new Color(90, 90, 90),
+    projector: new Color(180, 180, 180),
+  }),
 
   // Toggle switch thumb color
   toggleThumbProperty: new ProfileColorProperty(resonance, "toggleThumb", {
@@ -381,38 +297,26 @@ const ResonanceColors = {
   }),
 
   // Connection rod marker stroke
-  connectionRodMarkerProperty: new ProfileColorProperty(
-    resonance,
-    "connectionRodMarker",
-    {
-      default: new Color(51, 51, 51), // #333
-      projector: new Color(100, 100, 100),
-    },
-  ),
+  connectionRodMarkerProperty: new ProfileColorProperty(resonance, "connectionRodMarker", {
+    default: new Color(51, 51, 51), // #333
+    projector: new Color(100, 100, 100),
+  }),
 
   // Displacement colormap colors (blue-white-red gradient)
-  colormapNegativeProperty: new ProfileColorProperty(
-    resonance,
-    "colormapNegative",
-    {
-      default: new Color(0, 100, 255), // Blue for negative displacement
-      projector: new Color(0, 80, 200),
-    },
-  ),
+  colormapNegativeProperty: new ProfileColorProperty(resonance, "colormapNegative", {
+    default: new Color(0, 100, 255), // Blue for negative displacement
+    projector: new Color(0, 80, 200),
+  }),
 
   colormapZeroProperty: new ProfileColorProperty(resonance, "colormapZero", {
     default: new Color(255, 255, 255), // White for zero (nodal lines)
     projector: new Color(240, 240, 240),
   }),
 
-  colormapPositiveProperty: new ProfileColorProperty(
-    resonance,
-    "colormapPositive",
-    {
-      default: new Color(255, 80, 80), // Red for positive displacement
-      projector: new Color(220, 50, 50),
-    },
-  ),
+  colormapPositiveProperty: new ProfileColorProperty(resonance, "colormapPositive", {
+    default: new Color(255, 80, 80), // Red for positive displacement
+    projector: new Color(220, 50, 50),
+  }),
 };
 
 export default ResonanceColors;

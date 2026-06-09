@@ -6,9 +6,9 @@
  */
 
 import { LocalizedString } from "scenerystack";
-import strings_en from "./strings_en.json";
-import strings_fr from "./strings_fr.json";
-import strings_es from "./strings_es.json";
+import stringsEn from "./strings_en.json";
+import stringsEs from "./strings_es.json";
+import stringsFr from "./strings_fr.json";
 
 /**
  * Creates and caches the localized string properties.
@@ -17,15 +17,14 @@ import strings_es from "./strings_es.json";
  */
 function createStringProperties() {
   return LocalizedString.getNestedStringProperties({
-    en: strings_en,
-    fr: strings_fr,
-    es: strings_es,
+    en: stringsEn,
+    fr: stringsFr,
+    es: stringsEs,
   });
 }
 
 // Cached string properties (created once on first access)
-let cachedStringProperties: ReturnType<typeof createStringProperties> | null =
-  null;
+let cachedStringProperties: ReturnType<typeof createStringProperties> | null = null;
 
 /**
  * Get the string properties, creating them if necessary.

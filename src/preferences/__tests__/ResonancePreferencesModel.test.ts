@@ -4,12 +4,9 @@
  * P2 Priority: User preferences with localStorage persistence.
  */
 
-import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
-import {
-  ResonancePreferencesModel,
-  StoredPreferences,
-} from "../ResonancePreferencesModel.js";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { SolverType } from "../../common/model/SolverType.js";
+import { ResonancePreferencesModel, type StoredPreferences } from "../ResonancePreferencesModel.js";
 
 /** Typed shape for setItem spy when reading .mock or calling .mockImplementation */
 interface SetItemSpyLike {
@@ -32,17 +29,13 @@ describe("ResonancePreferencesModel", () => {
     mockStorage = {};
 
     // Spy on localStorage methods
-    getItemSpy = vi
-      .spyOn(Storage.prototype, "getItem")
-      .mockImplementation((key: string) => {
-        return mockStorage[key] ?? null;
-      });
+    getItemSpy = vi.spyOn(Storage.prototype, "getItem").mockImplementation((key: string) => {
+      return mockStorage[key] ?? null;
+    });
 
-    setItemSpy = vi
-      .spyOn(Storage.prototype, "setItem")
-      .mockImplementation((key: string, value: string) => {
-        mockStorage[key] = value;
-      });
+    setItemSpy = vi.spyOn(Storage.prototype, "setItem").mockImplementation((key: string, value: string) => {
+      mockStorage[key] = value;
+    });
   });
 
   afterEach(() => {
@@ -71,9 +64,7 @@ describe("ResonancePreferencesModel", () => {
       const model = new ResonancePreferencesModel();
       model.solverTypeProperty.value = SolverType.ADAPTIVE_RK45;
 
-      const saved = JSON.parse(
-        mockStorage["resonance-preferences"]!,
-      ) as StoredPreferences;
+      const saved = JSON.parse(mockStorage["resonance-preferences"]!) as StoredPreferences;
       expect(saved.solverType).toBe(SolverType.ADAPTIVE_RK45);
     });
 
@@ -81,9 +72,7 @@ describe("ResonancePreferencesModel", () => {
       const model = new ResonancePreferencesModel();
       model.solverTypeProperty.value = SolverType.ADAPTIVE_RK45;
 
-      const saved = JSON.parse(
-        mockStorage["resonance-preferences"]!,
-      ) as StoredPreferences;
+      const saved = JSON.parse(mockStorage["resonance-preferences"]!) as StoredPreferences;
       expect(saved).toEqual({
         solverType: SolverType.ADAPTIVE_RK45,
         showModalControls: false, // Default value
@@ -98,10 +87,7 @@ describe("ResonancePreferencesModel", () => {
 
       model.solverTypeProperty.value = SolverType.ADAPTIVE_RK45;
 
-      expect(setItemSpy).toHaveBeenCalledWith(
-        "resonance-preferences",
-        expect.any(String),
-      );
+      expect(setItemSpy).toHaveBeenCalledWith("resonance-preferences", expect.any(String));
       expect(setItemMock.calls.length).toBeGreaterThan(initialCallCount);
     });
   });
@@ -226,9 +212,7 @@ describe("ResonancePreferencesModel", () => {
     it("should trigger save after reset", () => {
       const model = new ResonancePreferencesModel();
       model.solverTypeProperty.value = SolverType.ADAPTIVE_RK45;
-      const setItemMock: { calls: [string, string][] } = (
-        setItemSpy as SetItemSpyLike
-      ).mock;
+      const setItemMock: { calls: [string, string][] } = (setItemSpy as SetItemSpyLike).mock;
       const countBeforeReset = setItemMock.calls.length;
 
       model.reset();

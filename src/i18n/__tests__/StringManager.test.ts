@@ -4,8 +4,8 @@
  * Tests singleton pattern and string properties access.
  */
 
-import { describe, it, expect, beforeEach } from "vitest";
-import { StringManager, getStringProperties } from "../StringManager.js";
+import { beforeEach, describe, expect, it } from "vitest";
+import { getStringProperties, StringManager } from "../StringManager.js";
 
 describe("StringManager", () => {
   let stringManager: StringManager;
@@ -65,9 +65,7 @@ describe("getStringProperties", () => {
       const strings = getStringProperties();
       expect(strings.resonance.titleStringProperty).toBeDefined();
       expect(typeof strings.resonance.titleStringProperty.value).toBe("string");
-      expect(
-        strings.resonance.titleStringProperty.value.length,
-      ).toBeGreaterThan(0);
+      expect(strings.resonance.titleStringProperty.value.length).toBeGreaterThan(0);
     });
   });
 
@@ -75,9 +73,7 @@ describe("getStringProperties", () => {
     it("should have screen name string properties", () => {
       const strings = getStringProperties();
       expect(strings.resonance.screens.simStringProperty).toBeDefined();
-      expect(
-        strings.resonance.screens.simStringProperty.value.length,
-      ).toBeGreaterThan(0);
+      expect(strings.resonance.screens.simStringProperty.value.length).toBeGreaterThan(0);
     });
   });
 
@@ -197,12 +193,8 @@ describe("getStringProperties", () => {
 
     it("should have non-empty preset names", () => {
       const presets = getStringProperties().resonance.presets;
-      expect(presets.lightAndBouncyStringProperty.value.length).toBeGreaterThan(
-        0,
-      );
-      expect(presets.resonanceDemoStringProperty.value.length).toBeGreaterThan(
-        0,
-      );
+      expect(presets.lightAndBouncyStringProperty.value.length).toBeGreaterThan(0);
+      expect(presets.resonanceDemoStringProperty.value.length).toBeGreaterThan(0);
     });
   });
 

@@ -12,15 +12,15 @@
  * when needed for immediate results.
  */
 
-import { Vector2, Range } from "scenerystack/dot";
-import { ModalCalculator } from "./ModalCalculator.js";
+import { Range, Vector2 } from "scenerystack/dot";
 import {
-  FREQUENCY_MIN,
-  FREQUENCY_MAX,
-  GRAPH_WINDOW_WIDTH,
   CURVE_SAMPLES_PER_HZ,
+  FREQUENCY_MAX,
+  FREQUENCY_MIN,
+  GRAPH_WINDOW_WIDTH,
   TOTAL_CURVE_SAMPLES,
 } from "./ChladniConstants.js";
+import type { ModalCalculator } from "./ModalCalculator.js";
 
 /**
  * Options for creating a ResonanceCurveCalculator
@@ -126,10 +126,7 @@ export class ResonanceCurveCalculator {
           return;
         }
 
-        const endIndex = Math.min(
-          this.progressiveIndex + PROGRESSIVE_CHUNK_SIZE,
-          TOTAL_CURVE_SAMPLES,
-        );
+        const endIndex = Math.min(this.progressiveIndex + PROGRESSIVE_CHUNK_SIZE, TOTAL_CURVE_SAMPLES);
 
         // Process this chunk
         for (let i = this.progressiveIndex; i < endIndex; i++) {
@@ -218,8 +215,7 @@ export class ResonanceCurveCalculator {
       this.cachedDataSampleCount = sampleCount;
     }
 
-    const freqStep =
-      sampleCount > 1 ? (freqMax - freqMin) / (sampleCount - 1) : 0;
+    const freqStep = sampleCount > 1 ? (freqMax - freqMin) / (sampleCount - 1) : 0;
 
     if (this.precomputedMaxStrength <= 0) {
       // No resonance data, return flat line
@@ -237,10 +233,7 @@ export class ResonanceCurveCalculator {
 
       // Map frequency to precomputed array index
       const index = Math.round((freq - FREQUENCY_MIN) * CURVE_SAMPLES_PER_HZ);
-      const clampedIndex = Math.max(
-        0,
-        Math.min(TOTAL_CURVE_SAMPLES - 1, index),
-      );
+      const clampedIndex = Math.max(0, Math.min(TOTAL_CURVE_SAMPLES - 1, index));
 
       const strength = this.precomputedStrengths[clampedIndex]!;
       const normalized = Math.min(strength * invMaxStrength, 1);

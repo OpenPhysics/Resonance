@@ -6,8 +6,8 @@
  * Extends ChladniOverlayNode for common overlay functionality.
  */
 
-import { Line, Text } from "scenerystack/scenery";
 import { StringProperty } from "scenerystack/axon";
+import { Line, Text } from "scenerystack/scenery";
 import ResonanceColors from "../../common/ResonanceColors.js";
 import ResonanceConstants from "../../common/ResonanceConstants.js";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
@@ -27,23 +27,16 @@ export class ChladniRulerNode extends ChladniOverlayNode {
     plateWidthMeters: number,
     plateHeightMeters: number,
   ) {
-    super(
-      visualizationWidth,
-      visualizationHeight,
-      plateWidthMeters,
-      plateHeightMeters,
-    );
+    super(visualizationWidth, visualizationHeight, plateWidthMeters, plateHeightMeters);
 
     // PDOM accessibility
     this.tagName = "div";
     this.ariaRole = "img";
-    this.accessibleName =
-      ResonanceStrings.chladni.a11y.rulerLabelStringProperty;
+    this.accessibleName = ResonanceStrings.chladni.a11y.rulerLabelStringProperty;
 
     // Create description with plate dimensions
     const { widthCm, heightCm } = this.getPlateDimensionsCm();
-    const template =
-      ResonanceStrings.chladni.a11y.rulerDescriptionStringProperty.value;
+    const template = ResonanceStrings.chladni.a11y.rulerDescriptionStringProperty.value;
     const description = template
       .replace("{{width}}", Math.round(widthCm).toString())
       .replace("{{height}}", Math.round(heightCm).toString());
@@ -83,16 +76,10 @@ export class ChladniRulerNode extends ChladniOverlayNode {
       const tickLength = isMajor ? MAJOR_TICK_LENGTH : MINOR_TICK_LENGTH;
 
       // Tick mark extending downward from bottom edge
-      const tick = new Line(
-        x,
-        this.visualizationHeight,
-        x,
-        this.visualizationHeight + tickLength,
-        {
-          stroke: ResonanceColors.textProperty,
-          lineWidth: TICK_LINE_WIDTH,
-        },
-      );
+      const tick = new Line(x, this.visualizationHeight, x, this.visualizationHeight + tickLength, {
+        stroke: ResonanceColors.textProperty,
+        lineWidth: TICK_LINE_WIDTH,
+      });
       this.addChild(tick);
 
       // Label for major ticks
