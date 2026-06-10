@@ -1,5 +1,18 @@
-// NOTE: brand.js needs to be the first import. This is because SceneryStack for sims needs a very specific loading
-// order: init.ts => assert.ts => splash.ts => brand.ts => everything else (here)
+/**
+ * main.ts
+ *
+ * Entry point for the simulation. Initializes SceneryStack, creates the
+ * screen, and starts the main event loop.
+ *
+ * !! CRITICAL IMPORT ORDER !!
+ * brand.js MUST be the first import. It triggers the full bootstrap chain:
+ *
+ *   brand.ts → splash.ts → assert.ts → init.ts
+ *
+ * SceneryStack requires this exact load order. Never reorder these imports.
+ */
+
+// brand.js MUST be first — triggers: init.ts → assert.ts → splash.ts → brand.ts
 import "./brand.js";
 
 import { onReadyToLaunch, PreferencesModel, Sim } from "scenerystack/sim";
