@@ -283,6 +283,6 @@ When making changes:
 ## Related Documentation
 
 - **[model.md](model.md)** - Comprehensive physics model and educational guide
-- **[CLAUDE.md](../CLAUDE.md)** - Quick reference for AI assistants and developers
+- **[CLAUDE.md](../CLAUDE.md)** — sim-specific AI assistant context (general SceneryStack guidance in [OpenPhysics/.github](https://github.com/OpenPhysics/.github/blob/main/CLAUDE.md))
 - **[model.md](model.md)** - Physics model for educators
 - **[chladni-recommendations.md](chladni-recommendations.md)** - Chladni screen enhancement ideas
