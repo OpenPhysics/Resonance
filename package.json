@@ -58,7 +58,8 @@
     "test:fuzz": "playwright test --project=chromium",
     "test:fuzz:headed": "playwright test --project=chromium --headed",
     "test:fuzz:quick": "FUZZ_DURATION=30 playwright test --project=chromium fuzz.spec.ts",
-    "test:fuzz:long": "FUZZ_DURATION=300 playwright test --project=chromium fuzz.spec.ts"
+    "test:fuzz:long": "FUZZ_DURATION=300 playwright test --project=chromium fuzz.spec.ts",
+    "prepare": "git config core.hooksPath .githooks"
   },
   "dependencies": {
     "scenerystack": "^3.0.0"
