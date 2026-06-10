@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#1a1a2e"/>
+  <!-- spring -->
+  <path d="M256 96 C236 126 276 126 256 156 C236 186 276 186 256 216 C236 246 276 246 256 276" fill="none" stroke="#4fc3f7" stroke-width="10" stroke-linecap="round"/>
+  <!-- mass -->
+  <rect x="206" y="276" width="100" height="72" rx="12" fill="#ffb74d"/>
+  <!-- resonance wave -->
+  <path d="M96 360 Q156 320 216 360 T336 360 T456 360" fill="none" stroke="#81c784" stroke-width="10" stroke-linecap="round"/>
+</svg>
