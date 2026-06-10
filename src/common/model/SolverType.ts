@@ -2,13 +2,15 @@ import type { ReadOnlyProperty } from "scenerystack/axon";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
 
 /**
- * Enumeration of available ODE solver types
+ * Available ODE solver types
  */
-export enum SolverType {
-  RUNGE_KUTTA_4 = "rk4",
-  ADAPTIVE_RK45 = "adaptiveRK45",
-  ANALYTICAL = "analytical",
-}
+export const SolverType = {
+  RUNGE_KUTTA_4: "rk4",
+  ADAPTIVE_RK45: "adaptiveRK45",
+  ANALYTICAL: "analytical",
+} as const;
+
+export type SolverType = (typeof SolverType)[keyof typeof SolverType];
 
 /**
  * Human-readable names for solver types (localized)

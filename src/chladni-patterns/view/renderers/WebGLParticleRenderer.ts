@@ -26,7 +26,7 @@ export class WebGLParticleRenderer implements ParticleRenderer {
   private sprite: Sprite | null = null;
   private spriteInstances: SpriteInstance[] = [];
 
-  public constructor(width: number, height: number, transform: ModelViewTransform2) {
+  public constructor(width: number, height: number, _transform: ModelViewTransform2) {
     this.width = width;
     this.height = height;
     this.containerNode = new Node();
@@ -139,7 +139,7 @@ export class WebGLParticleRenderer implements ParticleRenderer {
     this.spritesNode?.invalidatePaint();
   }
 
-  public resize(width: number, height: number, transform: ModelViewTransform2): void {
+  public resize(width: number, height: number, _transform: ModelViewTransform2): void {
     this.width = width;
     this.height = height;
     this.recreateSpritesNode();

@@ -25,7 +25,8 @@ export type { PlateGeometryOptions } from "./PlateGeometry.js";
 // Plate geometry
 export { PlateGeometry } from "./PlateGeometry.js";
 // Playback state management
-export { PlaybackState, PlaybackStateMachine } from "./PlaybackStateMachine.js";
+export type { PlaybackState } from "./PlaybackStateMachine.js";
+export { PlaybackStateMachine } from "./PlaybackStateMachine.js";
 export type { ResonanceCurveCalculatorOptions } from "./ResonanceCurveCalculator.js";
 // Resonance curve calculation
 export { ResonanceCurveCalculator } from "./ResonanceCurveCalculator.js";

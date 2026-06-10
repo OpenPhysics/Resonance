@@ -117,7 +117,7 @@ export class SweepButton extends RectangularPushButton {
       buttonAppearanceStrategy: FlatAppearanceStrategy,
       xMargin: BUTTON_X_MARGIN,
       yMargin: BUTTON_Y_MARGIN,
-      accessibleName: options.accessibleName,
+      ...(options.accessibleName !== undefined ? { accessibleName: options.accessibleName } : {}),
     });
   }
 }

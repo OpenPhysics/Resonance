@@ -47,13 +47,15 @@ interface OscillatorParams {
 }
 
 /**
- * Damping regime enumeration
+ * Damping regime identifiers
  */
-enum DampingRegime {
-  UNDERDAMPED,
-  CRITICALLY_DAMPED,
-  OVERDAMPED,
-}
+const DampingRegime = {
+  UNDERDAMPED: 0,
+  CRITICALLY_DAMPED: 1,
+  OVERDAMPED: 2,
+} as const;
+
+type DampingRegime = (typeof DampingRegime)[keyof typeof DampingRegime];
 
 /**
  * Analytical (exact) ODE solver for the driven, damped harmonic oscillator.

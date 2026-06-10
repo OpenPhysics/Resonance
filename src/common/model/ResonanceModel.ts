@@ -1006,7 +1006,7 @@ export class ResonanceModel extends BaseModel {
    *
    * Using phase instead of time ensures smooth frequency changes
    */
-  public override getDerivatives(t: number, state: number[]): number[] {
+  public override getDerivatives(_t: number, state: number[]): number[] {
     const x = state[0]!; // position (displacement from equilibrium)
     const v = state[1]!; // velocity
     const phase = state[2]!; // driving phase

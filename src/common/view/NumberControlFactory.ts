@@ -69,9 +69,9 @@ export const NumberControlFactory = {
 
     return new NumberControl(titleProperty, numberProperty, range, {
       delta,
-      enabledRangeProperty,
+      ...(enabledRangeProperty !== undefined ? { enabledRangeProperty } : {}),
       numberDisplayOptions: {
-        valuePattern,
+        ...(valuePattern !== undefined ? { valuePattern } : {}),
         decimalPlaces,
         textOptions: {
           font: ResonanceConstants.LABEL_FONT,
@@ -84,9 +84,9 @@ export const NumberControlFactory = {
       },
       sliderOptions: {
         trackSize,
-        trackFillEnabled: trackFill,
-        minorTickSpacing,
-        majorTicks,
+        ...(trackFill !== undefined ? { trackFillEnabled: trackFill } : {}),
+        ...(minorTickSpacing !== undefined ? { minorTickSpacing } : {}),
+        ...(majorTicks !== undefined ? { majorTicks } : {}),
         majorTickStroke: ResonanceColors.textProperty,
         minorTickStroke: ResonanceColors.textProperty,
       },

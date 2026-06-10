@@ -57,7 +57,7 @@ export class OscillatorVectorNode extends Node {
 
   public constructor(
     model: ResonanceModel,
-    modelViewTransform: ModelViewTransform2,
+    _modelViewTransform: ModelViewTransform2,
     options: OscillatorVectorNodeOptions,
   ) {
     super();

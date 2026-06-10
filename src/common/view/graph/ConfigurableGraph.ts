@@ -43,11 +43,6 @@ const BUTTON_FONT = new PhetFont({ size: 14, weight: "bold" });
 const BUTTON_HOVER_OPACITY = 0.8;
 const TITLE_BOTTOM_OFFSET = -5;
 
-// Resize handle (reserved for future use)
-const _RESIZE_HANDLE_SIZE = 16;
-const _RESIZE_DOT_RADIUS = 2;
-const _RESIZE_DOT_SPACING = 5;
-
 export default class ConfigurableGraph extends Node {
   private readonly availableProperties: PlottableProperty[];
   private readonly xPropertyProperty: Property<PlottableProperty>;
