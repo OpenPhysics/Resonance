@@ -35,7 +35,7 @@
     "serve": "serve -s dist",
     "watch": "tsc --watch",
     "clean": "rm -rf dist",
-    "test": "vitest",
+    "test": "vitest run",
     "test:coverage": "vitest --coverage",
     "test:fuzz": "playwright test --project=chromium",
     "test:fuzz:headed": "playwright test --project=chromium --headed",
