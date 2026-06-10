@@ -1,16 +1,14 @@
 # Resonance - Physics Simulation
 
-An interactive physics simulation demonstrating resonance phenomena in driven oscillating systems. Built with [SceneryStack](https://scenerystack.org/).
-
-## Overview
-
-This simulation visualizes the behavior of mass-spring systems driven by an oscillating platform and Chladni plate vibration patterns. Users can observe resonance effects, phase relationships, and the influence of various physical parameters on oscillation behavior.
+An interactive physics simulation demonstrating resonance phenomena in driven oscillating systems. Built with
+[SceneryStack](https://scenerystack.org/).
 
 ## Screens
 
 ### Single Oscillator
 
-A single driven, damped harmonic oscillator attached to an oscillating driver plate. Ideal for exploring the fundamentals of resonance when driving frequency matches the natural frequency.
+A single driven, damped harmonic oscillator attached to an oscillating driver plate. Ideal for exploring the
+fundamentals of resonance when driving frequency matches the natural frequency.
 
 **Features:**
 - **Spring Presets**: Quick configurations (Light and Bouncy, Heavy and Slow, Underdamped, Critically Damped, Overdamped)
@@ -20,15 +18,20 @@ A single driven, damped harmonic oscillator attached to an oscillating driver pl
 
 ### Multiple Oscillators
 
-Multiple oscillators (1-10) with different natural frequencies driven simultaneously. Observe which systems resonate with the driving frequency and compare their behaviors. Includes frequency sweep functionality to observe resonance peaks across the system.
+Multiple oscillators (1-10) with different natural frequencies driven simultaneously. Observe which systems
+resonate with the driving frequency and compare their behaviors. Includes frequency sweep functionality to
+observe resonance peaks across the system.
 
 ### Phase Analysis
 
-Explore phase relationships between the driving force and oscillator response. Visualize how phase lag changes as driving frequency passes through resonance. Includes configurable phase-space plots for detailed analysis.
+Explore phase relationships between the driving force and oscillator response. Visualize how phase lag changes
+as driving frequency passes through resonance. Includes configurable phase-space plots for detailed analysis.
 
 ### Chladni Patterns
 
-Visualizes Chladni patterns - the beautiful geometric patterns formed by particles on a vibrating plate. When a plate vibrates at specific frequencies, particles migrate to the nodal lines (areas of zero displacement), revealing the resonant mode shapes.
+Visualizes Chladni patterns - the beautiful geometric patterns formed by particles on a vibrating plate. When
+a plate vibrates at specific frequencies, particles migrate to the nodal lines (areas of zero displacement),
+revealing the resonant mode shapes.
 
 **Features:**
 
@@ -56,7 +59,6 @@ Visualizes Chladni patterns - the beautiful geometric patterns formed by particl
 - **Accessibility**: Multiple color profiles (default, projector, colorblind-friendly)
 - **Internationalization**: English, Spanish, and French language support
 
-
 ## Physics Background
 
 ### Oscillator Resonance
@@ -67,11 +69,13 @@ Maximum oscillation amplitude occurs when the driving frequency matches the natu
 f₀ = (1/2π) × √(k/m)
 ```
 
-The driving plate oscillates sinusoidally, creating a time-varying boundary condition for the springs. At resonance, small plate displacements can produce large amplitude oscillations.
+The driving plate oscillates sinusoidally, creating a time-varying boundary condition for the springs. At
+resonance, small plate displacements can produce large amplitude oscillations.
 
 ### Quality Factor and Damping Regimes
 
-The sharpness of resonance is characterized by the quality factor Q = √(km)/b, where b is the damping coefficient. Higher Q means sharper resonance peaks.
+The sharpness of resonance is characterized by the quality factor Q = √(km)/b, where b is the damping
+coefficient. Higher Q means sharper resonance peaks.
 
 **Damping regimes:**
 - **Underdamped** (ζ < 1): Oscillatory response with exponential decay
@@ -94,7 +98,8 @@ All properties update in real-time as parameters change, enabling quantitative a
 
 ### Chladni Patterns
 
-Chladni patterns demonstrate 2D resonance on vibrating plates. Named after physicist Ernst Chladni (1756-1827), these patterns reveal the nodal lines of plate vibration modes.
+Chladni patterns demonstrate 2D resonance on vibrating plates. Named after physicist Ernst Chladni (1756-1827),
+these patterns reveal the nodal lines of plate vibration modes.
 
 **Physics:**
 
@@ -103,7 +108,9 @@ Chladni patterns demonstrate 2D resonance on vibrating plates. Named after physi
 - Nodal lines: Regions where the plate displacement is zero
 
 **Pattern Formation:**
-Particles on a vibrating plate experience forces proportional to the local displacement. At high-displacement regions (antinodes), particles are pushed away. At low-displacement regions (nodal lines), particles accumulate, revealing the mode shape.
+Particles on a vibrating plate experience forces proportional to the local displacement. At high-displacement
+regions (antinodes), particles are pushed away. At low-displacement regions (nodal lines), particles accumulate,
+revealing the mode shape.
 
 **Material Properties (Dispersion Constants):**
 | Material | C (m²/s) |
@@ -119,17 +126,47 @@ Particles on a vibrating plate experience forces proportional to the local displ
 - **[Physics Model Guide](doc/model.md)** - Comprehensive physics model, equations, and educational guide
 - **[Implementation Notes](doc/implementation-notes.md)** - Technical architecture and design patterns
 
-## Technology
+## Quick Start
 
-- **SceneryStack** - Physics simulation framework
-- **TypeScript** - Type-safe development
-- **Vite** - Fast development and building
-- **Vitest** - Unit testing
-- **Playwright** - End-to-end testing
+```bash
+npm install
+npm run icons    # generate PNG icons from public/icons/icon.svg
+npm start        # dev server → http://localhost:5173
+```
+
+## Scripts
+
+| Command | Description |
+|---|---|
+| `npm start` / `npm run dev` | Start Vite dev server |
+| `npm run build` | Type-check + production build → `dist/` |
+| `npm run preview` | Preview the production build locally |
+| `npm run check` | TypeScript type check |
+| `npm run lint` | Biome lint check |
+| `npm run format` | Auto-format all files |
+| `npm run fix` | Lint + auto-fix |
+| `npm test` | Run Vitest unit tests |
+| `npm run icons` | Regenerate PWA icons from `public/icons/icon.svg` |
+| `npm run clean` | Remove `dist/` |
+
+## Tech Stack
+
+| Tool | Version | Purpose |
+|---|---|---|
+| [SceneryStack](https://scenerystack.org/) | ^3.0.0 | Simulation framework |
+| [Vite](https://vitejs.dev/) | ^8 | Build tool + dev server |
+| [TypeScript](https://www.typescriptlang.org/) | ^6 | Type-safe JavaScript |
+| [Biome](https://biomejs.dev/) | ^2.4 | Linting + formatting |
+| [vite-plugin-pwa](https://vite-pwa-org.netlify.app/) | ^1 | PWA + service worker |
 
 ## License
 
-MIT License - see LICENSE file for details.
+MIT
+
+## Contributing
+
+See [OpenPhysics contributing guidelines](https://github.com/OpenPhysics/.github/blob/main/CONTRIBUTING.md).
+Report bugs via GitHub Issues; use org issue templates.
 
 ## Acknowledgments
 
