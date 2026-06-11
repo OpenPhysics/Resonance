@@ -1,4 +1,4 @@
-# Resonance Simulation - Implementation Notes
+# Implementation Notes - Resonance Simulation
 
 This document provides technical details for developers and maintainers of the Resonance Simulation codebase. It covers architecture decisions, code organization, design patterns, and implementation considerations.
 
