@@ -13,7 +13,7 @@
 import { Bounds2, type Vector2 } from "scenerystack/dot";
 import type { ModelViewTransform2 } from "scenerystack/phetcommon";
 import { CanvasNode, type CanvasNodeOptions, type Node } from "scenerystack/scenery";
-import ResonanceColors from "../../../common/ResonanceColors.js";
+import ResonanceColors from "../../../ResonanceColors.js";
 import type { ParticleRenderer } from "./ParticleRenderer.js";
 
 // Particle rendering size in pixels

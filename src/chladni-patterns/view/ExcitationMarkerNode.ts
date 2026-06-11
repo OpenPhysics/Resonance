@@ -10,8 +10,8 @@ import { Property } from "scenerystack/axon";
 import { Bounds2, Matrix3, Transform3, Vector2 } from "scenerystack/dot";
 import type { ModelViewTransform2 } from "scenerystack/phetcommon";
 import { Circle, DragListener, KeyboardDragListener, Node, Voicing } from "scenerystack/scenery";
-import ResonanceColors from "../../common/ResonanceColors.js";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
+import ResonanceColors from "../../ResonanceColors.js";
 import type { ChladniModel } from "../model/ChladniModel.js";
 
 // Excitation marker properties

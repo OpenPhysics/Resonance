@@ -11,7 +11,7 @@ import type { BooleanProperty } from "scenerystack/axon";
 import type { ChartRectangle, ChartTransform, TickLabelSet } from "scenerystack/bamboo";
 import { Range, Vector2 } from "scenerystack/dot";
 import { DragListener, type Node, type Pointer, Rectangle } from "scenerystack/scenery";
-import ResonanceColors from "../../ResonanceColors.js";
+import ResonanceColors from "../../../ResonanceColors.js";
 import ResonanceNamespace from "../../ResonanceNamespace.js";
 import type GraphDataManager from "./GraphDataManager.js";
 

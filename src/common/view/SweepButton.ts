@@ -15,7 +15,7 @@ import type { TReadOnlyProperty } from "scenerystack/axon";
 import { Shape } from "scenerystack/kite";
 import { type Color, type Node, Path, type TColor } from "scenerystack/scenery";
 import { FlatAppearanceStrategy, RectangularPushButton } from "scenerystack/sun";
-import ResonanceColors from "../ResonanceColors.js";
+import ResonanceColors from "../../ResonanceColors.js";
 
 // Icon dimensions
 const SWEEP_ICON_WIDTH = 30;

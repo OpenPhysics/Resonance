@@ -4,10 +4,10 @@
  */
 
 import { Screen, type ScreenOptions } from "scenerystack/sim";
-import ResonanceColors from "../common/ResonanceColors.js";
 import { KeyboardShortcutsNode } from "../common/view/KeyboardShortcutsNode.js";
 import { ResonanceStrings } from "../i18n/ResonanceStrings.js";
 import type { ResonancePreferencesModel } from "../preferences/ResonancePreferencesModel.js";
+import ResonanceColors from "../ResonanceColors.js";
 import { MultipleOscillatorsModel } from "./model/MultipleOscillatorsModel.js";
 import { MultipleOscillatorsScreenView } from "./view/MultipleOscillatorsScreenView.js";
 

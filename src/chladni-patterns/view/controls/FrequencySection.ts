@@ -7,11 +7,11 @@
 
 import { DerivedProperty } from "scenerystack/axon";
 import { VBox } from "scenerystack/scenery";
-import ResonanceColors from "../../../common/ResonanceColors.js";
 import ResonanceConstants from "../../../common/ResonanceConstants.js";
 import { NumberControlFactory } from "../../../common/view/NumberControlFactory.js";
 import { SweepButton } from "../../../common/view/SweepButton.js";
 import { ResonanceStrings } from "../../../i18n/ResonanceStrings.js";
+import ResonanceColors from "../../../ResonanceColors.js";
 import type { ChladniModel } from "../../model/ChladniModel.js";
 
 export class FrequencySection extends VBox {

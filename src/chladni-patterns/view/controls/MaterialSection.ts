@@ -8,9 +8,9 @@ import type { TReadOnlyProperty } from "scenerystack/axon";
 import { type Node, Text, VBox } from "scenerystack/scenery";
 import type { ComboBoxItem } from "scenerystack/sun";
 import { ComboBox } from "scenerystack/sun";
-import ResonanceColors from "../../../common/ResonanceColors.js";
 import ResonanceConstants from "../../../common/ResonanceConstants.js";
 import { ResonanceStrings } from "../../../i18n/ResonanceStrings.js";
+import ResonanceColors from "../../../ResonanceColors.js";
 import type { ChladniModel } from "../../model/ChladniModel.js";
 import { MATERIALS, Material, type MaterialType } from "../../model/Material.js";
 

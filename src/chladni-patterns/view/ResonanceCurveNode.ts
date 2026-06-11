@@ -15,9 +15,9 @@ import { Bounds2, Range } from "scenerystack/dot";
 import { Shape } from "scenerystack/kite";
 import { Orientation } from "scenerystack/phet-core";
 import { Line, Node, Rectangle, Text } from "scenerystack/scenery";
-import ResonanceColors from "../../common/ResonanceColors.js";
 import ResonanceConstants from "../../common/ResonanceConstants.js";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
+import ResonanceColors from "../../ResonanceColors.js";
 import type { ChladniModel } from "../model/ChladniModel.js";
 
 // Chart dimensions

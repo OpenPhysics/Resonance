@@ -13,8 +13,8 @@ import { HBox, Text } from "scenerystack/scenery";
 import { PlayPauseStepButtonGroup } from "scenerystack/scenery-phet";
 import { AquaRadioButtonGroup } from "scenerystack/sun";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
+import ResonanceColors from "../../ResonanceColors.js";
 import type { BaseOscillatorScreenModel } from "../model/BaseOscillatorScreenModel.js";
-import ResonanceColors from "../ResonanceColors.js";
 import ResonanceConstants from "../ResonanceConstants.js";
 
 export class OscillatorPlaybackControlNode extends HBox {

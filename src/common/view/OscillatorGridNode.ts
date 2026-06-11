@@ -11,7 +11,7 @@ import { Shape } from "scenerystack/kite";
 import type { ModelViewTransform2 } from "scenerystack/phetcommon";
 import { Line, Node, Path, Text } from "scenerystack/scenery";
 import { ArrowNode, PhetFont } from "scenerystack/scenery-phet";
-import ResonanceColors from "../ResonanceColors.js";
+import ResonanceColors from "../../ResonanceColors.js";
 
 // Default grid options
 const DEFAULT_MAJOR_SPACING = 0.05; // 5 cm between major grid lines (meters)

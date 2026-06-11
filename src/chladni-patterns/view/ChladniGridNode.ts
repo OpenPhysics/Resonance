@@ -8,8 +8,8 @@
 
 import { StringProperty } from "scenerystack/axon";
 import { Line } from "scenerystack/scenery";
-import ResonanceColors from "../../common/ResonanceColors.js";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
+import ResonanceColors from "../../ResonanceColors.js";
 import { ChladniOverlayNode } from "./ChladniOverlayNode.js";
 
 // Grid configuration

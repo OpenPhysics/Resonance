@@ -7,7 +7,7 @@ import type { NumberProperty, TReadOnlyProperty } from "scenerystack/axon";
 import { Dimension2, type Range } from "scenerystack/dot";
 import type { Color, Text } from "scenerystack/scenery";
 import { NumberControl } from "scenerystack/scenery-phet";
-import ResonanceColors from "../ResonanceColors.js";
+import ResonanceColors from "../../ResonanceColors.js";
 import ResonanceConstants from "../ResonanceConstants.js";
 
 /**

@@ -14,7 +14,7 @@ import type { ModelViewTransform2 } from "scenerystack/phetcommon";
 import { Node, Text } from "scenerystack/scenery";
 import { ArrowNode, PhetFont } from "scenerystack/scenery-phet";
 import type { ResonanceModel } from "../../common/model/ResonanceModel.js";
-import ResonanceColors from "../../common/ResonanceColors.js";
+import ResonanceColors from "../../ResonanceColors.js";
 
 // Scale factors to convert physics values to pixel lengths
 const VELOCITY_SCALE = 200; // pixels per m/s (increased for visibility)

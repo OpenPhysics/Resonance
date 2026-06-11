@@ -6,7 +6,7 @@
 import type { ChartTransform, GridLineSet, LinePlot, TickLabelSet, TickMarkSet } from "scenerystack/bamboo";
 import { Range, Vector2 } from "scenerystack/dot";
 import { Circle, type Node } from "scenerystack/scenery";
-import ResonanceColors from "../../ResonanceColors.js";
+import ResonanceColors from "../../../ResonanceColors.js";
 import ResonanceNamespace from "../../ResonanceNamespace.js";
 
 /**

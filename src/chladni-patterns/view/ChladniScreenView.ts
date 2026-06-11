@@ -27,11 +27,11 @@ import { PlayPauseStepButtonGroup, ResetAllButton } from "scenerystack/scenery-p
 import { audioManager, ScreenView, type ScreenViewOptions } from "scenerystack/sim";
 import { AquaRadioButtonGroup } from "scenerystack/sun";
 import { Utterance } from "scenerystack/utterance-queue";
-import ResonanceColors from "../../common/ResonanceColors.js";
 import ResonanceConstants from "../../common/ResonanceConstants.js";
 import { utteranceQueue } from "../../common/util/utteranceQueue.js";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
 import type { ResonancePreferencesModel } from "../../preferences/ResonancePreferencesModel.js";
+import ResonanceColors from "../../ResonanceColors.js";
 import type { ChladniModel } from "../model/ChladniModel.js";
 import { ChladniControlPanel } from "./ChladniControlPanel.js";
 import { ChladniGridNode } from "./ChladniGridNode.js";

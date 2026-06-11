@@ -10,9 +10,9 @@ import { BooleanProperty } from "scenerystack/axon";
 import { HBox, Text, VBox } from "scenerystack/scenery";
 import { ArrowNode } from "scenerystack/scenery-phet";
 import { Checkbox, Panel } from "scenerystack/sun";
-import ResonanceColors from "../../common/ResonanceColors.js";
 import ResonanceConstants from "../../common/ResonanceConstants.js";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
+import ResonanceColors from "../../ResonanceColors.js";
 
 // Arrow icon dimensions for the checkboxes
 const ICON_ARROW_LENGTH = 20;

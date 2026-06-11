@@ -12,8 +12,8 @@
 import type { ModelViewTransform2 } from "scenerystack/phetcommon";
 import { DragListener, KeyboardDragListener, Line, Node, Rectangle } from "scenerystack/scenery";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
+import ResonanceColors from "../../ResonanceColors.js";
 import { type MeasurementLineModel, MeasurementLinesModel } from "../model/MeasurementLineModel.js";
-import ResonanceColors from "../ResonanceColors.js";
 
 // --- Named constants (hoisted magic numbers) ---
 
