@@ -18,7 +18,7 @@ import "./brand.js";
 import { onReadyToLaunch, PreferencesModel, Sim } from "scenerystack/sim";
 import { Tandem } from "scenerystack/tandem";
 import { ChladniScreen } from "./chladni-patterns/ChladniScreen.js";
-import { ResonanceStrings } from "./i18n/ResonanceStrings.js";
+import { StringManager } from "./i18n/StringManager.js";
 import { MultipleOscillatorsScreen } from "./multiple-oscillators/MultipleOscillatorsScreen.js";
 import { PhaseAnalysisScreen } from "./phase-analysis/PhaseAnalysisScreen.js";
 import { ResonancePreferencesModel } from "./preferences/ResonancePreferencesModel.js";
@@ -26,6 +26,7 @@ import { ResonancePreferencesNode } from "./preferences/ResonancePreferencesNode
 import { SingleOscillatorScreen } from "./single-oscillator/SingleOscillatorScreen.js";
 
 onReadyToLaunch(() => {
+  const stringManager = StringManager.getInstance();
   const resonancePreferences = new ResonancePreferencesModel();
 
   const simOptions = {
@@ -72,7 +73,7 @@ onReadyToLaunch(() => {
     }),
   ];
 
-  const sim = new Sim(ResonanceStrings.titleStringProperty, screens, simOptions);
+  const sim = new Sim(stringManager.getTitleStringProperty(), screens, simOptions);
 
   sim.start();
 });

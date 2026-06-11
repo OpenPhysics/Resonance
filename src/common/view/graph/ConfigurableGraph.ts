@@ -13,7 +13,7 @@ import { PhetFont } from "scenerystack/scenery-phet";
 import type { SubStepDataPoint } from "../../model/BaseModel.js";
 import ResonanceColors from "../../ResonanceColors.js";
 import ResonanceConstants from "../../ResonanceConstants.js";
-import resonance from "../../ResonanceNamespace.js";
+import ResonanceNamespace from "../../ResonanceNamespace.js";
 import GraphControlsPanel from "./GraphControlsPanel.js";
 import GraphDataManager from "./GraphDataManager.js";
 import GraphInteractionHandler from "./GraphInteractionHandler.js";
@@ -625,4 +625,4 @@ export default class ConfigurableGraph extends Node {
 }
 
 // Register with namespace for debugging accessibility
-resonance.register("ConfigurableGraph", ConfigurableGraph);
+ResonanceNamespace.register("ConfigurableGraph", ConfigurableGraph);

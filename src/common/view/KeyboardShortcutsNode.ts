@@ -15,7 +15,7 @@ import {
   TwoColumnKeyboardHelpContent,
 } from "scenerystack/scenery-phet";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
-import resonance from "../ResonanceNamespace.js";
+import ResonanceNamespace from "../ResonanceNamespace.js";
 
 // Layout constants
 const COLUMN_SPACING = 20;
@@ -111,4 +111,4 @@ export class KeyboardShortcutsNode extends TwoColumnKeyboardHelpContent {
 }
 
 // Register with namespace for debugging accessibility
-resonance.register("KeyboardShortcutsNode", KeyboardShortcutsNode);
+ResonanceNamespace.register("KeyboardShortcutsNode", KeyboardShortcutsNode);

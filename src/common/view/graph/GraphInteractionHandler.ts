@@ -12,7 +12,7 @@ import type { ChartRectangle, ChartTransform, TickLabelSet } from "scenerystack/
 import { Range, Vector2 } from "scenerystack/dot";
 import { DragListener, type Node, type Pointer, Rectangle } from "scenerystack/scenery";
 import ResonanceColors from "../../ResonanceColors.js";
-import resonance from "../../ResonanceNamespace.js";
+import ResonanceNamespace from "../../ResonanceNamespace.js";
 import type GraphDataManager from "./GraphDataManager.js";
 
 /**
@@ -975,4 +975,4 @@ export default class GraphInteractionHandler {
 }
 
 // Register with namespace for debugging accessibility
-resonance.register("GraphInteractionHandler", GraphInteractionHandler);
+ResonanceNamespace.register("GraphInteractionHandler", GraphInteractionHandler);
