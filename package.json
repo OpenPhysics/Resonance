@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "description": "Interactive simulation of resonance in driven oscillating systems. Visualizes driven mass-spring systems and Chladni plate patterns.",
-  "license": "MIT",
+  "license": "AGPL-3.0-or-later",
   "repository": {
     "type": "git",
     "url": "https://github.com/OpenPhysics/Resonance.git"
