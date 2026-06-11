@@ -4,7 +4,7 @@
  */
 
 import { Screen, type ScreenOptions } from "scenerystack/sim";
-import { KeyboardShortcutsNode } from "../common/view/KeyboardShortcutsNode.js";
+import { ResonanceKeyboardHelpContent } from "../common/view/ResonanceKeyboardHelpContent.js";
 import { ResonanceStrings } from "../i18n/ResonanceStrings.js";
 import type { ResonancePreferencesModel } from "../preferences/ResonancePreferencesModel.js";
 import ResonanceColors from "../ResonanceColors.js";
@@ -20,7 +20,7 @@ export class MultipleOscillatorsScreen extends Screen<MultipleOscillatorsModel, 
         ...options,
         name: ResonanceStrings.screens.multipleOscillatorsStringProperty,
         backgroundColorProperty: ResonanceColors.backgroundProperty,
-        createKeyboardHelpNode: () => new KeyboardShortcutsNode(),
+        createKeyboardHelpNode: () => new ResonanceKeyboardHelpContent(),
       },
     );
   }

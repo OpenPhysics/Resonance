@@ -4,7 +4,6 @@
 
 // Oscillator screen shared components
 export { BaseOscillatorScreenView } from "./BaseOscillatorScreenView.js";
-export { KeyboardShortcutsNode } from "./KeyboardShortcutsNode.js";
 export type { NumberControlFactoryOptions } from "./NumberControlFactory.js";
 export { NumberControlFactory } from "./NumberControlFactory.js";
 export { OscillatorControlPanel } from "./OscillatorControlPanel.js";
@@ -16,5 +15,6 @@ export type {
   ResonatorBuildResult,
 } from "./OscillatorResonatorNodeBuilder.js";
 export { OscillatorResonatorNodeBuilder } from "./OscillatorResonatorNodeBuilder.js";
+export { ResonanceKeyboardHelpContent } from "./ResonanceKeyboardHelpContent.js";
 export type { SweepButtonOptions } from "./SweepButton.js";
 export { SweepButton } from "./SweepButton.js";

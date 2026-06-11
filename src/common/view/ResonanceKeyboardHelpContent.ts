@@ -87,7 +87,7 @@ class DragObjectsKeyboardHelpSection extends KeyboardHelpSection {
   }
 }
 
-export class KeyboardShortcutsNode extends TwoColumnKeyboardHelpContent {
+export class ResonanceKeyboardHelpContent extends TwoColumnKeyboardHelpContent {
   public constructor() {
     // Create slider controls section (for frequency, amplitude, mass, etc.)
     const sliderControlsSection = new SliderControlsKeyboardHelpSection();
@@ -111,4 +111,4 @@ export class KeyboardShortcutsNode extends TwoColumnKeyboardHelpContent {
 }
 
 // Register with namespace for debugging accessibility
-ResonanceNamespace.register("KeyboardShortcutsNode", KeyboardShortcutsNode);
+ResonanceNamespace.register("ResonanceKeyboardHelpContent", ResonanceKeyboardHelpContent);
