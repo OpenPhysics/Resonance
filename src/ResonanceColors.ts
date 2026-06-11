@@ -4,7 +4,7 @@
  */
 
 import { Color, ProfileColorProperty } from "scenerystack/scenery";
-import ResonanceNamespace from "./ResonanceNamespace.js";
+import ResonanceNamespace from "./common/ResonanceNamespace.js";
 
 const ResonanceColors = {
   // Background
