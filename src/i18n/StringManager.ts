@@ -10,6 +10,13 @@ import stringsEn from "./strings_en.json";
 import stringsEs from "./strings_es.json";
 import stringsFr from "./strings_fr.json";
 
+// ── Compile-time key-parity check ─────────────────────────────────────────────
+// satisfies errors immediately if either locale file is missing keys from the other.
+// biome-ignore lint/complexity/noVoid: intentional compile-time type assertion
+void (stringsEn satisfies typeof stringsFr);
+// biome-ignore lint/complexity/noVoid: intentional compile-time type assertion
+void (stringsFr satisfies typeof stringsEn);
+
 /**
  * Creates and caches the localized string properties.
  * Uses LocalizedString.getNestedStringProperties to automatically
