@@ -4,17 +4,9 @@
  */
 
 import { BooleanProperty, Property } from "scenerystack/axon";
-import { SolverType } from "../common/model/SolverType.js";
-
-/**
- * Renderer types for the Chladni visualization.
- */
-export const RendererType = {
-  CANVAS: "canvas",
-  WEBGL: "webgl",
-} as const;
-
-export type RendererType = (typeof RendererType)[keyof typeof RendererType];
+import type { SolverType } from "../common/model/SolverType.js";
+import type { RendererType } from "./RendererType.js";
+import resonanceQueryParameters from "./resonanceQueryParameters.js";
 
 /** Shape of preferences as stored in localStorage (may be partial) */
 export interface StoredPreferences {
@@ -37,14 +29,14 @@ export class ResonancePreferencesModel {
   // We don't need a separate property for this as it's managed by joist
 
   public constructor() {
-    // Simulation preferences
-    this.solverTypeProperty = new Property<SolverType>(SolverType.RUNGE_KUTTA_4);
+    // Initial values come from query parameters (see resonanceQueryParameters).
+    this.solverTypeProperty = new Property<SolverType>(resonanceQueryParameters.solverType as SolverType);
 
     // Chladni screen preferences - modal controls hidden by default
-    this.showModalControlsProperty = new BooleanProperty(false);
+    this.showModalControlsProperty = new BooleanProperty(resonanceQueryParameters.showModalControls);
 
     // Rendering preferences - default to Canvas
-    this.rendererTypeProperty = new Property<RendererType>(RendererType.CANVAS);
+    this.rendererTypeProperty = new Property<RendererType>(resonanceQueryParameters.rendererType as RendererType);
 
     // Set up persistence
     this.setupPersistence();

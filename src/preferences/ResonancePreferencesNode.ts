@@ -13,7 +13,8 @@ import { Checkbox, VerticalAquaRadioButtonGroup } from "scenerystack/sun";
 import { SolverType } from "../common/model/SolverType.js";
 import { ResonanceStrings } from "../i18n/ResonanceStrings.js";
 import ResonanceColors from "../ResonanceColors.js";
-import { RendererType, type ResonancePreferencesModel } from "./ResonancePreferencesModel.js";
+import { RendererType } from "./RendererType.js";
+import type { ResonancePreferencesModel } from "./ResonancePreferencesModel.js";
 
 export class ResonancePreferencesNode extends VBox {
   public constructor(preferencesModel: ResonancePreferencesModel) {

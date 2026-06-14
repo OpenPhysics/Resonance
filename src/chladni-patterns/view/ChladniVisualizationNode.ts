@@ -16,7 +16,7 @@ import { Bounds2 } from "scenerystack/dot";
 import type { ModelViewTransform2 } from "scenerystack/phetcommon";
 import { Node, type NodeOptions, Rectangle } from "scenerystack/scenery";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
-import { RendererType } from "../../preferences/ResonancePreferencesModel.js";
+import { RendererType } from "../../preferences/RendererType.js";
 import ResonanceColors from "../../ResonanceColors.js";
 import type { ChladniModel } from "../model/ChladniModel.js";
 import { createChladniTransform } from "./ChladniTransformFactory.js";
