@@ -183,7 +183,23 @@
         "traceStopped": "Enregistrement du tracé arrêté"
       },
       "measurementLinePattern": "Ligne de Mesure {{number}}",
-      "rulerAccessibleName": "Règle"
+      "rulerAccessibleName": "Règle",
+      "screenSummary": {
+        "playArea": "La zone de jeu montre un ou plusieurs résonateurs masse-ressort entraînés par une plaque oscillante, avec des outils optionnels de tracé, de grille et de règle pour mesurer leur mouvement.",
+        "controlArea": "Les commandes activent ou désactivent l'excitateur et règlent sa fréquence et son amplitude, configurent les résonateurs, balayent les fréquences, et lisent, mettent en pause ou changent la vitesse de la simulation. Un bouton Tout réinitialiser ramène la simulation à son état initial.",
+        "interactionHint": "Activez l'excitateur et ajustez sa fréquence pour trouver la résonance de chaque oscillateur."
+      },
+      "currentDetails": "La fréquence de l'excitateur est de {{frequency}} hertz, entraînant {{count}} résonateur(s). La lecture est {{state}}.",
+      "playingLabel": "en cours",
+      "pausedLabel": "en pause",
+      "chladni": {
+        "screenSummary": {
+          "playArea": "La zone de jeu montre une plaque vibrante qui forme des figures de Chladni, avec des grains se rassemblant le long des lignes nodales où la plaque est immobile. Une grille et une règle aident à mesurer la figure.",
+          "controlArea": "Les commandes règlent le matériau de la plaque et la fréquence d'excitation, déplacent le point d'excitation, choisissent le nombre de grains, et lisent, mettent en pause ou changent la vitesse de la simulation. Un bouton Tout réinitialiser ramène la simulation à son état initial.",
+          "interactionHint": "Ajustez la fréquence d'excitation pour trouver les modes résonants qui forment des figures de Chladni distinctes."
+        },
+        "currentDetails": "La plaque vibre à {{frequency}} hertz, formant une figure de Chladni avec environ {{particles}} grains rassemblés sur les lignes nodales."
+      }
     },
     "keyboardHelp": {
       "simulationControls": "Contrôles de Simulation",

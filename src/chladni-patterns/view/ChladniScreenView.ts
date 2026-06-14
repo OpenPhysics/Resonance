@@ -36,6 +36,7 @@ import type { ChladniModel } from "../model/ChladniModel.js";
 import { ChladniControlPanel } from "./ChladniControlPanel.js";
 import { ChladniGridNode } from "./ChladniGridNode.js";
 import { ChladniRulerNode } from "./ChladniRulerNode.js";
+import { ChladniScreenSummaryContent } from "./ChladniScreenSummaryContent.js";
 import { createChladniTransform } from "./ChladniTransformFactory.js";
 import { ChladniVisualizationNode } from "./ChladniVisualizationNode.js";
 import { DisplacementColormapNode } from "./DisplacementColormapNode.js";
@@ -79,7 +80,12 @@ export class ChladniScreenView extends ScreenView {
   private modelViewTransform: ModelViewTransform2;
 
   public constructor(model: ChladniModel, preferencesModel: ResonancePreferencesModel, options?: ScreenViewOptions) {
-    super(options);
+    // Register the accessible screen summary (Interactive Description); current
+    // details are derived live from the model.
+    super({
+      screenSummaryContent: new ChladniScreenSummaryContent(model),
+      ...options,
+    });
     this.model = model;
 
     // Fixed center position for the visualization
@@ -233,6 +239,24 @@ export class ChladniScreenView extends ScreenView {
 
     // Set up screen reader alerts for resonance detection
     this.setupAccessibilityAlerts();
+
+    // ── Accessibility: keyboard / reading traversal order ───────────────────────
+    // Deterministic Tab/reading order: the plate visualization and excitation
+    // marker first, then the controls, the resize handle, playback controls, and
+    // Reset All last. ScreenView throws if you set pdomOrder on itself, so use a
+    // wrapper Node.
+    this.addChild(
+      new Node({
+        pdomOrder: [
+          this.visualizationNode,
+          this.excitationMarker,
+          this.controlPanel,
+          this.resizeHandle,
+          this.playbackControls,
+          resetAllButton,
+        ],
+      }),
+    );
   }
 
   /**

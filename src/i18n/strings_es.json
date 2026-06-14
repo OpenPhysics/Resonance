@@ -183,7 +183,23 @@
         "traceStopped": "Grabación de traza detenida"
       },
       "measurementLinePattern": "Línea de Medición {{number}}",
-      "rulerAccessibleName": "Regla"
+      "rulerAccessibleName": "Regla",
+      "screenSummary": {
+        "playArea": "El área de juego muestra uno o más resonadores de masa y resorte impulsados por una placa oscilante, con herramientas opcionales de trazado, cuadrícula y regla para medir su movimiento.",
+        "controlArea": "Los controles encienden o apagan el impulsor y ajustan su frecuencia y amplitud, configuran los resonadores, recorren las frecuencias, y reproducen, pausan o cambian la velocidad de la simulación. Un botón Restablecer todo devuelve la simulación a su estado inicial.",
+        "interactionHint": "Enciende el impulsor y ajusta su frecuencia para encontrar la resonancia de cada oscilador."
+      },
+      "currentDetails": "La frecuencia del impulsor es de {{frequency}} hercios, impulsando {{count}} resonador(es). La reproducción está {{state}}.",
+      "playingLabel": "en marcha",
+      "pausedLabel": "en pausa",
+      "chladni": {
+        "screenSummary": {
+          "playArea": "El área de juego muestra una placa vibrante que forma figuras de Chladni, con granos que se acumulan a lo largo de las líneas nodales donde la placa está quieta. Una cuadrícula y una regla ayudan a medir la figura.",
+          "controlArea": "Los controles ajustan el material de la placa y la frecuencia de excitación, mueven el punto de excitación, eligen el número de granos, y reproducen, pausan o cambian la velocidad de la simulación. Un botón Restablecer todo devuelve la simulación a su estado inicial.",
+          "interactionHint": "Ajusta la frecuencia de excitación para encontrar los modos resonantes que forman figuras de Chladni distintas."
+        },
+        "currentDetails": "La placa vibra a {{frequency}} hercios, formando una figura de Chladni con aproximadamente {{particles}} granos reunidos en las líneas nodales."
+      }
     },
     "keyboardHelp": {
       "simulationControls": "Controles de Simulación",

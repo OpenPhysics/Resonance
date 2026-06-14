@@ -64,4 +64,13 @@ export class StringManager {
   public getAllStringProperties() {
     return stringProperties;
   }
+
+  /**
+   * Accessibility (Interactive Description) StringProperties: screen-summary
+   * regions, the live current-details template, and per-control names/help text.
+   * See the shared OpenPhysics ACCESSIBILITY.md convention.
+   */
+  public getA11yStrings() {
+    return stringProperties.resonance.a11y;
+  }
 }

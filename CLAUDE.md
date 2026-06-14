@@ -33,6 +33,15 @@ Interactive resonance simulation: driven mass-spring systems and Chladni plate p
 - **Units** — driving amplitude stored in meters, displayed in cm; check `ResonanceConstants` for ranges
 - **Solvers** — RK4 default (1 ms steps); sub-step callbacks feed smooth phase-space graphs
 
+## Accessibility
+
+Follows the shared [OpenPhysics accessibility convention](https://github.com/OpenPhysics/OpenPhysics/blob/main/ACCESSIBILITY.md).
+`BaseOscillatorScreenView` registers `OscillatorScreenSummaryContent` (shared by the three
+oscillator screens) and `ChladniScreenView` registers `ChladniScreenSummaryContent`; both set an
+explicit `pdomOrder` and use live current-details derived from the model. Per-control
+`accessibleName`/`accessibleHelpText` and screen-summary strings live under `resonance.a11y` in
+each locale JSON, exposed via `StringManager.getA11yStrings()`.
+
 ## Documentation
 
 | File | Contents |

@@ -38,6 +38,7 @@ import { OscillatorGridNode } from "./OscillatorGridNode.js";
 import { OscillatorMeasurementLinesNode } from "./OscillatorMeasurementLinesNode.js";
 import { OscillatorPlaybackControlNode } from "./OscillatorPlaybackControlNode.js";
 import { OscillatorResonatorNodeBuilder } from "./OscillatorResonatorNodeBuilder.js";
+import { OscillatorScreenSummaryContent } from "./OscillatorScreenSummaryContent.js";
 import { OscillatorTraceNode } from "./OscillatorTraceNode.js";
 
 // ===== Layout and grid constants =====
@@ -85,7 +86,12 @@ export class BaseOscillatorScreenView extends ScreenView {
   protected readonly traceNode: OscillatorTraceNode;
 
   public constructor(model: BaseOscillatorScreenModel, options?: ScreenViewOptions) {
-    super(options);
+    // Register the accessible screen summary (Interactive Description). Shared by
+    // the oscillator-based screens; current details are derived live from the model.
+    super({
+      screenSummaryContent: new OscillatorScreenSummaryContent(model),
+      ...options,
+    });
 
     this.model = model;
 
@@ -266,6 +272,24 @@ export class BaseOscillatorScreenView extends ScreenView {
 
     // Set up accessibility alerts
     this.setupAccessibilityAlerts();
+
+    // ── Accessibility: keyboard / reading traversal order ───────────────────────
+    // Deterministic Tab/reading order: the resonators (draggable masses) and
+    // driver first, then the control panel and playback controls, the ruler, and
+    // Reset All last. ScreenView throws if you set pdomOrder on itself, so use a
+    // wrapper Node.
+    this.addChild(
+      new Node({
+        pdomOrder: [
+          this.resonatorsContainer,
+          this.driverNode,
+          this.controlPanel,
+          playbackControls,
+          this.rulerNode,
+          resetAllButton,
+        ],
+      }),
+    );
 
     // Initial spring/mass update
     this.updateSpringAndMass();

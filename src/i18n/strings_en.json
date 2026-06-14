@@ -183,7 +183,23 @@
         "traceStopped": "Trace recording stopped"
       },
       "measurementLinePattern": "Measurement Line {{number}}",
-      "rulerAccessibleName": "Ruler"
+      "rulerAccessibleName": "Ruler",
+      "screenSummary": {
+        "playArea": "The play area shows one or more mass-and-spring resonators driven by an oscillating plate, with optional trace, grid, and ruler tools to measure their motion.",
+        "controlArea": "The controls turn the driver on or off and set its frequency and amplitude, configure the resonators, sweep through frequencies, and play, pause, or change the simulation speed. A Reset All button returns the simulation to its starting state.",
+        "interactionHint": "Turn on the driver and adjust its frequency to find the resonance of each oscillator."
+      },
+      "currentDetails": "The driver frequency is {{frequency}} hertz, driving {{count}} resonator(s). Playback is {{state}}.",
+      "playingLabel": "playing",
+      "pausedLabel": "paused",
+      "chladni": {
+        "screenSummary": {
+          "playArea": "The play area shows a vibrating plate that forms Chladni patterns, with grains gathering along the nodal lines where the plate is still. A grid and ruler help measure the pattern.",
+          "controlArea": "The controls set the plate material and driving frequency, move the excitation point, choose the number of grains, and play, pause, or change the simulation speed. A Reset All button returns the simulation to its starting state.",
+          "interactionHint": "Adjust the driving frequency to find the resonant modes that form distinct Chladni patterns."
+        },
+        "currentDetails": "The plate is vibrating at {{frequency}} hertz, forming a Chladni pattern with about {{particles}} grains gathered on the nodal lines."
+      }
     },
     "keyboardHelp": {
       "simulationControls": "Simulation Controls",
