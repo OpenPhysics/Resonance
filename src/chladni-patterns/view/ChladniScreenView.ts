@@ -492,6 +492,9 @@ export class ChladniScreenView extends ScreenView {
     const handle = new Node({
       children: [hitArea, handleLines],
       cursor: "nwse-resize",
+      tagName: "div",
+      focusable: true,
+      accessibleName: ResonanceStrings.chladni.a11y.resizeHandleLabelStringProperty,
     });
 
     // Track the starting position for the drag
@@ -580,6 +583,7 @@ export class ChladniScreenView extends ScreenView {
       radioButtonOptions: {
         radius: ResonanceConstants.SPEED_RADIO_BUTTON_RADIUS,
       },
+      accessibleName: ResonanceStrings.chladni.a11y.speedControlLabelStringProperty,
     });
 
     const playPauseStepButtonGroup = new PlayPauseStepButtonGroup(this.model.isPlayingProperty, {

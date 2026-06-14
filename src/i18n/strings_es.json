@@ -58,7 +58,7 @@
       "springPower": "Potencia del Resorte",
       "gravitationalPower": "Potencia Gravitacional",
       "driverPosition": "Posición del Excitador",
-      "frequencyRatio": "Razón de Frecuencia (\u03c9/\u03c9\u2080)",
+      "frequencyRatio": "Razón de Frecuencia (ω/ω₀)",
       "amplitudeRatio": "Factor de Amplificación",
       "phase": "Fase",
       "driverEnergy": "Energía del Excitador",
@@ -299,7 +299,9 @@
           "showGridDescription": "Alternar visibilidad de la cuadrícula de referencia",
           "showColormapLabel": "Mostrar Desplazamiento",
           "showColormapDescription": "Alternar visibilidad del mapa de colores de desplazamiento"
-        }
+        },
+        "resizeHandleLabel": "Redimensionar la placa — arrastra para cambiar el tamaño",
+        "speedControlLabel": "Velocidad de la simulación"
       }
     }
   }

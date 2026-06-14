@@ -58,7 +58,7 @@
       "springPower": "Spring Power",
       "gravitationalPower": "Gravitational Power",
       "driverPosition": "Driver Position",
-      "frequencyRatio": "Frequency Ratio (\u03c9/\u03c9\u2080)",
+      "frequencyRatio": "Frequency Ratio (ω/ω₀)",
       "amplitudeRatio": "Magnification Factor",
       "phase": "Phase",
       "driverEnergy": "Driver Energy",
@@ -299,7 +299,9 @@
           "showGridDescription": "Toggle visibility of the reference grid",
           "showColormapLabel": "Show Displacement",
           "showColormapDescription": "Toggle visibility of the displacement colormap"
-        }
+        },
+        "resizeHandleLabel": "Resize plate — drag to change the plate size",
+        "speedControlLabel": "Simulation speed"
       }
     }
   }

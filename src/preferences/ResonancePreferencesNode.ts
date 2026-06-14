@@ -85,6 +85,7 @@ export class ResonancePreferencesNode extends VBox {
       {
         spacing: 10,
         radioButtonOptions: { radius: 8 },
+        accessibleName: ResonanceStrings.preferences.simulation.solverMethodStringProperty,
       },
     );
 
@@ -174,6 +175,7 @@ export class ResonancePreferencesNode extends VBox {
       {
         spacing: 10,
         radioButtonOptions: { radius: 8 },
+        accessibleName: ResonanceStrings.preferences.simulation.rendererStringProperty,
       },
     );
 
