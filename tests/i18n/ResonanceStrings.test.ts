@@ -5,7 +5,7 @@
  */
 
 import { describe, expect, it } from "vitest";
-import { ResonanceStrings, resonanceStringManager, StringManager } from "../ResonanceStrings.js";
+import { ResonanceStrings, resonanceStringManager, StringManager } from "../../src/i18n/ResonanceStrings.js";
 
 describe("ResonanceStrings", () => {
   describe("exports", () => {

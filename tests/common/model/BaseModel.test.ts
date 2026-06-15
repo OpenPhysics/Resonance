@@ -6,11 +6,11 @@
 
 import { Property } from "scenerystack/axon";
 import { beforeEach, describe, expect, it } from "vitest";
-import { AdaptiveRK45Solver } from "../AdaptiveRK45Solver.js";
-import { AnalyticalSolver } from "../AnalyticalSolver.js";
-import { BaseModel, type TimeSpeed } from "../BaseModel.js";
-import { RungeKuttaSolver } from "../RungeKuttaSolver.js";
-import { SolverType } from "../SolverType.js";
+import { AdaptiveRK45Solver } from "../../../src/common/model/AdaptiveRK45Solver.js";
+import { AnalyticalSolver } from "../../../src/common/model/AnalyticalSolver.js";
+import { BaseModel, type TimeSpeed } from "../../../src/common/model/BaseModel.js";
+import { RungeKuttaSolver } from "../../../src/common/model/RungeKuttaSolver.js";
+import { SolverType } from "../../../src/common/model/SolverType.js";
 
 /**
  * Concrete implementation of BaseModel for testing

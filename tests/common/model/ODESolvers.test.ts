@@ -6,9 +6,9 @@
  */
 
 import { beforeEach, describe, expect, it } from "vitest";
-import { AdaptiveRK45Solver } from "../AdaptiveRK45Solver.js";
-import type { ODEModel, ODESolver } from "../ODESolver.js";
-import { RungeKuttaSolver } from "../RungeKuttaSolver.js";
+import { AdaptiveRK45Solver } from "../../../src/common/model/AdaptiveRK45Solver.js";
+import type { ODEModel, ODESolver } from "../../../src/common/model/ODESolver.js";
+import { RungeKuttaSolver } from "../../../src/common/model/RungeKuttaSolver.js";
 
 /**
  * Simple harmonic oscillator model for testing

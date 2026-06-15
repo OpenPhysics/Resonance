@@ -5,8 +5,8 @@
  */
 
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { SolverType } from "../../common/model/SolverType.js";
-import { ResonancePreferencesModel, type StoredPreferences } from "../ResonancePreferencesModel.js";
+import { SolverType } from "../../src/common/model/SolverType.js";
+import { ResonancePreferencesModel, type StoredPreferences } from "../../src/preferences/ResonancePreferencesModel.js";
 
 /** Typed shape for setItem spy when reading .mock or calling .mockImplementation */
 interface SetItemSpyLike {

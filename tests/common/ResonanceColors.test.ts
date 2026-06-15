@@ -6,7 +6,7 @@
 
 import { ProfileColorProperty } from "scenerystack/scenery";
 import { describe, expect, it } from "vitest";
-import ResonanceColors from "../../ResonanceColors.js";
+import ResonanceColors from "../../src/ResonanceColors.js";
 
 describe("ResonanceColors", () => {
   describe("color property definitions", () => {

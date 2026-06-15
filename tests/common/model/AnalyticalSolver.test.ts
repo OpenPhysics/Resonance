@@ -7,11 +7,11 @@
 
 import { Property } from "scenerystack/axon";
 import { beforeEach, describe, expect, it } from "vitest";
-import { AnalyticalSolver } from "../AnalyticalSolver.js";
-import { ODESolver } from "../ODESolver.js";
-import { ResonanceModel } from "../ResonanceModel.js";
-import { RungeKuttaSolver } from "../RungeKuttaSolver.js";
-import { SolverType } from "../SolverType.js";
+import { AnalyticalSolver } from "../../../src/common/model/AnalyticalSolver.js";
+import { ODESolver } from "../../../src/common/model/ODESolver.js";
+import { ResonanceModel } from "../../../src/common/model/ResonanceModel.js";
+import { RungeKuttaSolver } from "../../../src/common/model/RungeKuttaSolver.js";
+import { SolverType } from "../../../src/common/model/SolverType.js";
 
 describe("AnalyticalSolver", () => {
   describe("API conformance", () => {

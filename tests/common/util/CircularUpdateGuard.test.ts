@@ -5,7 +5,7 @@
  */
 
 import { describe, expect, it, vi } from "vitest";
-import { CircularUpdateGuard } from "../CircularUpdateGuard.js";
+import { CircularUpdateGuard } from "../../../src/common/util/CircularUpdateGuard.js";
 
 describe("CircularUpdateGuard", () => {
   describe("single execution", () => {

@@ -7,7 +7,7 @@ import type { ChartTransform, GridLineSet, LinePlot, TickLabelSet, TickMarkSet }
 import { Range, Vector2 } from "scenerystack/dot";
 import { Circle, type Node } from "scenerystack/scenery";
 import ResonanceColors from "../../../ResonanceColors.js";
-import ResonanceNamespace from "../../ResonanceNamespace.js";
+import ResonanceNamespace from "../../../ResonanceNamespace.js";
 
 /**
  * Configuration for grid lines, tick marks, and tick labels

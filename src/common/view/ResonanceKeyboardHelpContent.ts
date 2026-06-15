@@ -15,7 +15,7 @@ import {
   TwoColumnKeyboardHelpContent,
 } from "scenerystack/scenery-phet";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
-import ResonanceNamespace from "../ResonanceNamespace.js";
+import ResonanceNamespace from "../../ResonanceNamespace.js";
 
 // Layout constants
 const COLUMN_SPACING = 20;

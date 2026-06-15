@@ -7,8 +7,8 @@
 
 import { Property } from "scenerystack/axon";
 import { beforeEach, describe, expect, it } from "vitest";
-import { ResonanceModel, ResonancePresets } from "../ResonanceModel.js";
-import { SolverType } from "../SolverType.js";
+import { ResonanceModel, ResonancePresets } from "../../../src/common/model/ResonanceModel.js";
+import { SolverType } from "../../../src/common/model/SolverType.js";
 
 // Mock preferences model for testing
 function createMockPreferences() {

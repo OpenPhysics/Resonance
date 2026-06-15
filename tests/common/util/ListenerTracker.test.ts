@@ -5,7 +5,7 @@
  */
 
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { ListenerTracker } from "../ListenerTracker.js";
+import { ListenerTracker } from "../../../src/common/util/ListenerTracker.js";
 
 // Mock Property implementation for testing
 class MockProperty<T> {

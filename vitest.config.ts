@@ -4,7 +4,8 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     globals: true,
-    setupFiles: ["./vitest.setup.ts"],
+    setupFiles: ["./tests/setup.ts"],
+    include: ["tests/**/*.test.ts"],
     // Exclude Playwright tests (they run separately with playwright test)
     exclude: ["**/node_modules/**", "**/dist/**", "**/tests/fuzz/**"],
   },

@@ -5,7 +5,7 @@
  */
 
 import { describe, expect, it } from "vitest";
-import { ResonatorConfigMode, type ResonatorConfigModeType } from "../ResonatorConfigMode.js";
+import { ResonatorConfigMode, type ResonatorConfigModeType } from "../../../src/common/model/ResonatorConfigMode.js";
 
 describe("ResonatorConfigMode", () => {
   describe("mode values", () => {

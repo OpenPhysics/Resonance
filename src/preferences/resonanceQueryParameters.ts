@@ -11,7 +11,7 @@
 import { logGlobal } from "scenerystack/phet-core";
 import { QueryStringMachine } from "scenerystack/query-string-machine";
 import { SolverType } from "../common/model/SolverType.js";
-import ResonanceNamespace from "../common/ResonanceNamespace.js";
+import ResonanceNamespace from "../ResonanceNamespace.js";
 import { RendererType } from "./RendererType.js";
 
 const resonanceQueryParameters = QueryStringMachine.getAll({

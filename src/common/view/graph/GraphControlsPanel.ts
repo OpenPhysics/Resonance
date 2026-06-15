@@ -10,7 +10,7 @@ import { PhetFont } from "scenerystack/scenery-phet";
 import { ComboBox } from "scenerystack/sun";
 import { ResonanceStrings } from "../../../i18n/ResonanceStrings.js";
 import ResonanceColors from "../../../ResonanceColors.js";
-import ResonanceNamespace from "../../ResonanceNamespace.js";
+import ResonanceNamespace from "../../../ResonanceNamespace.js";
 import type { PlottableProperty } from "./PlottableProperty.js";
 
 // Font sizes

@@ -5,7 +5,7 @@
  */
 
 import { beforeEach, describe, expect, it } from "vitest";
-import { getStringProperties, StringManager } from "../StringManager.js";
+import { getStringProperties, StringManager } from "../../src/i18n/StringManager.js";
 
 describe("StringManager", () => {
   let stringManager: StringManager;
