@@ -10,7 +10,9 @@
  * Follows the OpenPhysics accessibility convention; see the canonical
  * TemplateSingleSim/SimScreenSummaryContent.ts.
  */
+
 import { DerivedProperty } from "scenerystack/axon";
+import { toFixed } from "scenerystack/dot";
 import { StringUtils } from "scenerystack/phetcommon";
 import { ScreenSummaryContent } from "scenerystack/sim";
 import { StringManager } from "../../i18n/StringManager.js";
@@ -31,7 +33,7 @@ export class OscillatorScreenSummaryContent extends ScreenSummaryContent {
       ],
       (template, playingLabel, pausedLabel, frequency, count, isPlaying) =>
         StringUtils.fillIn(template, {
-          frequency: frequency.toFixed(2),
+          frequency: toFixed(frequency, 2),
           count: count,
           state: isPlaying ? playingLabel : pausedLabel,
         }),

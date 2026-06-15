@@ -20,6 +20,7 @@
 
 import { Multilink } from "scenerystack/axon";
 import type { Vector2 } from "scenerystack/dot";
+import { toFixed } from "scenerystack/dot";
 import { Shape } from "scenerystack/kite";
 import type { ModelViewTransform2 } from "scenerystack/phetcommon";
 import { DragListener, HBox, KeyboardUtils, Node, Path, Rectangle, Text, VBox } from "scenerystack/scenery";
@@ -275,7 +276,7 @@ export class ChladniScreenView extends ScreenView {
     // Announce when a resonance peak is detected
     this.sonification.isAtResonanceProperty.lazyLink((isAtResonance) => {
       if (isAtResonance) {
-        const frequency = this.model.frequencyProperty.value.toFixed(0);
+        const frequency = toFixed(this.model.frequencyProperty.value, 0);
         const alertString = a11y.resonancePeakAlertStringProperty.value.replace("{{frequency}}", frequency);
         resonanceUtterance.alert = alertString;
         utteranceQueue.addToBack(resonanceUtterance);

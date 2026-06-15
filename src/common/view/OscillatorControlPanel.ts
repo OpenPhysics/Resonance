@@ -17,7 +17,7 @@
  */
 
 import { NumberProperty, Property } from "scenerystack/axon";
-import { Bounds2, Range } from "scenerystack/dot";
+import { Bounds2, Range, toFixed } from "scenerystack/dot";
 import {
   AlignBox,
   HBox,
@@ -539,7 +539,10 @@ export class OscillatorControlPanel extends Panel {
 
     // Initialize with first resonator's frequency
     const freq = model.getResonatorModel(0).naturalFrequencyHzProperty.value;
-    const valueWithUnit = ResonanceStrings.units.hertzPatternStringProperty.value.replace("{{value}}", freq.toFixed(3));
+    const valueWithUnit = ResonanceStrings.units.hertzPatternStringProperty.value.replace(
+      "{{value}}",
+      toFixed(freq, 3),
+    );
     naturalFrequencyText.string = `${ResonanceStrings.controls.frequencyEqualsStringProperty.value} ${valueWithUnit}`;
 
     const naturalFrequencyBox = new AlignBox(naturalFrequencyText, {
@@ -819,7 +822,7 @@ export class OscillatorControlPanel extends Panel {
       const freq = this.model.getResonatorModel(index).naturalFrequencyHzProperty.value;
       const valueWithUnit = ResonanceStrings.units.hertzPatternStringProperty.value.replace(
         "{{value}}",
-        freq.toFixed(3),
+        toFixed(freq, 3),
       );
       this.naturalFrequencyText.string = `${ResonanceStrings.controls.frequencyEqualsStringProperty.value} ${valueWithUnit}`;
     };
