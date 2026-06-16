@@ -6,7 +6,6 @@
 import { vi } from "vitest";
 
 // Mock global phet object with version for scenerystack/joist
-// @ts-expect-error - Mock global phet object
 global.phet = {
   chipper: {
     packageObject: {
@@ -154,8 +153,7 @@ class MockAudioContext {
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  decodeAudioData(audioData: ArrayBuffer): Promise<AudioBuffer> {
+  decodeAudioData(_audioData: ArrayBuffer): Promise<AudioBuffer> {
     return Promise.resolve(this.createBuffer(2, 44100, 44100) as unknown as AudioBuffer);
   }
 
@@ -181,6 +179,7 @@ global.webkitAudioContext = MockAudioContext;
 const originalGetContext = HTMLCanvasElement.prototype.getContext;
 
 HTMLCanvasElement.prototype.getContext = function (
+  this: HTMLCanvasElement,
   contextId: string,
   options?: CanvasRenderingContext2DSettings,
 ): RenderingContext | null {
@@ -233,7 +232,7 @@ HTMLCanvasElement.prototype.getContext = function (
     }
   }
   return originalGetContext.call(this, contextId, options);
-};
+} as typeof originalGetContext;
 
 // Mock SVG getBBox and other SVG-related methods
 const mockBBox = {
@@ -257,20 +256,18 @@ if (typeof SVGElement !== "undefined") {
 
 // Mock createElementNS for SVG elements
 const originalCreateElementNS = document.createElementNS;
-document.createElementNS = (namespaceURI: string | null, qualifiedName: string) => {
+document.createElementNS = ((namespaceURI: string | null, qualifiedName: string) => {
   const element = originalCreateElementNS.call(document, namespaceURI, qualifiedName);
 
   if (namespaceURI === "http://www.w3.org/2000/svg") {
-    // @ts-expect-error - Adding mock method
-    element.getBBox = () => ({ ...mockBBox });
-    // @ts-expect-error - Adding mock method
-    element.getComputedTextLength = () => 100;
-    // @ts-expect-error - Adding mock method
-    element.getSubStringLength = () => 10;
+    const svg = element as unknown as Record<string, unknown>;
+    svg["getBBox"] = () => ({ ...mockBBox });
+    svg["getComputedTextLength"] = () => 100;
+    svg["getSubStringLength"] = () => 10;
   }
 
   return element;
-};
+}) as typeof originalCreateElementNS;
 
 // Mock matchMedia
 Object.defineProperty(window, "matchMedia", {
@@ -294,8 +291,7 @@ class MockResizeObserver {
   disconnect = vi.fn();
 }
 
-// @ts-expect-error - Mock implementation
-global.ResizeObserver = MockResizeObserver;
+global.ResizeObserver = MockResizeObserver as unknown as typeof ResizeObserver;
 
 // Mock IntersectionObserver
 class MockIntersectionObserver {
