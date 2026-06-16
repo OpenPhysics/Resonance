@@ -1,7 +1,7 @@
 {
   "name": "resonance",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.9.0",
   "type": "module",
   "description": "Interactive simulation of resonance in driven oscillating systems. Visualizes driven mass-spring systems and Chladni plate patterns.",
   "license": "AGPL-3.0-or-later",
