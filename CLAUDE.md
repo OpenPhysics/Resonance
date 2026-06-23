@@ -33,6 +33,7 @@ Interactive resonance simulation: driven mass-spring systems and Chladni plate p
 - **Units** — driving amplitude stored in meters, displayed in cm; check `ResonanceConstants` for ranges
 - **Solvers** — RK4 default (1 ms steps); sub-step callbacks feed smooth phase-space graphs
 - **Audio teardown timer (allowed exception)** — `chladni-patterns/view/ResonanceSonification.ts` uses a raw `setTimeout(…, 30 ms)` to stop and disconnect the Web Audio oscillator *after* a `linearRampToValueAtTime` gain fade. This intentionally runs on wall-clock time, not `stepTimer`, so the click-free fade-out completes even while the sim clock is paused — the one documented exception to the "no `setTimeout`" rule (CONVENTIONS.md §2.9 / §7).
+- **Progressive curve precompute (allowed exception)** — `chladni-patterns/model/ResonanceCurveCalculator.ts` precomputes the resonance-strength curve (`TOTAL_CURVE_SAMPLES`) in chunks across `requestAnimationFrame` callbacks, with a `computationVersion` guard so a newer request supersedes the in-flight one and `cancelProgressiveComputation()` aborts via `cancelAnimationFrame`. This is a deliberate non-blocking *background precompute*, not a physics step: it is driven by rAF rather than `stepTimer` so it runs at the browser frame rate independent of sim play/pause and never couples to `step(dt)`. It produces a cached lookup table; the sim never reads partial results (the `isComputationValid` flag gates use). A second documented exception to the "no raw rAF in the model" rule (CONVENTIONS.md §2.9 / §7).
 
 ## Accessibility
 
