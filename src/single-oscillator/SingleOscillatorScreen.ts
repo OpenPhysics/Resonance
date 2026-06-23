@@ -3,6 +3,7 @@
  * It demonstrates a single driven, damped harmonic oscillator.
  */
 
+import { type EmptySelfOptions, optionize } from "scenerystack/phet-core";
 import { Screen, type ScreenOptions } from "scenerystack/sim";
 import { ResonanceKeyboardHelpContent } from "../common/view/ResonanceKeyboardHelpContent.js";
 import { ResonanceStrings } from "../i18n/ResonanceStrings.js";
@@ -16,12 +17,14 @@ export class SingleOscillatorScreen extends Screen<SingleOscillatorModel, Single
     super(
       () => new SingleOscillatorModel(preferencesModel),
       (model: SingleOscillatorModel) => new SingleOscillatorScreenView(model),
-      {
-        ...options,
-        name: ResonanceStrings.screens.singleOscillatorStringProperty,
-        backgroundColorProperty: ResonanceColors.backgroundProperty,
-        createKeyboardHelpNode: () => new ResonanceKeyboardHelpContent(),
-      },
+      optionize<ScreenOptions, EmptySelfOptions, ScreenOptions>()(
+        {
+          name: ResonanceStrings.screens.singleOscillatorStringProperty,
+          backgroundColorProperty: ResonanceColors.backgroundProperty,
+          createKeyboardHelpNode: () => new ResonanceKeyboardHelpContent(),
+        },
+        options,
+      ),
     );
   }
 }

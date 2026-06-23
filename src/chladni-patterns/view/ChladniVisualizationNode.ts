@@ -13,6 +13,7 @@
 
 import { DerivedProperty, type Property } from "scenerystack/axon";
 import { Bounds2 } from "scenerystack/dot";
+import { optionize } from "scenerystack/phet-core";
 import type { ModelViewTransform2 } from "scenerystack/phetcommon";
 import { Node, type NodeOptions, Rectangle } from "scenerystack/scenery";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
@@ -22,14 +23,18 @@ import type { ChladniModel } from "../model/ChladniModel.js";
 import { createChladniTransform } from "./ChladniTransformFactory.js";
 import { CanvasParticleRenderer, type ParticleRenderer, WebGLParticleRenderer } from "./renderers/index.js";
 
-export interface ChladniVisualizationNodeOptions extends NodeOptions {
+type ChladniVisualizationNodeSelfOptions = {
   // Size of the visualization area (deprecated, use visualizationWidth/Height)
   visualizationSize?: number;
   // Width of the visualization area in pixels
   visualizationWidth?: number;
   // Height of the visualization area in pixels
   visualizationHeight?: number;
-}
+};
+
+export type ChladniVisualizationNodeOptions = ChladniVisualizationNodeSelfOptions & NodeOptions;
+
+const DEFAULT_VISUALIZATION_SIZE = 400;
 
 export class ChladniVisualizationNode extends Node {
   private readonly model: ChladniModel;
@@ -53,13 +58,22 @@ export class ChladniVisualizationNode extends Node {
     rendererTypeProperty: Property<RendererType>,
     providedOptions?: ChladniVisualizationNodeOptions,
   ) {
-    super(providedOptions);
+    // Support both legacy visualizationSize and new width/height options: width and
+    // height each fall back to the (possibly legacy) square size when not given.
+    const visualizationSize = providedOptions?.visualizationSize ?? DEFAULT_VISUALIZATION_SIZE;
+    const options = optionize<ChladniVisualizationNodeOptions, ChladniVisualizationNodeSelfOptions, NodeOptions>()(
+      {
+        visualizationSize,
+        visualizationWidth: visualizationSize,
+        visualizationHeight: visualizationSize,
+      },
+      providedOptions,
+    );
 
-    // Support both legacy visualizationSize and new width/height options
-    const defaultSize = 400;
-    const visualizationWidth = providedOptions?.visualizationWidth ?? providedOptions?.visualizationSize ?? defaultSize;
-    const visualizationHeight =
-      providedOptions?.visualizationHeight ?? providedOptions?.visualizationSize ?? defaultSize;
+    super(options);
+
+    const visualizationWidth = options.visualizationWidth;
+    const visualizationHeight = options.visualizationHeight;
 
     this.model = model;
     this.visualizationWidth = visualizationWidth;

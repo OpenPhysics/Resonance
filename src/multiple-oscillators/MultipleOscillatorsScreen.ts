@@ -3,6 +3,7 @@
  * It demonstrates multiple driven, damped harmonic oscillators with different natural frequencies.
  */
 
+import { type EmptySelfOptions, optionize } from "scenerystack/phet-core";
 import { Screen, type ScreenOptions } from "scenerystack/sim";
 import { ResonanceKeyboardHelpContent } from "../common/view/ResonanceKeyboardHelpContent.js";
 import { ResonanceStrings } from "../i18n/ResonanceStrings.js";
@@ -16,12 +17,14 @@ export class MultipleOscillatorsScreen extends Screen<MultipleOscillatorsModel, 
     super(
       () => new MultipleOscillatorsModel(preferencesModel),
       (model: MultipleOscillatorsModel) => new MultipleOscillatorsScreenView(model),
-      {
-        ...options,
-        name: ResonanceStrings.screens.multipleOscillatorsStringProperty,
-        backgroundColorProperty: ResonanceColors.backgroundProperty,
-        createKeyboardHelpNode: () => new ResonanceKeyboardHelpContent(),
-      },
+      optionize<ScreenOptions, EmptySelfOptions, ScreenOptions>()(
+        {
+          name: ResonanceStrings.screens.multipleOscillatorsStringProperty,
+          backgroundColorProperty: ResonanceColors.backgroundProperty,
+          createKeyboardHelpNode: () => new ResonanceKeyboardHelpContent(),
+        },
+        options,
+      ),
     );
   }
 }
