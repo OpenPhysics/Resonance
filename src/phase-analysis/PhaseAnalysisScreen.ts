@@ -3,6 +3,7 @@
  * It demonstrates phase relationships in driven oscillators.
  */
 
+import { type EmptySelfOptions, optionize } from "scenerystack/phet-core";
 import { Screen, type ScreenOptions } from "scenerystack/sim";
 import { ResonanceKeyboardHelpContent } from "../common/view/ResonanceKeyboardHelpContent.js";
 import { ResonanceStrings } from "../i18n/ResonanceStrings.js";
@@ -16,12 +17,14 @@ export class PhaseAnalysisScreen extends Screen<PhaseAnalysisModel, PhaseAnalysi
     super(
       () => new PhaseAnalysisModel(preferencesModel),
       (model: PhaseAnalysisModel) => new PhaseAnalysisScreenView(model),
-      {
-        ...options,
-        name: ResonanceStrings.screens.phaseAnalysisStringProperty,
-        backgroundColorProperty: ResonanceColors.backgroundProperty,
-        createKeyboardHelpNode: () => new ResonanceKeyboardHelpContent(),
-      },
+      optionize<ScreenOptions, EmptySelfOptions, ScreenOptions>()(
+        {
+          name: ResonanceStrings.screens.phaseAnalysisStringProperty,
+          backgroundColorProperty: ResonanceColors.backgroundProperty,
+          createKeyboardHelpNode: () => new ResonanceKeyboardHelpContent(),
+        },
+        options,
+      ),
     );
   }
 }
