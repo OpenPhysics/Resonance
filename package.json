@@ -66,13 +66,13 @@
     "scenerystack": "^3.0.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.2",
+    "@biomejs/biome": "^2.5.3",
     "@playwright/test": "^1.61.1",
-    "@types/node": "^26.1.0",
-    "@vitest/coverage-v8": "^4.1.9",
+    "@types/node": "^26.1.1",
+    "@vitest/coverage-v8": "^4.1.10",
     "canvas": "^3.2.3",
     "jsdom": "^29.1.1",
-    "png-to-ico": "^3.0.1",
+    "png-to-ico": "^3.0.2",
     "sharp": "^0.35.3",
     "tsx": "^4.23.0",
     "typescript": "^7.0.2",
