@@ -1,5 +1,7 @@
 # Architecture Review: Resonance Simulation
 
+> **Historical document (dated 2026-02-10).** This review may be stale. Since it was written, preferences UI has been extracted to `ResonancePreferencesNode` and `main.ts` is substantially smaller. Treat findings below as a snapshot, not current architecture.
+
 A thorough analysis of the codebase architecture, encapsulation, and separation of concerns.
 
 ---

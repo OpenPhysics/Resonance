@@ -195,12 +195,13 @@ const viewY = baseY - modelPosition * scale;
 
 ### Available Solvers
 
-| Solver                     | Method            | Accuracy | Best For                             |
-| -------------------------- | ----------------- | -------- | ------------------------------------ |
-| **RungeKuttaSolver**       | RK4 (4th order)   | O(h⁴)    | **Default**, stable, general-purpose |
-| **AdaptiveRK45Solver**     | Dormand-Prince    | Adaptive | High accuracy requirements           |
-| **AdaptiveEulerSolver**    | Adaptive Euler    | O(h²)    | Educational, simple problems         |
-| **ModifiedMidpointSolver** | Modified midpoint | O(h²)    | Oscillatory systems                  |
+Defined in `SolverType.ts` and implemented in `src/common/model/`:
+
+| Solver                 | `SolverType` key | Method          | Accuracy | Best For                             |
+| ---------------------- | ---------------- | --------------- | -------- | ------------------------------------ |
+| **RungeKuttaSolver**   | `rk4`            | RK4 (4th order) | O(h⁴)    | **Default**, stable, general-purpose |
+| **AdaptiveRK45Solver** | `adaptiveRK45`   | Dormand-Prince  | Adaptive | High accuracy requirements           |
+| **AnalyticalSolver**   | `analytical`     | Closed-form     | Exact    | Educational, verifying numerics      |
 
 **Default Configuration**: RK4 with 0.001s fixed timestep, automatic substepping for large frame deltas.
 

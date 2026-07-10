@@ -181,9 +181,9 @@ The simulation allows students to adjust these parameters:
 
 | Parameter           | Minimum | Maximum | Default | Unit  |
 | ------------------- | ------- | ------- | ------- | ----- |
-| Mass                | 0.1     | 5.0     | 0.25    | kg    |
+| Mass                | 0.1     | 5.0     | 2.53    | kg    |
 | Spring Constant     | 10      | 6000    | 100     | N/m   |
-| Damping Coefficient | 0.1     | 5.0     | 0.5     | N·s/m |
+| Damping Coefficient | 0.1     | 5.0     | 1.0     | N·s/m |
 | Driving Amplitude   | 0.2     | 2.0     | 1.0     | cm    |
 | Driving Frequency   | 0.1     | 5.0     | 1.0     | Hz    |
 
@@ -212,43 +212,57 @@ The simulation can display 1 to 10 oscillators simultaneously, each with its own
 
 ## Spring Presets
 
-The Single Oscillator screen includes quick-access presets for exploring different damping regimes:
+The Single Oscillator screen includes quick-access presets (from `ResonancePresets` in code) for exploring different damping regimes:
 
 ### 1. Light and Bouncy
 
-- Mass: 0.1 kg, Spring: 100 N/m, Damping: 0.5 N·s/m
-- Natural frequency: ~5.03 Hz
-- Damping ratio: ζ ≈ 0.158
+- Mass: 0.5 kg, Spring: 50 N/m, Damping: 0.1 N·s/m
+- Natural frequency: ~1.59 Hz
+- Damping ratio: ζ ≈ 0.01
+- Driving: 1 cm amplitude at 1.6 Hz (near f₀)
 - Fast, lightly damped oscillations
 
-### 2. Heavy and Slow (Default)
+### 2. Heavy and Slow
 
-- Mass: 5.0 kg, Spring: 100 N/m, Damping: 2.0 N·s/m
-- Natural frequency: ~0.71 Hz
-- Damping ratio: ζ ≈ 0.045
-- Slow, heavy oscillations with minimal damping
+- Mass: 5.0 kg, Spring: 10 N/m, Damping: 0.5 N·s/m
+- Natural frequency: ~0.225 Hz
+- Damping ratio: ζ ≈ 0.035
+- Driving: 1.5 cm amplitude at 0.2 Hz (near f₀)
+- Slow, heavy oscillations with light damping
 
 ### 3. Underdamped
 
-- Mass: 0.25 kg, Spring: 100 N/m, Damping: 0.5 N·s/m
-- Natural frequency: ~3.18 Hz
-- Damping ratio: ζ ≈ 0.050
-- Classic underdamped behavior (ζ << 1)
+- Mass: 0.1 kg, Spring: 16 N/m, Damping: 0.5 N·s/m
+- Natural frequency: ~2.01 Hz
+- Damping ratio: ζ ≈ 0.2 (critical damping b_crit ≈ 2.53 N·s/m)
+- Driving: 1 cm amplitude at 2.0 Hz (at f₀)
+- Classic underdamped behavior (ζ < 1)
 
 ### 4. Critically Damped
 
-- Mass: 0.25 kg, Spring: 100 N/m, Damping: 3.16 N·s/m
-- Natural frequency: ~3.18 Hz
-- Damping ratio: ζ = 1.0
+- Mass: 0.1 kg, Spring: 16 N/m, Damping: 2.5 N·s/m
+- Natural frequency: ~2.01 Hz
+- Damping ratio: ζ ≈ 1.0
+- Driving: 1 cm amplitude at 2.0 Hz
 - Fastest return to equilibrium without oscillation
 - Used in car shock absorbers, door closers
 
 ### 5. Overdamped
 
-- Mass: 0.25 kg, Spring: 100 N/m, Damping: 5.0 N·s/m
-- Natural frequency: ~3.18 Hz (undamped)
-- Damping ratio: ζ ≈ 1.58
+- Mass: 0.1 kg, Spring: 16 N/m, Damping: 4.0 N·s/m
+- Natural frequency: ~2.01 Hz (undamped)
+- Damping ratio: ζ ≈ 1.6
+- Driving: 1 cm amplitude at 2.0 Hz
 - Slow return to equilibrium, no oscillation
+
+### 6. Resonance Demo
+
+- Mass: 1.0 kg, Spring: 10 N/m, Damping: 0.3 N·s/m
+- Natural frequency: ~0.503 Hz
+- Damping ratio: ζ ≈ 0.047
+- Initial position: 0.5 m (other presets use 1.0 m)
+- Driving: 1 cm amplitude at 0.503 Hz (exactly at f₀)
+- Light damping for a clear resonance demonstration
 
 ---
 
