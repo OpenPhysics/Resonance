@@ -677,7 +677,7 @@ export class BaseOscillatorScreenView extends ScreenView {
     return {};
   }
 
-  public step(dt: number): void {
+  public override step(dt: number): void {
     // Note: model.step(dt) is called by the Screen base class, not here
     // to avoid double-stepping
 
