@@ -20,25 +20,6 @@
     "education",
     "pwa"
   ],
-  "phet": {
-    "simulation": true,
-    "runnable": true,
-    "supportedBrands": [
-      "made-with-scenerystack"
-    ],
-    "simFeatures": {
-      "colorProfiles": [
-        "default",
-        "projector"
-      ],
-      "supportsDynamicLocale": true,
-      "supportsInteractiveDescription": true,
-      "supportsInteractiveHighlights": true,
-      "supportsVoicing": false,
-      "supportsPanAndZoom": true,
-      "supportsSound": false
-    }
-  },
   "scripts": {
     "start": "vite",
     "dev": "vite",
@@ -71,6 +52,7 @@
     "@types/node": "^26.1.1",
     "@vitest/coverage-v8": "^4.1.10",
     "canvas": "^3.2.3",
+    "happy-dom": "^20.11.0",
     "jsdom": "^29.1.1",
     "png-to-ico": "^3.0.2",
     "sharp": "^0.35.3",
@@ -87,5 +69,24 @@
     "lodash": "^4.18.0",
     "three": "^0.125.0",
     "minimatch": "^3.1.3"
+  },
+  "phet": {
+    "simulation": true,
+    "runnable": true,
+    "supportedBrands": [
+      "made-with-scenerystack"
+    ],
+    "simFeatures": {
+      "colorProfiles": [
+        "default",
+        "projector"
+      ],
+      "supportsDynamicLocale": true,
+      "supportsInteractiveDescription": true,
+      "supportsInteractiveHighlights": true,
+      "supportsVoicing": false,
+      "supportsPanAndZoom": true,
+      "supportsSound": false
+    }
   }
 }
