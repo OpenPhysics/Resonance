@@ -5,6 +5,7 @@
 
 import { type EmptySelfOptions, optionize } from "scenerystack/phet-core";
 import { Screen, type ScreenOptions } from "scenerystack/sim";
+import { createMultipleOscillatorsIcon } from "../common/ResonanceScreenIcons.js";
 import { ResonanceKeyboardHelpContent } from "../common/view/ResonanceKeyboardHelpContent.js";
 import { ResonanceStrings } from "../i18n/ResonanceStrings.js";
 import type { ResonancePreferencesModel } from "../preferences/ResonancePreferencesModel.js";
@@ -22,6 +23,8 @@ export class MultipleOscillatorsScreen extends Screen<MultipleOscillatorsModel, 
           name: ResonanceStrings.screens.multipleOscillatorsStringProperty,
           backgroundColorProperty: ResonanceColors.backgroundProperty,
           createKeyboardHelpNode: () => new ResonanceKeyboardHelpContent(),
+          homeScreenIcon: createMultipleOscillatorsIcon(),
+          navigationBarIcon: createMultipleOscillatorsIcon(),
         },
         options,
       ),

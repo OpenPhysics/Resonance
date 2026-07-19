@@ -5,6 +5,7 @@
 
 import { type EmptySelfOptions, optionize } from "scenerystack/phet-core";
 import { Screen, type ScreenOptions } from "scenerystack/sim";
+import { createSingleOscillatorIcon } from "../common/ResonanceScreenIcons.js";
 import { ResonanceKeyboardHelpContent } from "../common/view/ResonanceKeyboardHelpContent.js";
 import { ResonanceStrings } from "../i18n/ResonanceStrings.js";
 import type { ResonancePreferencesModel } from "../preferences/ResonancePreferencesModel.js";
@@ -22,6 +23,8 @@ export class SingleOscillatorScreen extends Screen<SingleOscillatorModel, Single
           name: ResonanceStrings.screens.singleOscillatorStringProperty,
           backgroundColorProperty: ResonanceColors.backgroundProperty,
           createKeyboardHelpNode: () => new ResonanceKeyboardHelpContent(),
+          homeScreenIcon: createSingleOscillatorIcon(),
+          navigationBarIcon: createSingleOscillatorIcon(),
         },
         options,
       ),

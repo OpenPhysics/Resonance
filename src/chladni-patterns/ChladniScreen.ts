@@ -1,5 +1,6 @@
 import { type EmptySelfOptions, optionize } from "scenerystack/phet-core";
 import { Screen, type ScreenOptions } from "scenerystack/sim";
+import { createChladniIcon } from "../common/ResonanceScreenIcons.js";
 import { ResonanceKeyboardHelpContent } from "../common/view/ResonanceKeyboardHelpContent.js";
 import { ResonanceStrings } from "../i18n/ResonanceStrings.js";
 import type { ResonancePreferencesModel } from "../preferences/ResonancePreferencesModel.js";
@@ -17,6 +18,8 @@ export class ChladniScreen extends Screen<ChladniModel, ChladniScreenView> {
           name: ResonanceStrings.screens.chladniPatternsStringProperty,
           backgroundColorProperty: ResonanceColors.backgroundProperty,
           createKeyboardHelpNode: () => new ResonanceKeyboardHelpContent(),
+          homeScreenIcon: createChladniIcon(),
+          navigationBarIcon: createChladniIcon(),
         },
         options,
       ),
