@@ -41,12 +41,13 @@ const ResonanceColors = {
     projector: new Color(150, 150, 150),
   }),
 
-  // Preferences text - stays black regardless of color profile
+  // Preferences text - stays black regardless of color profile (light dialog chrome).
   preferencesTextProperty: new ProfileColorProperty(ResonanceNamespace, "preferencesText", {
     default: new Color(0, 0, 0),
     projector: new Color(0, 0, 0),
   }),
 
+  // Secondary preferences caption — same mid-gray in both profiles (always on light chrome).
   preferencesTextSecondaryProperty: new ProfileColorProperty(ResonanceNamespace, "preferencesTextSecondary", {
     default: new Color(102, 102, 102),
     projector: new Color(102, 102, 102),
@@ -58,19 +59,21 @@ const ResonanceColors = {
     projector: new Color(204, 0, 0),
   }),
 
+  // Mass body — deep enough blues that the dark mass label stays readable.
   massProperty: new ProfileColorProperty(ResonanceNamespace, "mass", {
-    default: new Color(120, 180, 255),
-    projector: new Color(51, 102, 255),
+    default: new Color(70, 140, 230),
+    projector: new Color(40, 85, 210),
   }),
 
   massStrokeProperty: new ProfileColorProperty(ResonanceNamespace, "massStroke", {
-    default: new Color(180, 220, 255),
+    default: new Color(140, 190, 255),
     projector: new Color(0, 51, 170),
   }),
 
+  // Dark label on the mass body for contrast in both profiles.
   massLabelProperty: new ProfileColorProperty(ResonanceNamespace, "massLabel", {
-    default: new Color(255, 255, 255),
-    projector: new Color(255, 255, 255),
+    default: new Color(15, 30, 60),
+    projector: new Color(10, 20, 50),
   }),
 
   // Mass label color when being dragged (yellow for visibility)
@@ -95,9 +98,10 @@ const ResonanceColors = {
     projector: new Color(68, 68, 68),
   }),
 
+  // White on dark fill (default); dark on mid-gray fill (projector).
   driverTextProperty: new ProfileColorProperty(ResonanceNamespace, "driverText", {
     default: new Color(255, 255, 255),
-    projector: new Color(255, 255, 255),
+    projector: new Color(20, 20, 20),
   }),
 
   // Control panel
@@ -284,7 +288,7 @@ const ResonanceColors = {
     projector: new Color(180, 180, 180),
   }),
 
-  // Toggle switch thumb color
+  // Toggle switch thumb — white in both profiles (reads on green/gray tracks).
   toggleThumbProperty: new ProfileColorProperty(ResonanceNamespace, "toggleThumb", {
     default: new Color(255, 255, 255),
     projector: new Color(255, 255, 255),
