@@ -21,7 +21,7 @@ First three screens share `BaseOscillatorScreenModel` / `BaseOscillatorScreenVie
 
 | Area | Location |
 |---|---|
-| Oscillator physics | `src/common/model/ResonanceModel.ts`, `ResonanceConstants.ts`, `BaseModel.ts` |
+| Oscillator physics | `src/common/model/ResonanceModel.ts`, `BaseModel.ts`; `src/ResonanceConstants.ts` |
 | ODE solvers | `src/common/model/{RungeKutta,AdaptiveRK45,Analytical}Solver.ts`, `ODESolver.ts` |
 | Frequency sweep | `FrequencySweepController.ts`, `SweepButton.ts` |
 | Trace / graph | `OscillatorTraceNode.ts`, `TraceDataModel.ts`, `src/common/view/graph/ConfigurableGraph.ts` |
@@ -52,7 +52,7 @@ via `StringManager.getA11yStrings()`.
 
 ## Compliance carve-outs
 
-- **Nested constants:** shared + per-screen constants under `src/common/` and screen folders.
+- **Root constants:** `src/ResonanceConstants.ts`; domain-specific `ChladniConstants` stays under chladni-patterns.
 - **Hardcoded colors:** near-invisible `rgba(0,0,0,0.01)` hit-target fill in `ChladniScreenView.ts`
   (interaction surface, not themed chrome).
 

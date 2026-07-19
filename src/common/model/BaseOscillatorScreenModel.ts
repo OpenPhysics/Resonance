@@ -18,7 +18,7 @@
 
 import { NumberProperty, Property } from "scenerystack/axon";
 import type { ResonancePreferencesModel } from "../../preferences/ResonancePreferencesModel.js";
-import ResonanceConstants from "../ResonanceConstants.js";
+import ResonanceConstants from "../../ResonanceConstants.js";
 import { CircularUpdateGuard } from "../util/index.js";
 import type { TimeSpeed } from "./BaseModel.js";
 import { FrequencySweepController } from "./FrequencySweepController.js";

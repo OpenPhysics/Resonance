@@ -7,11 +7,11 @@
  */
 
 import type { ScreenViewOptions } from "scenerystack/sim";
-import ResonanceConstants from "../../common/ResonanceConstants.js";
 import { BaseOscillatorScreenView } from "../../common/view/BaseOscillatorScreenView.js";
 import type ConfigurableGraph from "../../common/view/graph/ConfigurableGraph.js";
 import type { PlottableProperty } from "../../common/view/graph/PlottableProperty.js";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
+import ResonanceConstants from "../../ResonanceConstants.js";
 import type { SingleOscillatorModel } from "../model/SingleOscillatorModel.js";
 import { OscillatorVectorControlPanel } from "./OscillatorVectorControlPanel.js";
 import { OscillatorVectorNode } from "./OscillatorVectorNode.js";

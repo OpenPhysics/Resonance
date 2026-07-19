@@ -18,9 +18,9 @@ import { Shape } from "scenerystack/kite";
 import type { ModelViewTransform2 } from "scenerystack/phetcommon";
 import { Circle, Node, Path } from "scenerystack/scenery";
 import ResonanceColors from "../../ResonanceColors.js";
+import ResonanceConstants from "../../ResonanceConstants.js";
 import type { TimeSpeed } from "../model/BaseModel.js";
 import type { TraceDataModel } from "../model/TraceDataModel.js";
-import ResonanceConstants from "../ResonanceConstants.js";
 import { OscillatorGridNode } from "./OscillatorGridNode.js";
 
 // Pen dot radius in view coordinates

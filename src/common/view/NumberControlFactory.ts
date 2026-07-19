@@ -8,7 +8,7 @@ import { Dimension2, type Range } from "scenerystack/dot";
 import type { Color, Text } from "scenerystack/scenery";
 import { NumberControl } from "scenerystack/scenery-phet";
 import ResonanceColors from "../../ResonanceColors.js";
-import ResonanceConstants from "../ResonanceConstants.js";
+import ResonanceConstants from "../../ResonanceConstants.js";
 
 /**
  * Options for creating a NumberControl with the factory.

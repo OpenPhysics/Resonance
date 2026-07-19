@@ -14,8 +14,8 @@ import { PlayPauseStepButtonGroup } from "scenerystack/scenery-phet";
 import { AquaRadioButtonGroup } from "scenerystack/sun";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
 import ResonanceColors from "../../ResonanceColors.js";
+import ResonanceConstants from "../../ResonanceConstants.js";
 import type { BaseOscillatorScreenModel } from "../model/BaseOscillatorScreenModel.js";
-import ResonanceConstants from "../ResonanceConstants.js";
 
 export class OscillatorPlaybackControlNode extends HBox {
   public constructor(model: BaseOscillatorScreenModel, layoutBounds: Bounds2) {

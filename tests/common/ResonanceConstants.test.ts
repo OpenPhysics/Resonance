@@ -5,7 +5,7 @@
  */
 
 import { describe, expect, it } from "vitest";
-import ResonanceConstants from "../../src/common/ResonanceConstants.js";
+import ResonanceConstants from "../../src/ResonanceConstants.js";
 
 describe("ResonanceConstants", () => {
   describe("physics ranges", () => {

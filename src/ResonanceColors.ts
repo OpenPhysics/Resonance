@@ -317,6 +317,42 @@ const ResonanceColors = {
     default: new Color(255, 80, 80), // Red for positive displacement
     projector: new Color(220, 50, 50),
   }),
+
+  // Fleet-standard aliases for shared Panel + ButtonOptions modules.
+  panelBackgroundColorProperty: new ProfileColorProperty(ResonanceNamespace, "panelBackground", {
+    default: new Color(40, 40, 40),
+    projector: new Color(240, 240, 240),
+  }),
+  panelBorderColorProperty: new ProfileColorProperty(ResonanceNamespace, "panelBorder", {
+    default: new Color(150, 150, 150),
+    projector: new Color(204, 204, 204),
+  }),
+  textColorProperty: new ProfileColorProperty(ResonanceNamespace, "textColor", {
+    default: new Color(255, 255, 255),
+    projector: new Color(0, 0, 0),
+  }),
+
+  // ── Light control surfaces ───────────────────────────────────────────────────
+  // White chrome (combo boxes, flat push buttons, editable input fields) stays light
+  // in both profiles; its text stays dark.
+
+  /** Fill of light control surfaces: combo-box button/list, editable input fields. */
+  controlSurfaceColorProperty: new ProfileColorProperty(ResonanceNamespace, "controlSurface", {
+    default: "#ffffff",
+    projector: "#ffffff",
+  }),
+
+  /** Fill of a disabled control surface (grayed-out editable input field). */
+  controlSurfaceDisabledColorProperty: new ProfileColorProperty(ResonanceNamespace, "controlSurfaceDisabled", {
+    default: "#cccccc",
+    projector: "#cccccc",
+  }),
+
+  /** Text on light control surfaces: combo items, flat-button labels, field values, preferences. */
+  controlSurfaceTextColorProperty: new ProfileColorProperty(ResonanceNamespace, "controlSurfaceText", {
+    default: "#1a1a1a",
+    projector: "#1a1a1a",
+  }),
 };
 
 export default ResonanceColors;

@@ -8,9 +8,9 @@
 
 import { StringProperty } from "scenerystack/axon";
 import { Line, Text } from "scenerystack/scenery";
-import ResonanceConstants from "../../common/ResonanceConstants.js";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
 import ResonanceColors from "../../ResonanceColors.js";
+import ResonanceConstants from "../../ResonanceConstants.js";
 import { ChladniOverlayNode } from "./ChladniOverlayNode.js";
 
 // Ruler configuration

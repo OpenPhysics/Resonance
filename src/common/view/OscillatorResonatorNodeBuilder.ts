@@ -24,9 +24,9 @@ import {
 import { ParametricSpringNode, PhetFont } from "scenerystack/scenery-phet";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
 import ResonanceColors from "../../ResonanceColors.js";
+import ResonanceConstants from "../../ResonanceConstants.js";
 import { BaseOscillatorScreenModel } from "../model/BaseOscillatorScreenModel.js";
 import type { ResonanceModel } from "../model/index.js";
-import ResonanceConstants from "../ResonanceConstants.js";
 import { CircularUpdateGuard } from "../util/index.js";
 
 // Named constants for magic numbers

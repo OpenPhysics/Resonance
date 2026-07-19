@@ -9,9 +9,9 @@ import { NumberProperty, Property } from "scenerystack/axon";
 import { Range } from "scenerystack/dot";
 import { HBox, Text, VBox } from "scenerystack/scenery";
 import { Checkbox, NumberSpinner } from "scenerystack/sun";
-import ResonanceConstants from "../../../common/ResonanceConstants.js";
 import { ResonanceStrings } from "../../../i18n/ResonanceStrings.js";
 import ResonanceColors from "../../../ResonanceColors.js";
+import ResonanceConstants from "../../../ResonanceConstants.js";
 import { MAX_MODE } from "../../model/ChladniConstants.js";
 import type { ModeSelection } from "../ModalShapeNode.js";
 

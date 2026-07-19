@@ -8,9 +8,9 @@
 import { Property } from "scenerystack/axon";
 import { Text, VBox } from "scenerystack/scenery";
 import { Checkbox } from "scenerystack/sun";
-import ResonanceConstants from "../../../common/ResonanceConstants.js";
 import { ResonanceStrings } from "../../../i18n/ResonanceStrings.js";
 import ResonanceColors from "../../../ResonanceColors.js";
+import ResonanceConstants from "../../../ResonanceConstants.js";
 
 export class DisplayOptionsSection extends VBox {
   /**

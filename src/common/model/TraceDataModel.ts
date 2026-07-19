@@ -10,7 +10,7 @@
  */
 
 import { BooleanProperty } from "scenerystack/axon";
-import ResonanceConstants from "../ResonanceConstants.js";
+import ResonanceConstants from "../../ResonanceConstants.js";
 
 export interface TracePoint {
   /** Scroll offset when this point was recorded (pixels) */

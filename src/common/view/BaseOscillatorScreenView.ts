@@ -26,9 +26,10 @@ import { Checkbox } from "scenerystack/sun";
 import { Utterance } from "scenerystack/utterance-queue";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
 import ResonanceColors from "../../ResonanceColors.js";
+import ResonanceConstants from "../../ResonanceConstants.js";
 import type { BaseOscillatorScreenModel } from "../model/BaseOscillatorScreenModel.js";
 import { TraceDataModel } from "../model/TraceDataModel.js";
-import ResonanceConstants from "../ResonanceConstants.js";
+import { FLAT_RESET_ALL_BUTTON_OPTIONS } from "../ResonanceButtonOptions.js";
 import { utteranceQueue } from "../util/utteranceQueue.js";
 import ConfigurableGraph from "./graph/ConfigurableGraph.js";
 import type { PlottableProperty } from "./graph/PlottableProperty.js";
@@ -213,6 +214,7 @@ export class BaseOscillatorScreenView extends ScreenView {
 
     // ===== RESET ALL BUTTON =====
     const resetAllButton = new ResetAllButton({
+      ...FLAT_RESET_ALL_BUTTON_OPTIONS,
       listener: () => {
         model.reset();
         this.reset();

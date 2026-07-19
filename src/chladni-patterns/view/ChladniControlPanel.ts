@@ -9,8 +9,8 @@ import type { Property, TReadOnlyProperty } from "scenerystack/axon";
 import type { Bounds2 } from "scenerystack/dot";
 import { Line, Node, VBox } from "scenerystack/scenery";
 import { Panel } from "scenerystack/sun";
-import ResonanceConstants from "../../common/ResonanceConstants.js";
 import ResonanceColors from "../../ResonanceColors.js";
+import ResonanceConstants from "../../ResonanceConstants.js";
 import type { ChladniModel } from "../model/ChladniModel.js";
 import {
   DisplayOptionsSection,

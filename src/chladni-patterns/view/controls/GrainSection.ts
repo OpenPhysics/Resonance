@@ -9,9 +9,9 @@ import { DerivedProperty, type TReadOnlyProperty } from "scenerystack/axon";
 import { HBox, type Node, Text, VBox } from "scenerystack/scenery";
 import type { ComboBoxItem } from "scenerystack/sun";
 import { AquaRadioButtonGroup, ComboBox, TextPushButton } from "scenerystack/sun";
-import ResonanceConstants from "../../../common/ResonanceConstants.js";
 import { ResonanceStrings } from "../../../i18n/ResonanceStrings.js";
 import ResonanceColors from "../../../ResonanceColors.js";
+import ResonanceConstants from "../../../ResonanceConstants.js";
 import {
   type BoundaryMode,
   type ChladniModel,

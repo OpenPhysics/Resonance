@@ -28,11 +28,12 @@ import { PlayPauseStepButtonGroup, ResetAllButton } from "scenerystack/scenery-p
 import { audioManager, ScreenView, type ScreenViewOptions } from "scenerystack/sim";
 import { AquaRadioButtonGroup } from "scenerystack/sun";
 import { Utterance } from "scenerystack/utterance-queue";
-import ResonanceConstants from "../../common/ResonanceConstants.js";
+import { FLAT_RESET_ALL_BUTTON_OPTIONS } from "../../common/ResonanceButtonOptions.js";
 import { utteranceQueue } from "../../common/util/utteranceQueue.js";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
 import type { ResonancePreferencesModel } from "../../preferences/ResonancePreferencesModel.js";
 import ResonanceColors from "../../ResonanceColors.js";
+import ResonanceConstants from "../../ResonanceConstants.js";
 import type { ChladniModel } from "../model/ChladniModel.js";
 import { ChladniControlPanel } from "./ChladniControlPanel.js";
 import { ChladniGridNode } from "./ChladniGridNode.js";
@@ -219,6 +220,7 @@ export class ChladniScreenView extends ScreenView {
 
     // Create reset button
     const resetAllButton = new ResetAllButton({
+      ...FLAT_RESET_ALL_BUTTON_OPTIONS,
       listener: () => {
         model.reset();
         this.reset();
