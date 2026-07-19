@@ -10,7 +10,7 @@
 import type { BooleanProperty } from "scenerystack/axon";
 import type { ChartRectangle, ChartTransform, TickLabelSet } from "scenerystack/bamboo";
 import { Range, Vector2 } from "scenerystack/dot";
-import { DragListener, type Node, type Pointer, Rectangle } from "scenerystack/scenery";
+import { DragListener, KeyboardDragListener, type Node, type Pointer, Rectangle } from "scenerystack/scenery";
 import ResonanceColors from "../../../ResonanceColors.js";
 import ResonanceNamespace from "../../../ResonanceNamespace.js";
 import type GraphDataManager from "./GraphDataManager.js";
@@ -200,6 +200,33 @@ export default class GraphInteractionHandler {
 
     this.chartRectangle.addInputListener(dragListener);
     this.chartRectangle.cursor = "move";
+
+    // Keyboard pan: arrow keys translate the chart model ranges.
+    this.chartRectangle.focusable = true;
+    this.chartRectangle.tagName = "div";
+    this.chartRectangle.addInputListener(
+      new KeyboardDragListener({
+        dragSpeed: 200,
+        shiftDragSpeed: 60,
+        start: () => {
+          this.dataManager.setManuallyZoomed(true);
+        },
+        drag: (_event, listener) => {
+          const xRange = this.chartTransform.modelXRange;
+          const yRange = this.chartTransform.modelYRange;
+          const viewW = Math.max(1, this.graphWidth);
+          const viewH = Math.max(1, this.graphHeight);
+          const deltaX = (-listener.modelDelta.x * xRange.getLength()) / viewW;
+          const deltaY = (listener.modelDelta.y * yRange.getLength()) / viewH;
+          const newXRange = new Range(xRange.min + deltaX, xRange.max + deltaX);
+          const newYRange = new Range(yRange.min + deltaY, yRange.max + deltaY);
+          this.chartTransform.setModelXRange(newXRange);
+          this.chartTransform.setModelYRange(newYRange);
+          this.dataManager.updateTickSpacing(newXRange, newYRange);
+          this.dataManager.updateTrail();
+        },
+      }),
+    );
   }
 
   /**

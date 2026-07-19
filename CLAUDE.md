@@ -44,6 +44,11 @@ explicit `pdomOrder` and use live current-details derived from the model. Per-co
 `accessibleName`/`accessibleHelpText` and screen-summary strings live under `resonance.a11y` in
 each locale JSON, exposed via `StringManager.getA11yStrings()`.
 
+## Compliance carve-outs
+
+- **Nested constants:** shared + per-screen constants under `src/common/` / screen folders.
+- **Hardcoded colors:** near-invisible `rgba(0,0,0,0.01)` hit-target fill in `ChladniScreenView.ts` (interaction surface, not themed chrome).
+
 ## Testing
 
 Fleet-standard Vitest layout:
