@@ -88,4 +88,3 @@ add locale keys and summary content. See `doc/multi-screen.md`.
 
 - [model.md](./model.md) — educator physics guide
 - [CLAUDE.md](../CLAUDE.md) — sim-specific AI context and pitfall list
-- [architecture-review.md](./architecture-review.md) — historical design review (not user-facing)
