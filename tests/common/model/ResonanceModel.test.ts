@@ -425,7 +425,11 @@ describe("ResonanceModel", () => {
 
   describe("preset application", () => {
     it("should apply preset values correctly", () => {
-      const preset = ResonancePresets[0]!; // Light and Bouncy
+      const preset = ResonancePresets[0]; // Light and Bouncy
+      expect(preset).toBeDefined();
+      if (preset === undefined) {
+        return;
+      }
 
       model.setPreset(preset);
 
@@ -1084,7 +1088,7 @@ describe("ResonanceModel", () => {
       const omega0 = model.naturalFrequencyProperty.value;
       const Q = model.qualityFactorProperty.value;
 
-      if (E > 1e-15 && isFinite(Q)) {
+      if (E > 1e-15 && Number.isFinite(Q)) {
         expect(P).toBeCloseTo((omega0 * E) / Q, 5);
       }
     });

@@ -50,9 +50,9 @@ describe("SolverType", () => {
     });
 
     it("should have names for all solver types", () => {
-      Object.values(SolverType).forEach((solverType) => {
+      for (const solverType of Object.values(SolverType)) {
         expect(SolverTypeName[solverType]).toBeDefined();
-      });
+      }
     });
   });
 
@@ -76,10 +76,10 @@ describe("SolverType", () => {
     });
 
     it("should have non-empty localized names", () => {
-      Object.values(SolverType).forEach((solverType) => {
+      for (const solverType of Object.values(SolverType)) {
         const name = SolverTypeName[solverType].value;
         expect(name.length).toBeGreaterThan(0);
-      });
+      }
     });
 
     it("should have unique localized names", () => {
@@ -103,9 +103,9 @@ describe("SolverType", () => {
     });
 
     it("should have descriptions for all solver types", () => {
-      Object.values(SolverType).forEach((solverType) => {
+      for (const solverType of Object.values(SolverType)) {
         expect(SolverTypeDescription[solverType]).toBeDefined();
-      });
+      }
     });
   });
 
@@ -129,10 +129,10 @@ describe("SolverType", () => {
     });
 
     it("should have non-empty localized descriptions", () => {
-      Object.values(SolverType).forEach((solverType) => {
+      for (const solverType of Object.values(SolverType)) {
         const description = SolverTypeDescription[solverType].value;
         expect(description.length).toBeGreaterThan(0);
-      });
+      }
     });
 
     it("should have unique localized descriptions", () => {
@@ -142,11 +142,11 @@ describe("SolverType", () => {
     });
 
     it("should have descriptions longer than names", () => {
-      Object.values(SolverType).forEach((solverType) => {
+      for (const solverType of Object.values(SolverType)) {
         const name = SolverTypeName[solverType].value;
         const description = SolverTypeDescription[solverType].value;
         expect(description.length).toBeGreaterThan(name.length);
-      });
+      }
     });
   });
 
@@ -194,17 +194,21 @@ describe("SolverType", () => {
 
   describe("string representation", () => {
     it("should have lowercase string values", () => {
-      Object.values(SolverType).forEach((value) => {
-        // Should be camelCase (starts lowercase)
-        expect(value[0]).toBe(value[0]!.toLowerCase());
-      });
+      for (const value of Object.values(SolverType)) {
+        const firstChar = value[0];
+        expect(firstChar).toBeDefined();
+        if (firstChar === undefined) {
+          return;
+        }
+        expect(firstChar).toBe(firstChar.toLowerCase());
+      }
     });
 
     it("should be valid identifiers", () => {
       const validIdentifier = /^[a-zA-Z][a-zA-Z0-9]*$/;
-      Object.values(SolverType).forEach((value) => {
+      for (const value of Object.values(SolverType)) {
         expect(validIdentifier.test(value)).toBe(true);
-      });
+      }
     });
   });
 });

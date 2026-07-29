@@ -21,8 +21,9 @@ class TestModel extends BaseModel {
   public velocity: number = 0;
   private omega: number = 1;
 
-  constructor(solverTypeProperty: Property<SolverType>) {
+  constructor(solverTypeProperty: Property<SolverType>, omega = 1) {
     super(solverTypeProperty);
+    this.omega = omega;
   }
 
   getState(): number[] {

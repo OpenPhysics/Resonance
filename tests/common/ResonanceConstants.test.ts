@@ -290,9 +290,9 @@ describe("ResonanceConstants", () => {
         "STEP_DT",
       ];
 
-      expectedKeys.forEach((key) => {
+      for (const key of expectedKeys) {
         expect(ResonanceConstants[key as keyof typeof ResonanceConstants]).toBeDefined();
-      });
+      }
     });
   });
 });

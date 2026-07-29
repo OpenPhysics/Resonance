@@ -148,18 +148,22 @@ describe("ResonatorConfigMode", () => {
 
   describe("string representation", () => {
     it("should have camelCase string values", () => {
-      Object.values(ResonatorConfigMode).forEach((value) => {
-        // Should be camelCase (starts lowercase, no underscores)
-        expect(value[0]).toBe(value[0]!.toLowerCase());
+      for (const value of Object.values(ResonatorConfigMode)) {
+        const firstChar = value[0];
+        expect(firstChar).toBeDefined();
+        if (firstChar === undefined) {
+          return;
+        }
+        expect(firstChar).toBe(firstChar.toLowerCase());
         expect(value).not.toContain("_");
-      });
+      }
     });
 
     it("should be valid identifiers", () => {
       const validIdentifier = /^[a-zA-Z][a-zA-Z0-9]*$/;
-      Object.values(ResonatorConfigMode).forEach((value) => {
+      for (const value of Object.values(ResonatorConfigMode)) {
         expect(validIdentifier.test(value)).toBe(true);
-      });
+      }
     });
 
     it("should be serializable to JSON", () => {

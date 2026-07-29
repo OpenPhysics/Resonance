@@ -64,7 +64,9 @@ describe("ResonancePreferencesModel", () => {
       const model = new ResonancePreferencesModel();
       model.solverTypeProperty.value = SolverType.ADAPTIVE_RK45;
 
-      const saved = JSON.parse(mockStorage["resonance-preferences"]!) as StoredPreferences;
+      const savedJson = mockStorage["resonance-preferences"];
+      expect(savedJson).toBeDefined();
+      const saved = JSON.parse(savedJson as string) as StoredPreferences;
       expect(saved.solverType).toBe(SolverType.ADAPTIVE_RK45);
     });
 
@@ -72,7 +74,9 @@ describe("ResonancePreferencesModel", () => {
       const model = new ResonancePreferencesModel();
       model.solverTypeProperty.value = SolverType.ADAPTIVE_RK45;
 
-      const saved = JSON.parse(mockStorage["resonance-preferences"]!) as StoredPreferences;
+      const savedJson = mockStorage["resonance-preferences"];
+      expect(savedJson).toBeDefined();
+      const saved = JSON.parse(savedJson as string) as StoredPreferences;
       expect(saved).toEqual({
         solverType: SolverType.ADAPTIVE_RK45,
         showModalControls: false, // Default value

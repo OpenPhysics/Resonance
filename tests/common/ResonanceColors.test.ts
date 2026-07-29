@@ -126,7 +126,13 @@ describe("ResonanceColors", () => {
         const v = channel / 255;
         return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
       });
-      const [rs, gs, bs] = [mapped[0]!, mapped[1]!, mapped[2]!];
+      const [rs, gs, bs] = mapped;
+      expect(rs).toBeDefined();
+      expect(gs).toBeDefined();
+      expect(bs).toBeDefined();
+      if (rs === undefined || gs === undefined || bs === undefined) {
+        return 0;
+      }
       return 0.2126 * rs + 0.7152 * gs + 0.0722 * bs;
     }
 
@@ -295,9 +301,9 @@ describe("ResonanceColors", () => {
         "outOfPhaseProperty",
       ];
 
-      expectedColors.forEach((colorName) => {
+      for (const colorName of expectedColors) {
         expect(ResonanceColors[colorName as keyof typeof ResonanceColors]).toBeDefined();
-      });
+      }
     });
   });
 });

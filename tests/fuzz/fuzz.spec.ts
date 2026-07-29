@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/suspicious/noConsole: fuzz harness progress and diagnostic output */
 /**
  * Automated fuzz testing for the Resonance simulation.
  *
@@ -153,17 +154,17 @@ test.describe("Fuzz Testing", () => {
 
     if (result.errors.length > 0) {
       console.log("\nERRORS:");
-      result.errors.forEach((err, i) => {
+      for (const [i, err] of result.errors.entries()) {
         console.log(`  ${i + 1}. [${(err.timestamp / 1000).toFixed(1)}s] ${err.text}`);
         console.log(`     Location: ${err.location}`);
-      });
+      }
     }
 
     if (result.assertions.length > 0) {
       console.log("\nASSERTIONS:");
-      result.assertions.forEach((a, i) => {
+      for (const [i, a] of result.assertions.entries()) {
         console.log(`  ${i + 1}. [${(a.timestamp / 1000).toFixed(1)}s] ${a.text}`);
-      });
+      }
     }
 
     console.log("========================================");
@@ -254,9 +255,9 @@ test.describe("Fuzz Testing", () => {
 
     if (errors.length > 0) {
       console.log("\nErrors:");
-      errors.forEach((err, i) => {
+      for (const [i, err] of errors.entries()) {
         console.log(`  ${i + 1}. ${err.text}`);
-      });
+      }
     }
 
     expect(errors.length, `Found ${errors.length} errors during stress test`).toBe(0);

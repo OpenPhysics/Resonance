@@ -222,26 +222,26 @@ describe("ResonanceStrings", () => {
         "common",
       ];
 
-      categories.forEach((category) => {
+      for (const category of categories) {
         expect(ResonanceStrings[category as keyof typeof ResonanceStrings]).toBeDefined();
-      });
+      }
     });
 
     it("should not have undefined nested properties", () => {
       // Check controls
-      Object.values(ResonanceStrings.controls).forEach((prop) => {
+      for (const prop of Object.values(ResonanceStrings.controls)) {
         expect(prop).toBeDefined();
-      });
+      }
 
       // Check units
-      Object.values(ResonanceStrings.units).forEach((prop) => {
+      for (const prop of Object.values(ResonanceStrings.units)) {
         expect(prop).toBeDefined();
-      });
+      }
 
       // Check presets
-      Object.values(ResonanceStrings.presets).forEach((prop) => {
+      for (const prop of Object.values(ResonanceStrings.presets)) {
         expect(prop).toBeDefined();
-      });
+      }
     });
   });
 });

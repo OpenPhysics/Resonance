@@ -22,9 +22,9 @@ class MockProperty<T> {
 
   set value(newValue: T) {
     this._value = newValue;
-    this.listeners.forEach((listener) => {
+    for (const listener of this.listeners) {
       listener(newValue);
-    });
+    }
   }
 
   link(listener: (value: T) => void): void {
@@ -284,16 +284,16 @@ describe("ListenerTracker", () => {
       }
 
       // All listeners should be tracked
-      properties.forEach((p) => {
+      for (const p of properties) {
         expect(p.listenerCount).toBe(1);
-      });
+      }
 
       // Dispose should clean up all
       tracker.dispose();
 
-      properties.forEach((p) => {
+      for (const p of properties) {
         expect(p.listenerCount).toBe(0);
-      });
+      }
     });
   });
 

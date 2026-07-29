@@ -52,7 +52,9 @@ describe("AnalyticalSolver", () => {
 
       const newState = model.getState();
       // Position should have changed
-      expect(newState[0]).not.toBeCloseTo(initialState[0]!, 5);
+      const initialX = initialState[0];
+      expect(initialX).toBeDefined();
+      expect(newState[0]).not.toBeCloseTo(initialX as number, 5);
     });
 
     it("should not change state when dt is 0", () => {
@@ -64,8 +66,12 @@ describe("AnalyticalSolver", () => {
       solver.step(0, model);
 
       const newState = model.getState();
-      expect(newState[0]).toBeCloseTo(initialState[0]!, 10);
-      expect(newState[1]).toBeCloseTo(initialState[1]!, 10);
+      const initialX = initialState[0];
+      const initialV = initialState[1];
+      expect(initialX).toBeDefined();
+      expect(initialV).toBeDefined();
+      expect(newState[0]).toBeCloseTo(initialX as number, 10);
+      expect(newState[1]).toBeCloseTo(initialV as number, 10);
     });
 
     it("should preserve energy for undamped oscillator", () => {
@@ -293,7 +299,7 @@ describe("AnalyticalSolver", () => {
       const posBeforeChange = model.positionProperty.value;
 
       // Change mass
-      model.massProperty.value = model.massProperty.value * 2;
+      model.massProperty.value *= 2;
 
       // Step should continue smoothly
       solver.step(0.001, model);
@@ -314,7 +320,7 @@ describe("AnalyticalSolver", () => {
       const velBeforeChange = model.velocityProperty.value;
 
       // Change spring constant
-      model.springConstantProperty.value = model.springConstantProperty.value * 1.5;
+      model.springConstantProperty.value *= 1.5;
 
       solver.step(0.001, model);
       const velAfterChange = model.velocityProperty.value;
