@@ -221,7 +221,7 @@ export class ResonanceCurveCalculator {
       // No resonance data, return flat line
       for (let i = 0; i < sampleCount; i++) {
         const freq = freqMin + i * freqStep;
-        this.cachedDataPoints[i]!.setXY(freq, 0);
+        this.cachedDataPoints[i]?.setXY(freq, 0);
       }
       return this.cachedDataPoints;
     }
@@ -238,7 +238,7 @@ export class ResonanceCurveCalculator {
       const strength = this.precomputedStrengths[clampedIndex]!;
       const normalized = Math.min(strength * invMaxStrength, 1);
 
-      this.cachedDataPoints[i]!.setXY(freq, normalized);
+      this.cachedDataPoints[i]?.setXY(freq, normalized);
     }
 
     return this.cachedDataPoints;

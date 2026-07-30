@@ -329,69 +329,65 @@ export class ChladniScreenView extends ScreenView {
    * - Escape: Stop sweep if running
    */
   private setupKeyboardControls(): void {
-    // Use DOM event listener for global keyboard handling
     const handleKeyDown = (event: KeyboardEvent) => {
-      // Ignore if typing in an input field
-      if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) {
+      if (this.shouldIgnoreChladniKeyboardEvent(event)) {
         return;
-      }
-
-      // Ignore arrow keys if any interactive element has focus
-      // (buttons, sliders, and the excitation marker have their own keyboard handling)
-      if (KeyboardUtils.isArrowKey(event)) {
-        const activeElement = document.activeElement;
-        // Skip if focus is on a button, slider, or other interactive element
-        if (activeElement && activeElement !== document.body && activeElement.tagName !== "BODY") {
-          return;
-        }
       }
 
       const shiftPressed = event.shiftKey;
 
       if (KeyboardUtils.isKeyEvent(event, KeyboardUtils.KEY_SPACE)) {
-        // Toggle play/pause
         event.preventDefault();
         this.model.isPlayingProperty.value = !this.model.isPlayingProperty.value;
       } else if (KeyboardUtils.isArrowKey(event)) {
-        // Block frequency adjustment during sweep
-        if (this.model.isSweepActiveProperty.value) {
-          return;
-        }
-        event.preventDefault();
-
-        if (KeyboardUtils.isKeyEvent(event, KeyboardUtils.KEY_LEFT_ARROW)) {
-          // Decrease frequency
-          const step = shiftPressed ? FREQUENCY_STEP_MEDIUM : FREQUENCY_STEP_SMALL;
-          this.adjustFrequency(-step);
-        } else if (KeyboardUtils.isKeyEvent(event, KeyboardUtils.KEY_RIGHT_ARROW)) {
-          // Increase frequency
-          const step = shiftPressed ? FREQUENCY_STEP_MEDIUM : FREQUENCY_STEP_SMALL;
-          this.adjustFrequency(step);
-        } else if (KeyboardUtils.isKeyEvent(event, KeyboardUtils.KEY_DOWN_ARROW)) {
-          // Decrease frequency (larger step)
-          const step = shiftPressed ? FREQUENCY_STEP_LARGE : FREQUENCY_STEP_MEDIUM;
-          this.adjustFrequency(-step);
-        } else if (KeyboardUtils.isKeyEvent(event, KeyboardUtils.KEY_UP_ARROW)) {
-          // Increase frequency (larger step)
-          const step = shiftPressed ? FREQUENCY_STEP_LARGE : FREQUENCY_STEP_MEDIUM;
-          this.adjustFrequency(step);
-        }
+        this.handleChladniArrowKeyFrequency(event, shiftPressed);
       } else if (event.key.toLowerCase() === "r" && !event.ctrlKey) {
-        // Reset all (but not Ctrl+R which is browser refresh)
         event.preventDefault();
         this.model.reset();
         this.reset();
-      } else if (KeyboardUtils.isKeyEvent(event, KeyboardUtils.KEY_ESCAPE)) {
-        // Stop sweep if running
-        if (this.model.isSweepingProperty.value) {
-          event.preventDefault();
-          this.model.stopSweep();
-        }
+      } else if (KeyboardUtils.isKeyEvent(event, KeyboardUtils.KEY_ESCAPE) && this.model.isSweepingProperty.value) {
+        event.preventDefault();
+        this.model.stopSweep();
       }
     };
 
-    // Add global keyboard listener
     window.addEventListener("keydown", handleKeyDown);
+  }
+
+  /**
+   * Returns true when the keyboard event should be ignored (input focus or interactive element focus).
+   */
+  private shouldIgnoreChladniKeyboardEvent(event: KeyboardEvent): boolean {
+    if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) {
+      return true;
+    }
+
+    if (KeyboardUtils.isArrowKey(event)) {
+      const activeElement = document.activeElement;
+      return Boolean(activeElement && activeElement !== document.body && activeElement.tagName !== "BODY");
+    }
+
+    return false;
+  }
+
+  /**
+   * Adjust frequency in response to arrow-key presses.
+   */
+  private handleChladniArrowKeyFrequency(event: KeyboardEvent, shiftPressed: boolean): void {
+    if (this.model.isSweepActiveProperty.value) {
+      return;
+    }
+    event.preventDefault();
+
+    if (KeyboardUtils.isKeyEvent(event, KeyboardUtils.KEY_LEFT_ARROW)) {
+      this.adjustFrequency(-(shiftPressed ? FREQUENCY_STEP_MEDIUM : FREQUENCY_STEP_SMALL));
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardUtils.KEY_RIGHT_ARROW)) {
+      this.adjustFrequency(shiftPressed ? FREQUENCY_STEP_MEDIUM : FREQUENCY_STEP_SMALL);
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardUtils.KEY_DOWN_ARROW)) {
+      this.adjustFrequency(-(shiftPressed ? FREQUENCY_STEP_LARGE : FREQUENCY_STEP_MEDIUM));
+    } else if (KeyboardUtils.isKeyEvent(event, KeyboardUtils.KEY_UP_ARROW)) {
+      this.adjustFrequency(shiftPressed ? FREQUENCY_STEP_LARGE : FREQUENCY_STEP_MEDIUM);
+    }
   }
 
   /**

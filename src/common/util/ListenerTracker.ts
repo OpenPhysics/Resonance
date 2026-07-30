@@ -47,9 +47,9 @@ export class ListenerTracker {
    * Unlinks all tracked listeners and clears the tracking list.
    */
   public dispose(): void {
-    this.cleanups.forEach((cleanup) => {
+    for (const cleanup of this.cleanups) {
       cleanup();
-    });
+    }
     this.cleanups.length = 0;
   }
 }

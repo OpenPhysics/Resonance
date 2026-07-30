@@ -429,17 +429,17 @@ export default class ConfigurableGraph extends Node {
 
     // Create and add resize handles
     const resizeHandles = this.interactionHandler.createResizeHandles();
-    resizeHandles.forEach((handle) => {
+    for (const handle of resizeHandles) {
       this.addChild(handle);
-    });
+    }
 
     // Link visibility property to the content node, header bar, and resize handles
     this.graphVisibleProperty.link((visible) => {
       this.graphContentNode.visible = visible;
       this.headerBar.visible = visible;
-      resizeHandles.forEach((handle) => {
+      for (const handle of resizeHandles) {
         handle.visible = visible;
-      });
+      }
     });
 
     // Add visual feedback for drag and resize operations

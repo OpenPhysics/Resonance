@@ -828,9 +828,9 @@ export class OscillatorControlPanel extends Panel {
     };
 
     this.listenerTracker.link(this.model.selectedResonatorIndexProperty, updateNaturalFrequency);
-    this.model.resonatorModels.forEach((resonator) => {
+    for (const resonator of this.model.resonatorModels) {
       this.listenerTracker.link(resonator.naturalFrequencyHzProperty, updateNaturalFrequency);
-    });
+    }
 
     // Also update when locale changes (string properties update)
     this.listenerTracker.link(ResonanceStrings.units.hertzPatternStringProperty, updateNaturalFrequency);

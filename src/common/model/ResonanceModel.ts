@@ -692,7 +692,7 @@ export class ResonanceModel extends BaseModel {
     this.bandwidthProperty = new DerivedProperty(
       [this.naturalFrequencyHzProperty, this.qualityFactorProperty],
       (f0: number, Q: number) => {
-        if (!isFinite(Q) || Q < 1e-15) {
+        if (!Number.isFinite(Q) || Q < 1e-15) {
           return f0 > 0 ? Infinity : 0;
         }
         return f0 / Q;

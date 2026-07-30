@@ -27,8 +27,8 @@
 import { Multilink, NumberProperty, Property, StringUnionProperty } from "scenerystack/axon";
 import { Range, Vector2 } from "scenerystack/dot";
 import { FrequencySweepController } from "../../common/model/FrequencySweepController.js";
+import type { BoundaryMode, GrainCountOption } from "./ChladniConstants.js";
 import {
-  type BoundaryMode,
   DEFAULT_BOUNDARY_MODE,
   DEFAULT_EXCITATION_X,
   DEFAULT_EXCITATION_Y,
@@ -36,8 +36,6 @@ import {
   FREQUENCY_DEFAULT,
   FREQUENCY_MAX,
   FREQUENCY_MIN,
-  GRAIN_COUNT_OPTIONS,
-  type GrainCountOption,
   SWEEP_RATE,
 } from "./ChladniConstants.js";
 import { Material, type MaterialType } from "./Material.js";
@@ -48,8 +46,8 @@ import { type PlaybackState, PlaybackStateMachine } from "./PlaybackStateMachine
 import { ResonanceCurveCalculator } from "./ResonanceCurveCalculator.js";
 
 // Re-export types for backward compatibility
-export type { BoundaryMode, GrainCountOption };
-export { GRAIN_COUNT_OPTIONS };
+export type { BoundaryMode, GrainCountOption } from "./ChladniConstants.js";
+export { GRAIN_COUNT_OPTIONS } from "./ChladniConstants.js";
 
 /**
  * Valid time speed values for the Chladni simulation.

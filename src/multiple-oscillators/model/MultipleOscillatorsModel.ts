@@ -6,10 +6,5 @@
  */
 
 import { BaseOscillatorScreenModel } from "../../common/model/BaseOscillatorScreenModel.js";
-import type { ResonancePreferencesModel } from "../../preferences/ResonancePreferencesModel.js";
 
-export class MultipleOscillatorsModel extends BaseOscillatorScreenModel {
-  public constructor(preferencesModel: ResonancePreferencesModel) {
-    super(preferencesModel);
-  }
-}
+export class MultipleOscillatorsModel extends BaseOscillatorScreenModel {}

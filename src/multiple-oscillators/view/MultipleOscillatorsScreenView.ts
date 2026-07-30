@@ -4,16 +4,10 @@
  * (trace is not useful with multiple resonators).
  */
 
-import type { ScreenViewOptions } from "scenerystack/sim";
 import { BaseOscillatorScreenView } from "../../common/view/BaseOscillatorScreenView.js";
 import type { OscillatorControlPanelOptions } from "../../common/view/OscillatorControlPanel.js";
-import type { MultipleOscillatorsModel } from "../model/MultipleOscillatorsModel.js";
 
 export class MultipleOscillatorsScreenView extends BaseOscillatorScreenView {
-  public constructor(model: MultipleOscillatorsModel, options?: ScreenViewOptions) {
-    super(model, options);
-  }
-
   protected override getControlPanelOptions(): Partial<OscillatorControlPanelOptions> {
     return { showTrace: false };
   }

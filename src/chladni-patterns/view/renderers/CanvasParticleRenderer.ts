@@ -76,8 +76,7 @@ class ParticleCanvasNode extends CanvasNode {
     let minY = Infinity;
     let maxY = -Infinity;
 
-    for (let i = 0; i < this.particles.length; i++) {
-      const particle = this.particles[i]!;
+    for (const particle of this.particles) {
       // Use the transform to get view coordinates
       const viewX = this.modelViewTransform.modelToViewX(particle.x);
       const viewY = this.modelViewTransform.modelToViewY(particle.y);
@@ -148,8 +147,7 @@ class ParticleCanvasNode extends CanvasNode {
     context.fillStyle = color;
     context.beginPath();
 
-    for (let i = 0; i < this.particles.length; i++) {
-      const particle = this.particles[i]!;
+    for (const particle of this.particles) {
       const viewX = this.modelViewTransform.modelToViewX(particle.x);
       const viewY = this.modelViewTransform.modelToViewY(particle.y);
 

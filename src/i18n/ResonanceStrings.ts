@@ -80,4 +80,4 @@ export const ResonanceStrings = {
 export const resonanceStringManager = StringManager.getInstance();
 
 // Export StringManager for direct access when needed
-export { StringManager };
+export { StringManager } from "./StringManager.js";

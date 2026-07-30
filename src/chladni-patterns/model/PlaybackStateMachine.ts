@@ -99,13 +99,12 @@ export class PlaybackStateMachine {
       } else if (currentState === "paused_sweeping") {
         this.stateProperty.value = "sweeping";
       }
-    } else {
-      // Transitioning to paused
-      if (currentState === "playing") {
-        this.stateProperty.value = "idle";
-      } else if (currentState === "sweeping") {
-        this.stateProperty.value = "paused_sweeping";
-      }
+    } else if (currentState === "playing") {
+      // Transitioning to paused from playing
+      this.stateProperty.value = "idle";
+    } else if (currentState === "sweeping") {
+      // Transitioning to paused from sweeping
+      this.stateProperty.value = "paused_sweeping";
     }
   }
 
@@ -223,11 +222,12 @@ export class PlaybackStateMachine {
    * @unused - Currently not used in the codebase but kept for future validation needs
    */
   public isValidTransition(from: PlaybackState, to: PlaybackState): boolean {
+    const pausedSweeping: PlaybackState = "paused_sweeping";
     const validTransitions: Record<PlaybackState, PlaybackState[]> = {
       idle: ["playing", "sweeping"],
       playing: ["idle", "sweeping"],
-      sweeping: ["playing", "paused_sweeping"],
-      paused_sweeping: ["idle", "sweeping"],
+      sweeping: ["playing", pausedSweeping],
+      [pausedSweeping]: ["idle", "sweeping"],
     };
 
     return validTransitions[from]?.includes(to) ?? false;

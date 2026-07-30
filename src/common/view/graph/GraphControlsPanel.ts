@@ -72,7 +72,7 @@ export default class GraphControlsPanel {
           font: COMBO_BOX_FONT,
           fill: ResonanceColors.textProperty,
         }),
-      tandemName: this.sanitizeTandemName(prop.name) + "Item",
+      tandemName: `${this.sanitizeTandemName(prop.name)}Item`,
     }));
 
     const xComboBox = new ComboBox(this.xPropertyProperty, xItems, listParent, {
@@ -93,7 +93,7 @@ export default class GraphControlsPanel {
           font: COMBO_BOX_FONT,
           fill: ResonanceColors.textProperty,
         }),
-      tandemName: this.sanitizeTandemName(prop.name) + "Item",
+      tandemName: `${this.sanitizeTandemName(prop.name)}Item`,
     }));
 
     const yComboBox = new ComboBox(this.yPropertyProperty, yItems, listParent, {

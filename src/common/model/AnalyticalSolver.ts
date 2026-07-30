@@ -90,10 +90,10 @@ export class AnalyticalSolver extends ODESolver {
   private omegaD: number = 0;
   private alphaExp: number = 0; // overdamped decay rate 1
   private betaExp: number = 0; // overdamped decay rate 2
-  private C1: number = 0;
-  private C2: number = 0;
+  private c1: number = 0;
+  private c2: number = 0;
   private xEq: number = 0;
-  private X0ss: number = 0;
+  private x0ss: number = 0;
   private phiSS: number = 0;
   private omegaDrive: number = 0;
   private drivingEnabled: boolean = false;
@@ -261,7 +261,7 @@ export class AnalyticalSolver extends ODESolver {
       const term1 = k - m * this.omegaDrive * this.omegaDrive;
       const term2 = bVal * this.omegaDrive;
       const denom = Math.sqrt(term1 * term1 + term2 * term2);
-      this.X0ss = denom > 1e-10 ? F0 / denom : F0 / 1e-10;
+      this.x0ss = denom > 1e-10 ? F0 / denom : F0 / 1e-10;
 
       // Phase lag calculation using atan2 for correct quadrant
       if (Math.abs(term1) < 1e-10) {
@@ -274,7 +274,7 @@ export class AnalyticalSolver extends ODESolver {
       }
     } else {
       this.omegaDrive = 0;
-      this.X0ss = 0;
+      this.x0ss = 0;
       this.phiSS = 0;
     }
 
@@ -282,8 +282,8 @@ export class AnalyticalSolver extends ODESolver {
     // x0 = xEq + C1·h1(0) + C2·h2(0) + xp(0)
     // v0 = C1·h1'(0) + C2·h2'(0) + xp'(0)
 
-    const xp0 = this.drivingEnabled ? this.X0ss * Math.sin(this.phase0 - this.phiSS) : 0;
-    const xpDot0 = this.drivingEnabled ? this.X0ss * this.omegaDrive * Math.cos(this.phase0 - this.phiSS) : 0;
+    const xp0 = this.drivingEnabled ? this.x0ss * Math.sin(this.phase0 - this.phiSS) : 0;
+    const xpDot0 = this.drivingEnabled ? this.x0ss * this.omegaDrive * Math.cos(this.phase0 - this.phiSS) : 0;
 
     const residualX = this.x0 - xp0 - this.xEq;
     const residualV = this.v0 - xpDot0;
@@ -293,23 +293,23 @@ export class AnalyticalSolver extends ODESolver {
         // x_h(τ) = e^(-ζω₀τ) [C₁ cos(ω_d τ) + C₂ sin(ω_d τ)]
         // At τ = 0: x_h(0) = C₁
         // ẋ_h(0) = -ζω₀ C₁ + ω_d C₂
-        this.C1 = residualX;
-        this.C2 = (residualV + this.zeta * this.omega0 * this.C1) / this.omegaD;
+        this.c1 = residualX;
+        this.c2 = (residualV + this.zeta * this.omega0 * this.c1) / this.omegaD;
         break;
       case DampingRegime.CRITICALLY_DAMPED:
         // x_h(τ) = (C₁ + C₂τ) e^(-ω₀τ)
         // At τ = 0: x_h(0) = C₁
         // ẋ_h(0) = C₂ - ω₀ C₁
-        this.C1 = residualX;
-        this.C2 = residualV + this.omega0 * this.C1;
+        this.c1 = residualX;
+        this.c2 = residualV + this.omega0 * this.c1;
         break;
       case DampingRegime.OVERDAMPED:
         // x_h(τ) = C₁ e^(-ατ) + C₂ e^(-βτ)
         // At τ = 0: x_h(0) = C₁ + C₂ = residualX
         // ẋ_h(0) = -α C₁ - β C₂ = residualV
         // Solving: C₁ = (residualX·β + residualV) / (β - α)
-        this.C1 = (residualX * this.betaExp + residualV) / (this.betaExp - this.alphaExp);
-        this.C2 = residualX - this.C1;
+        this.c1 = (residualX * this.betaExp + residualV) / (this.betaExp - this.alphaExp);
+        this.c2 = residualX - this.c1;
         break;
     }
   }
@@ -323,16 +323,16 @@ export class AnalyticalSolver extends ODESolver {
     switch (this.regime) {
       case DampingRegime.UNDERDAMPED: {
         const decay = Math.exp(-this.zeta * this.omega0 * tau);
-        xh = decay * (this.C1 * Math.cos(this.omegaD * tau) + this.C2 * Math.sin(this.omegaD * tau));
+        xh = decay * (this.c1 * Math.cos(this.omegaD * tau) + this.c2 * Math.sin(this.omegaD * tau));
         break;
       }
       case DampingRegime.CRITICALLY_DAMPED: {
         const decay = Math.exp(-this.omega0 * tau);
-        xh = (this.C1 + this.C2 * tau) * decay;
+        xh = (this.c1 + this.c2 * tau) * decay;
         break;
       }
       case DampingRegime.OVERDAMPED: {
-        xh = this.C1 * Math.exp(-this.alphaExp * tau) + this.C2 * Math.exp(-this.betaExp * tau);
+        xh = this.c1 * Math.exp(-this.alphaExp * tau) + this.c2 * Math.exp(-this.betaExp * tau);
         break;
       }
     }
@@ -341,7 +341,7 @@ export class AnalyticalSolver extends ODESolver {
     let xp = 0;
     if (this.drivingEnabled) {
       const phase = this.phase0 + this.omegaDrive * tau;
-      xp = this.X0ss * Math.sin(phase - this.phiSS);
+      xp = this.x0ss * Math.sin(phase - this.phiSS);
     }
 
     return xh + xp + this.xEq;
@@ -363,21 +363,21 @@ export class AnalyticalSolver extends ODESolver {
         // = e^(-ζω₀t)[(-ζω₀)(C₁cos + C₂sin) + (-C₁ω_d sin + C₂ω_d cos)]
         vh =
           decay *
-          (-this.zeta * this.omega0 * (this.C1 * cosTerm + this.C2 * sinTerm) +
-            this.omegaD * (-this.C1 * sinTerm + this.C2 * cosTerm));
+          (-this.zeta * this.omega0 * (this.c1 * cosTerm + this.c2 * sinTerm) +
+            this.omegaD * (-this.c1 * sinTerm + this.c2 * cosTerm));
         break;
       }
       case DampingRegime.CRITICALLY_DAMPED: {
         const decay = Math.exp(-this.omega0 * tau);
         // d/dt[(C₁ + C₂t)e^(-ω₀t)] = C₂·e^(-ω₀t) - ω₀(C₁ + C₂t)e^(-ω₀t)
         // = e^(-ω₀t)[C₂ - ω₀(C₁ + C₂t)]
-        vh = decay * (this.C2 - this.omega0 * (this.C1 + this.C2 * tau));
+        vh = decay * (this.c2 - this.omega0 * (this.c1 + this.c2 * tau));
         break;
       }
       case DampingRegime.OVERDAMPED: {
         vh =
-          -this.alphaExp * this.C1 * Math.exp(-this.alphaExp * tau) -
-          this.betaExp * this.C2 * Math.exp(-this.betaExp * tau);
+          -this.alphaExp * this.c1 * Math.exp(-this.alphaExp * tau) -
+          this.betaExp * this.c2 * Math.exp(-this.betaExp * tau);
         break;
       }
     }
@@ -386,7 +386,7 @@ export class AnalyticalSolver extends ODESolver {
     let vp = 0;
     if (this.drivingEnabled) {
       const phase = this.phase0 + this.omegaDrive * tau;
-      vp = this.X0ss * this.omegaDrive * Math.cos(phase - this.phiSS);
+      vp = this.x0ss * this.omegaDrive * Math.cos(phase - this.phiSS);
     }
 
     return vh + vp;

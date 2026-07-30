@@ -62,7 +62,7 @@ export default class GraphDataManager {
    */
   public addDataPoint(xValue: number, yValue: number): void {
     // Skip invalid values
-    if (!(isFinite(xValue) && isFinite(yValue))) {
+    if (!(Number.isFinite(xValue) && Number.isFinite(yValue))) {
       return;
     }
 
@@ -98,7 +98,7 @@ export default class GraphDataManager {
 
     // Add all valid points
     for (const { x, y } of points) {
-      if (isFinite(x) && isFinite(y)) {
+      if (Number.isFinite(x) && Number.isFinite(y)) {
         this.dataPoints.push(new Vector2(x, y));
       }
     }
@@ -203,7 +203,7 @@ export default class GraphDataManager {
    */
   public static calculateTickSpacing(rangeLength: number): number {
     // Handle edge cases
-    if (!isFinite(rangeLength) || rangeLength <= 0) {
+    if (!Number.isFinite(rangeLength) || rangeLength <= 0) {
       return 1;
     }
 
