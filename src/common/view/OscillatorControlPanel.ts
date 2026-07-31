@@ -615,6 +615,8 @@ export class OscillatorControlPanel extends Panel {
       }),
       {
         boxWidth: ResonanceConstants.RULER_CHECKBOX_BOX_WIDTH,
+        checkboxColor: ResonanceColors.textProperty,
+        checkboxColorBackground: ResonanceColors.panelFillProperty,
         // Accessibility
         accessibleName: ResonanceStrings.a11y.resonatorPanel.rulerCheckboxLabelStringProperty,
         // Voicing support
@@ -649,6 +651,8 @@ export class OscillatorControlPanel extends Panel {
 
     const checkbox = new Checkbox(gridVisibleProperty, gridIcon, {
       boxWidth: ResonanceConstants.RULER_CHECKBOX_BOX_WIDTH,
+      checkboxColor: ResonanceColors.textProperty,
+      checkboxColorBackground: ResonanceColors.panelFillProperty,
       // Accessibility
       accessibleName: ResonanceStrings.a11y.resonatorPanel.gridCheckboxLabelStringProperty,
       // Voicing support
@@ -688,6 +692,8 @@ export class OscillatorControlPanel extends Panel {
       }),
       {
         boxWidth: ResonanceConstants.RULER_CHECKBOX_BOX_WIDTH,
+        checkboxColor: ResonanceColors.textProperty,
+        checkboxColorBackground: ResonanceColors.panelFillProperty,
         accessibleName: ResonanceStrings.a11y.resonatorPanel.traceCheckboxLabelStringProperty,
         voicingNameResponse: ResonanceStrings.a11y.resonatorPanel.traceCheckboxLabelStringProperty,
         voicingHintResponse: ResonanceStrings.a11y.resonatorPanel.traceCheckboxDescriptionStringProperty,

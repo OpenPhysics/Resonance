@@ -49,6 +49,8 @@ export class DisplayOptionsSection extends VBox {
       }),
       {
         boxWidth: ResonanceConstants.RULER_CHECKBOX_BOX_WIDTH,
+        checkboxColor: ResonanceColors.textProperty,
+        checkboxColorBackground: ResonanceColors.panelFillProperty,
         // Accessibility
         accessibleName: ResonanceStrings.chladni.a11y.controlPanel.showResonanceCurveLabelStringProperty,
       },
@@ -63,6 +65,8 @@ export class DisplayOptionsSection extends VBox {
       }),
       {
         boxWidth: ResonanceConstants.RULER_CHECKBOX_BOX_WIDTH,
+        checkboxColor: ResonanceColors.textProperty,
+        checkboxColorBackground: ResonanceColors.panelFillProperty,
         // Accessibility
         accessibleName: ResonanceStrings.chladni.a11y.controlPanel.showRulerLabelStringProperty,
       },
@@ -77,6 +81,8 @@ export class DisplayOptionsSection extends VBox {
       }),
       {
         boxWidth: ResonanceConstants.RULER_CHECKBOX_BOX_WIDTH,
+        checkboxColor: ResonanceColors.textProperty,
+        checkboxColorBackground: ResonanceColors.panelFillProperty,
         // Accessibility
         accessibleName: ResonanceStrings.chladni.a11y.controlPanel.showGridLabelStringProperty,
       },
@@ -91,6 +97,8 @@ export class DisplayOptionsSection extends VBox {
       }),
       {
         boxWidth: ResonanceConstants.RULER_CHECKBOX_BOX_WIDTH,
+        checkboxColor: ResonanceColors.textProperty,
+        checkboxColorBackground: ResonanceColors.panelFillProperty,
         // Accessibility
         accessibleName: ResonanceStrings.chladni.a11y.controlPanel.showColormapLabelStringProperty,
       },

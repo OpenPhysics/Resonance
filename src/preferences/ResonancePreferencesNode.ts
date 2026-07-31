@@ -135,7 +135,11 @@ export class ResonancePreferencesNode extends VBox {
           }),
         ],
       }),
-      { boxWidth: 16 },
+      {
+        boxWidth: 16,
+        checkboxColor: ResonanceColors.controlSurfaceTextColorProperty,
+        checkboxColorBackground: ResonanceColors.controlSurfaceColorProperty,
+      },
     );
 
     const rendererSection = ResonancePreferencesNode.createRendererSection(preferencesModel);

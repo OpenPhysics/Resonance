@@ -57,6 +57,8 @@ export class OscillatorVectorControlPanel extends Panel {
 
     const velocityCheckbox = new Checkbox(velocityVisibleProperty, velocityLabel, {
       boxWidth: CHECKBOX_BOX_WIDTH,
+      checkboxColor: ResonanceColors.textProperty,
+      checkboxColorBackground: ResonanceColors.panelFillProperty,
       accessibleName: ResonanceStrings.controls.velocityStringProperty,
     });
 
@@ -82,6 +84,8 @@ export class OscillatorVectorControlPanel extends Panel {
 
     const accelerationCheckbox = new Checkbox(accelerationVisibleProperty, accelerationLabel, {
       boxWidth: CHECKBOX_BOX_WIDTH,
+      checkboxColor: ResonanceColors.textProperty,
+      checkboxColorBackground: ResonanceColors.panelFillProperty,
       accessibleName: ResonanceStrings.controls.accelerationStringProperty,
     });
 
@@ -107,6 +111,8 @@ export class OscillatorVectorControlPanel extends Panel {
 
     const appliedForceCheckbox = new Checkbox(appliedForceVisibleProperty, appliedForceLabel, {
       boxWidth: CHECKBOX_BOX_WIDTH,
+      checkboxColor: ResonanceColors.textProperty,
+      checkboxColorBackground: ResonanceColors.panelFillProperty,
       accessibleName: ResonanceStrings.controls.appliedForceStringProperty,
     });
 

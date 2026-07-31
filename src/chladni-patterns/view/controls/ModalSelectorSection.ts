@@ -61,6 +61,8 @@ export class ModalSelectorSection extends VBox {
       }),
       {
         boxWidth: ResonanceConstants.RULER_CHECKBOX_BOX_WIDTH,
+        checkboxColor: ResonanceColors.textProperty,
+        checkboxColorBackground: ResonanceColors.panelFillProperty,
       },
     );
 

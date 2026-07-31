@@ -754,6 +754,8 @@ export class BaseOscillatorScreenView extends ScreenView {
     });
     const checkbox = new Checkbox(graph.getGraphVisibleProperty(), checkboxLabel, {
       boxWidth: GRAPH_CHECKBOX_BOX_WIDTH,
+      checkboxColor: ResonanceColors.textProperty,
+      checkboxColorBackground: ResonanceColors.panelFillProperty,
       spacing: GRAPH_CHECKBOX_SPACING,
     });
 
