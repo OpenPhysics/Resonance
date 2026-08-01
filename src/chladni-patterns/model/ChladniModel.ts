@@ -175,7 +175,9 @@ export class ChladniModel {
     this.grainCountProperty = new Property<GrainCountOption>(DEFAULT_GRAIN_COUNT);
 
     // Initialize boundary mode
-    this.boundaryModeProperty = new Property<BoundaryMode>(DEFAULT_BOUNDARY_MODE);
+    this.boundaryModeProperty = new StringUnionProperty<BoundaryMode>(DEFAULT_BOUNDARY_MODE, {
+      validValues: ["clamp", "remove"],
+    });
 
     // --- Initialize Extracted Modules ---
 

@@ -12,7 +12,7 @@
  * - reset(): Restore initial conditions
  */
 
-import { BooleanProperty, NumberProperty, Property } from "scenerystack/axon";
+import { BooleanProperty, NumberProperty, type Property, StringUnionProperty } from "scenerystack/axon";
 import { AdaptiveRK45Solver } from "./AdaptiveRK45Solver.js";
 import { AnalyticalSolver } from "./AnalyticalSolver.js";
 import type { ODEModel, ODESolver, SubStepCallback } from "./ODESolver.js";
@@ -36,7 +36,7 @@ export abstract class BaseModel implements ODEModel {
   // Time management
   public readonly timeProperty: NumberProperty;
   public readonly isPlayingProperty: BooleanProperty;
-  public readonly timeSpeedProperty: Property<TimeSpeed>;
+  public readonly timeSpeedProperty: StringUnionProperty<TimeSpeed>;
 
   // ODE solver
   protected solver: ODESolver;
@@ -56,7 +56,9 @@ export abstract class BaseModel implements ODEModel {
     // Initialize time management properties
     this.timeProperty = new NumberProperty(0);
     this.isPlayingProperty = new BooleanProperty(true);
-    this.timeSpeedProperty = new Property<TimeSpeed>("normal");
+    this.timeSpeedProperty = new StringUnionProperty<TimeSpeed>("normal", {
+      validValues: ["slow", "normal", "fast"],
+    });
 
     // Initialize solver
     this.solverTypeProperty = solverTypeProperty;
