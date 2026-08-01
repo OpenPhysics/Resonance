@@ -20,7 +20,7 @@ import { Property } from "scenerystack/axon";
 import { Bounds2, Vector2, Vector2Property } from "scenerystack/dot";
 import { type EmptySelfOptions, optionize } from "scenerystack/phet-core";
 import { ModelViewTransform2 } from "scenerystack/phetcommon";
-import { DragListener, KeyboardDragListener, Line, Node, Rectangle, Text } from "scenerystack/scenery";
+import { Line, Node, Rectangle, RichDragListener, Text } from "scenerystack/scenery";
 import { type ParametricSpringNode, ResetAllButton, RulerNode } from "scenerystack/scenery-phet";
 import { ScreenView, type ScreenViewOptions } from "scenerystack/sim";
 import { Checkbox } from "scenerystack/sun";
@@ -476,30 +476,27 @@ export class BaseOscillatorScreenView extends ScreenView {
     // Convert to model bounds for the drag listener
     const dragBoundsModel = this.modelViewTransform.viewToModelBounds(dragBounds);
 
-    const dragListener = new DragListener({
-      targetNode: rulerNode,
-      positionProperty: this.rulerPositionProperty,
-      transform: this.modelViewTransform,
-      useParentOffset: true,
-      dragBoundsProperty: new Property(dragBoundsModel),
-    });
-    rulerNode.addInputListener(dragListener);
+    rulerNode.addInputListener(
+      new RichDragListener({
+        positionProperty: this.rulerPositionProperty,
+        transform: this.modelViewTransform,
+        dragBoundsProperty: new Property(dragBoundsModel),
+        dragListenerOptions: {
+          targetNode: rulerNode,
+          useParentOffset: true,
+        },
+        keyboardDragListenerOptions: {
+          dragSpeed: RULER_KEYBOARD_DRAG_SPEED,
+          shiftDragSpeed: RULER_KEYBOARD_SHIFT_DRAG_SPEED,
+        },
+      }),
+    );
     rulerNode.cursor = "move";
 
     // Make focusable for keyboard navigation
     rulerNode.tagName = "div";
     rulerNode.focusable = true;
     rulerNode.accessibleName = ResonanceStrings.a11y.rulerAccessibleNameStringProperty;
-
-    // KeyboardDragListener for keyboard navigation
-    const keyboardDragListener = new KeyboardDragListener({
-      positionProperty: this.rulerPositionProperty,
-      transform: this.modelViewTransform,
-      dragBoundsProperty: new Property(dragBoundsModel),
-      dragSpeed: RULER_KEYBOARD_DRAG_SPEED,
-      shiftDragSpeed: RULER_KEYBOARD_SHIFT_DRAG_SPEED,
-    });
-    rulerNode.addInputListener(keyboardDragListener);
 
     return rulerNode;
   }

@@ -10,7 +10,7 @@
  */
 
 import type { ModelViewTransform2 } from "scenerystack/phetcommon";
-import { DragListener, KeyboardDragListener, Line, Node, Rectangle } from "scenerystack/scenery";
+import { Line, Node, Rectangle, RichDragListener } from "scenerystack/scenery";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
 import ResonanceColors from "../../ResonanceColors.js";
 import { type MeasurementLineModel, MeasurementLinesModel } from "../model/MeasurementLineModel.js";
@@ -73,24 +73,21 @@ class MeasurementLineNode extends Node {
       this.y = modelViewTransform.modelToViewY(position.y);
     });
 
-    // DragListener uses model's positionProperty directly with transform and bounds
-    const dragListener = new DragListener({
-      targetNode: this,
-      positionProperty: model.positionProperty,
-      transform: modelViewTransform,
-      dragBoundsProperty: model.dragBoundsProperty,
-    });
-    this.addInputListener(dragListener);
-
-    // KeyboardDragListener for keyboard navigation (vertical only)
-    const keyboardDragListener = new KeyboardDragListener({
-      positionProperty: model.positionProperty,
-      transform: modelViewTransform,
-      dragBoundsProperty: model.dragBoundsProperty,
-      dragSpeed: 100, // pixels per second
-      shiftDragSpeed: 50, // slower with shift key
-    });
-    this.addInputListener(keyboardDragListener);
+    // RichDragListener: model positionProperty + transform + bounds (pointer + keyboard).
+    this.addInputListener(
+      new RichDragListener({
+        positionProperty: model.positionProperty,
+        transform: modelViewTransform,
+        dragBoundsProperty: model.dragBoundsProperty,
+        dragListenerOptions: {
+          targetNode: this,
+        },
+        keyboardDragListenerOptions: {
+          dragSpeed: 100,
+          shiftDragSpeed: 50,
+        },
+      }),
+    );
   }
 }
 

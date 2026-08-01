@@ -9,7 +9,7 @@
 import { Property } from "scenerystack/axon";
 import { Bounds2, Matrix3, Transform3, Vector2 } from "scenerystack/dot";
 import type { ModelViewTransform2 } from "scenerystack/phetcommon";
-import { Circle, DragListener, KeyboardDragListener, Node, Voicing } from "scenerystack/scenery";
+import { Circle, Node, RichDragListener, Voicing } from "scenerystack/scenery";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
 import ResonanceColors from "../../ResonanceColors.js";
 import type { ChladniModel } from "../model/ChladniModel.js";
@@ -55,7 +55,7 @@ export class ExcitationMarkerNode extends VoicingNode {
   private readonly model: ChladniModel;
   private readonly options: ExcitationMarkerNodeOptions;
 
-  // View-coordinate position property for drag handling
+  // View-coordinate position property for pointer drag handling
   // This is kept in sync with the model's excitation position
   private readonly viewPositionProperty: Property<Vector2>;
   private isUpdatingFromModel = false;
@@ -94,11 +94,8 @@ export class ExcitationMarkerNode extends VoicingNode {
     // Create the marker visuals
     this.createMarker();
 
-    // Add drag listener
-    this.addDragListener();
-
-    // Add keyboard drag listener for accessibility
-    this.addKeyboardDragListener();
+    // RichDragListener: pointer drag in view coords, keyboard drag in model coords.
+    this.addRichDragListener();
 
     // Update node position when view position changes
     this.viewPositionProperty.link((viewPos) => {
@@ -157,71 +154,55 @@ export class ExcitationMarkerNode extends VoicingNode {
   }
 
   /**
-   * Add drag listener for interactive positioning.
+   * Add RichDragListener for pointer and keyboard positioning.
    */
-  private addDragListener(): void {
-    // Create drag bounds in view coordinates
-    const createDragBounds = () => {
-      const vizBounds = this.options.getVisualizationBounds();
-      return vizBounds;
-    };
-    const dragBoundsProperty = new Property(createDragBounds());
+  private addRichDragListener(): void {
+    const createViewDragBounds = () => this.options.getVisualizationBounds();
+    const viewDragBoundsProperty = new Property(createViewDragBounds());
 
-    // Update bounds when plate dimensions change
     this.model.plateWidthProperty.link(() => {
-      dragBoundsProperty.value = createDragBounds();
+      viewDragBoundsProperty.value = createViewDragBounds();
     });
     this.model.plateHeightProperty.link(() => {
-      dragBoundsProperty.value = createDragBounds();
+      viewDragBoundsProperty.value = createViewDragBounds();
     });
 
-    const dragListener = new DragListener({
-      positionProperty: this.viewPositionProperty,
-      dragBoundsProperty: dragBoundsProperty,
-      useParentOffset: true,
-      end: () => {
-        this.options.onDragEnd?.();
-      },
-    });
-
-    this.addInputListener(dragListener);
-  }
-
-  /**
-   * Add keyboard drag listener for accessibility.
-   * Allows arrow key navigation to move the excitation point.
-   */
-  private addKeyboardDragListener(): void {
-    // Create drag bounds based on plate dimensions (in model coordinates)
-    const createDragBounds = () => {
+    const createModelDragBounds = () => {
       const halfWidth = this.model.plateWidth / 2;
       const halfHeight = this.model.plateHeight / 2;
       return new Bounds2(-halfWidth, -halfHeight, halfWidth, halfHeight);
     };
-    const dragBoundsProperty = new Property(createDragBounds());
+    const modelDragBoundsProperty = new Property(createModelDragBounds());
 
-    // Update drag bounds when plate dimensions change
     this.model.plateWidthProperty.link(() => {
-      dragBoundsProperty.value = createDragBounds();
+      modelDragBoundsProperty.value = createModelDragBounds();
     });
     this.model.plateHeightProperty.link(() => {
-      dragBoundsProperty.value = createDragBounds();
+      modelDragBoundsProperty.value = createModelDragBounds();
     });
 
-    // Create a transform that inverts Y axis for keyboard drag
-    // This is needed because KeyboardDragListener assumes screen coordinates (+Y down)
-    // but excitationPositionProperty uses model coordinates (+Y up)
+    // Invert Y for keyboard drag: model coords use +Y up, screen uses +Y down.
     const invertYTransform = new Transform3(Matrix3.scaling(1, -1));
 
-    const keyboardDragListener = new KeyboardDragListener({
-      positionProperty: this.model.excitationPositionProperty,
-      dragBoundsProperty: dragBoundsProperty,
-      dragSpeed: KEYBOARD_DRAG_SPEED,
-      shiftDragSpeed: KEYBOARD_SHIFT_DRAG_SPEED,
-      transform: invertYTransform,
-    });
-
-    this.addInputListener(keyboardDragListener);
+    this.addInputListener(
+      new RichDragListener({
+        dragListenerOptions: {
+          positionProperty: this.viewPositionProperty,
+          dragBoundsProperty: viewDragBoundsProperty,
+          useParentOffset: true,
+          end: () => {
+            this.options.onDragEnd?.();
+          },
+        },
+        keyboardDragListenerOptions: {
+          positionProperty: this.model.excitationPositionProperty,
+          dragBoundsProperty: modelDragBoundsProperty,
+          transform: invertYTransform,
+          dragSpeed: KEYBOARD_DRAG_SPEED,
+          shiftDragSpeed: KEYBOARD_SHIFT_DRAG_SPEED,
+        },
+      }),
+    );
   }
 
   /**

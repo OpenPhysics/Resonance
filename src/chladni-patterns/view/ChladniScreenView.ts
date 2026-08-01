@@ -24,7 +24,7 @@ import { toFixed } from "scenerystack/dot";
 import { Shape } from "scenerystack/kite";
 import { type EmptySelfOptions, optionize } from "scenerystack/phet-core";
 import type { ModelViewTransform2 } from "scenerystack/phetcommon";
-import { DragListener, HBox, KeyboardUtils, Node, Path, Rectangle, Text, VBox } from "scenerystack/scenery";
+import { HBox, KeyboardUtils, Node, Path, Rectangle, RichDragListener, Text, VBox } from "scenerystack/scenery";
 import { PlayPauseStepButtonGroup, ResetAllButton } from "scenerystack/scenery-phet";
 import { audioManager, ScreenView, type ScreenViewOptions } from "scenerystack/sim";
 import { AquaRadioButtonGroup } from "scenerystack/sun";
@@ -511,44 +511,46 @@ export class ChladniScreenView extends ScreenView {
     let startWidth = 0;
     let startHeight = 0;
 
-    const dragListener = new DragListener({
-      start: (event) => {
-        dragStartPoint = event.pointer.point.copy();
-        startWidth = this.model.plateWidthProperty.value;
-        startHeight = this.model.plateHeightProperty.value;
-      },
-      drag: (event) => {
-        if (!dragStartPoint) {
-          return;
-        }
+    handle.addInputListener(
+      new RichDragListener({
+        dragListenerOptions: {
+          start: (event) => {
+            dragStartPoint = event.pointer.point.copy();
+            startWidth = this.model.plateWidthProperty.value;
+            startHeight = this.model.plateHeightProperty.value;
+          },
+          drag: (event) => {
+            if (!dragStartPoint) {
+              return;
+            }
 
-        // Calculate the drag delta
-        const currentPoint = event.pointer.point;
-        const deltaX = currentPoint.x - dragStartPoint.x;
-        const deltaY = currentPoint.y - dragStartPoint.y;
+            // Calculate the drag delta
+            const currentPoint = event.pointer.point;
+            const deltaX = currentPoint.x - dragStartPoint.x;
+            const deltaY = currentPoint.y - dragStartPoint.y;
 
-        // Convert pixel delta to physical dimension delta
-        // Since we're dragging the corner, the delta is half the total size change
-        // (because center is fixed, the opposite corner moves by the same amount)
-        const widthDelta = (deltaX * 2) / PIXELS_PER_METER;
-        const heightDelta = (deltaY * 2) / PIXELS_PER_METER;
+            // Convert pixel delta to physical dimension delta
+            // Since we're dragging the corner, the delta is half the total size change
+            // (because center is fixed, the opposite corner moves by the same amount)
+            const widthDelta = (deltaX * 2) / PIXELS_PER_METER;
+            const heightDelta = (deltaY * 2) / PIXELS_PER_METER;
 
-        // Calculate new dimensions
-        const widthRange = this.model.plateWidthProperty.range;
-        const heightRange = this.model.plateHeightProperty.range;
-        const newWidth = Math.max(widthRange.min, Math.min(widthRange.max, startWidth + widthDelta));
-        const newHeight = Math.max(heightRange.min, Math.min(heightRange.max, startHeight + heightDelta));
+            // Calculate new dimensions
+            const widthRange = this.model.plateWidthProperty.range;
+            const heightRange = this.model.plateHeightProperty.range;
+            const newWidth = Math.max(widthRange.min, Math.min(widthRange.max, startWidth + widthDelta));
+            const newHeight = Math.max(heightRange.min, Math.min(heightRange.max, startHeight + heightDelta));
 
-        // Update the model
-        this.model.plateWidthProperty.value = newWidth;
-        this.model.plateHeightProperty.value = newHeight;
-      },
-      end: () => {
-        dragStartPoint = null;
-      },
-    });
-
-    handle.addInputListener(dragListener);
+            // Update the model
+            this.model.plateWidthProperty.value = newWidth;
+            this.model.plateHeightProperty.value = newHeight;
+          },
+          end: () => {
+            dragStartPoint = null;
+          },
+        },
+      }),
+    );
 
     return handle;
   }

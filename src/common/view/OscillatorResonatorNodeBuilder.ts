@@ -11,16 +11,7 @@
 import { type NumberProperty, Property } from "scenerystack/axon";
 import { type Bounds2, Vector2, Vector2Property } from "scenerystack/dot";
 import type { ModelViewTransform2 } from "scenerystack/phetcommon";
-import {
-  Color,
-  DragListener,
-  KeyboardDragListener,
-  LinearGradient,
-  Node,
-  type Path,
-  Rectangle,
-  Text,
-} from "scenerystack/scenery";
+import { Color, LinearGradient, Node, type Path, Rectangle, RichDragListener, Text } from "scenerystack/scenery";
 import { ParametricSpringNode, PhetFont } from "scenerystack/scenery-phet";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
 import ResonanceColors from "../../ResonanceColors.js";
@@ -256,22 +247,26 @@ export const OscillatorResonatorNodeBuilder = {
       });
     });
 
-    const dragListener = new DragListener({
-      targetNode: massNode,
-      positionProperty: massPositionProperty,
-      dragBoundsProperty: new Property(layoutBounds),
-      start: () => {
-        // Mark this resonator as being dragged - simulation will skip updating it
-        resonatorModel.isDraggingProperty.value = true;
-        // Select this resonator in the control panel
-        selectedResonatorIndexProperty.value = index;
-      },
-      end: () => {
-        // Release the resonator back to simulation control
-        resonatorModel.isDraggingProperty.value = false;
-      },
-    });
-    massNode.addInputListener(dragListener);
+    massNode.addInputListener(
+      new RichDragListener({
+        positionProperty: massPositionProperty,
+        dragBoundsProperty: new Property(layoutBounds),
+        dragListenerOptions: {
+          targetNode: massNode,
+        },
+        keyboardDragListenerOptions: {
+          dragSpeed: KEYBOARD_DRAG_SPEED,
+          shiftDragSpeed: KEYBOARD_SHIFT_DRAG_SPEED,
+        },
+        start: () => {
+          resonatorModel.isDraggingProperty.value = true;
+          selectedResonatorIndexProperty.value = index;
+        },
+        end: () => {
+          resonatorModel.isDraggingProperty.value = false;
+        },
+      }),
+    );
 
     // Make focusable for keyboard navigation (tab key)
     // Generate accessible label and description with resonator number
@@ -289,22 +284,6 @@ export const OscillatorResonatorNodeBuilder = {
     massNode.focusable = true;
     massNode.accessibleName = accessibleMassLabel;
     massNode.descriptionContent = accessibleMassDescription;
-
-    // KeyboardDragListener for keyboard navigation (vertical dragging)
-    const keyboardDragListener = new KeyboardDragListener({
-      positionProperty: massPositionProperty,
-      dragBoundsProperty: new Property(layoutBounds),
-      dragSpeed: KEYBOARD_DRAG_SPEED,
-      shiftDragSpeed: KEYBOARD_SHIFT_DRAG_SPEED,
-      start: () => {
-        resonatorModel.isDraggingProperty.value = true;
-        selectedResonatorIndexProperty.value = index;
-      },
-      end: () => {
-        resonatorModel.isDraggingProperty.value = false;
-      },
-    });
-    massNode.addInputListener(keyboardDragListener);
 
     return massNode;
   },
