@@ -6,8 +6,11 @@
  * - A configurable graph for plotting physical quantities
  */
 
-import type { ScreenViewOptions } from "scenerystack/sim";
-import { BaseOscillatorScreenView } from "../../common/view/BaseOscillatorScreenView.js";
+import { type EmptySelfOptions, optionize } from "scenerystack/phet-core";
+import {
+  BaseOscillatorScreenView,
+  type BaseOscillatorScreenViewOptions,
+} from "../../common/view/BaseOscillatorScreenView.js";
 import type ConfigurableGraph from "../../common/view/graph/ConfigurableGraph.js";
 import type { PlottableProperty } from "../../common/view/graph/PlottableProperty.js";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
@@ -16,12 +19,18 @@ import type { SingleOscillatorModel } from "../model/SingleOscillatorModel.js";
 import { OscillatorVectorControlPanel } from "./OscillatorVectorControlPanel.js";
 import { OscillatorVectorNode } from "./OscillatorVectorNode.js";
 
+export type SingleOscillatorScreenViewOptions = BaseOscillatorScreenViewOptions;
+
 export class SingleOscillatorScreenView extends BaseOscillatorScreenView {
   private readonly vectorNode: OscillatorVectorNode;
   private readonly vectorControlPanel: OscillatorVectorControlPanel;
   private readonly configurableGraph: ConfigurableGraph;
 
-  public constructor(model: SingleOscillatorModel, options?: ScreenViewOptions) {
+  public constructor(model: SingleOscillatorModel, providedOptions?: SingleOscillatorScreenViewOptions) {
+    const options = optionize<SingleOscillatorScreenViewOptions, EmptySelfOptions, BaseOscillatorScreenViewOptions>()(
+      {},
+      providedOptions,
+    );
     super(model, options);
 
     // Create the vector control panel (positioned in upper-left)

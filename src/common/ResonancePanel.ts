@@ -25,21 +25,26 @@
  *   const panel = new ResonancePanel(content, { fill: "transparent" });
  */
 
+import { type EmptySelfOptions, optionize } from "scenerystack/phet-core";
 import type { Node } from "scenerystack/scenery";
-import type { PanelOptions } from "scenerystack/sun";
-import { Panel } from "scenerystack/sun";
+import { Panel, type PanelOptions } from "scenerystack/sun";
 import ResonanceColors from "../ResonanceColors.js";
 import { PANEL_CORNER_RADIUS } from "../ResonanceConstants.js";
 
+export type ResonancePanelOptions = PanelOptions;
+
 export class ResonancePanel extends Panel {
-  public constructor(content: Node, providedOptions?: PanelOptions) {
-    super(content, {
-      fill: ResonanceColors.panelBackgroundColorProperty,
-      stroke: ResonanceColors.panelBorderColorProperty,
-      cornerRadius: PANEL_CORNER_RADIUS,
-      xMargin: 12,
-      yMargin: 10,
-      ...providedOptions,
-    });
+  public constructor(content: Node, providedOptions?: ResonancePanelOptions) {
+    const options = optionize<ResonancePanelOptions, EmptySelfOptions, PanelOptions>()(
+      {
+        fill: ResonanceColors.panelBackgroundColorProperty,
+        stroke: ResonanceColors.panelBorderColorProperty,
+        cornerRadius: PANEL_CORNER_RADIUS,
+        xMargin: 12,
+        yMargin: 10,
+      },
+      providedOptions,
+    );
+    super(content, options);
   }
 }

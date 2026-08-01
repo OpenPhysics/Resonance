@@ -4,17 +4,26 @@
  * that lets users plot various physical quantities against each other.
  */
 
-import type { ScreenViewOptions } from "scenerystack/sim";
-import { BaseOscillatorScreenView } from "../../common/view/BaseOscillatorScreenView.js";
+import { type EmptySelfOptions, optionize } from "scenerystack/phet-core";
+import {
+  BaseOscillatorScreenView,
+  type BaseOscillatorScreenViewOptions,
+} from "../../common/view/BaseOscillatorScreenView.js";
 import type ConfigurableGraph from "../../common/view/graph/ConfigurableGraph.js";
 import type { PlottableProperty } from "../../common/view/graph/PlottableProperty.js";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
 import type { PhaseAnalysisModel } from "../model/PhaseAnalysisModel.js";
 
+export type PhaseAnalysisScreenViewOptions = BaseOscillatorScreenViewOptions;
+
 export class PhaseAnalysisScreenView extends BaseOscillatorScreenView {
   private readonly configurableGraph: ConfigurableGraph;
 
-  public constructor(model: PhaseAnalysisModel, options?: ScreenViewOptions) {
+  public constructor(model: PhaseAnalysisModel, providedOptions?: PhaseAnalysisScreenViewOptions) {
+    const options = optionize<PhaseAnalysisScreenViewOptions, EmptySelfOptions, BaseOscillatorScreenViewOptions>()(
+      {},
+      providedOptions,
+    );
     super(model, options);
 
     const resonanceModel = model.resonanceModel;

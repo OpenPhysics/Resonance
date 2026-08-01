@@ -11,6 +11,7 @@
  */
 
 import { Bounds2 } from "scenerystack/dot";
+import { type EmptySelfOptions, optionize } from "scenerystack/phet-core";
 import { CanvasNode, type CanvasNodeOptions } from "scenerystack/scenery";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
 import { ChladniOverlayNode } from "./ChladniOverlayNode.js";
@@ -49,12 +50,13 @@ class ColormapCanvasNode extends CanvasNode {
     psiFunction: DisplacementFunction,
     plateWidthMeters: number,
     plateHeightMeters: number,
-    options?: CanvasNodeOptions,
+    providedOptions?: CanvasNodeOptions,
   ) {
-    super({
-      ...options,
-      canvasBounds: new Bounds2(0, 0, width, height),
-    });
+    const options = optionize<CanvasNodeOptions, EmptySelfOptions, CanvasNodeOptions>()(
+      { canvasBounds: new Bounds2(0, 0, width, height) },
+      providedOptions,
+    );
+    super(options);
     this.psiFunction = psiFunction;
     this.plateWidthMeters = plateWidthMeters;
     this.plateHeightMeters = plateHeightMeters;

@@ -14,6 +14,7 @@
 
 import { DerivedProperty, type Property } from "scenerystack/axon";
 import { Bounds2 } from "scenerystack/dot";
+import { type EmptySelfOptions, optionize } from "scenerystack/phet-core";
 import { CanvasNode, type CanvasNodeOptions } from "scenerystack/scenery";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
 
@@ -24,6 +25,8 @@ export type ModeSelection = {
   m: number;
   n: number;
 };
+
+export type ModalShapeNodeOptions = CanvasNodeOptions;
 
 /**
  * Resolution of the modal shape grid (pixels per sample point).
@@ -55,12 +58,13 @@ export class ModalShapeNode extends CanvasNode {
     plateWidth: number,
     plateHeight: number,
     selectedModeProperty: Property<ModeSelection>,
-    options?: CanvasNodeOptions,
+    providedOptions?: ModalShapeNodeOptions,
   ) {
-    super({
-      ...options,
-      canvasBounds: new Bounds2(0, 0, viewWidth, viewHeight),
-    });
+    const options = optionize<ModalShapeNodeOptions, EmptySelfOptions, CanvasNodeOptions>()(
+      { canvasBounds: new Bounds2(0, 0, viewWidth, viewHeight) },
+      providedOptions,
+    );
+    super(options);
 
     this.plateWidth = plateWidth;
     this.plateHeight = plateHeight;

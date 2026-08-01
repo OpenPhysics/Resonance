@@ -22,6 +22,7 @@ import { Multilink } from "scenerystack/axon";
 import type { Vector2 } from "scenerystack/dot";
 import { toFixed } from "scenerystack/dot";
 import { Shape } from "scenerystack/kite";
+import { type EmptySelfOptions, optionize } from "scenerystack/phet-core";
 import type { ModelViewTransform2 } from "scenerystack/phetcommon";
 import { DragListener, HBox, KeyboardUtils, Node, Path, Rectangle, Text, VBox } from "scenerystack/scenery";
 import { PlayPauseStepButtonGroup, ResetAllButton } from "scenerystack/scenery-phet";
@@ -59,6 +60,8 @@ const FREQUENCY_STEP_SMALL = 10;
 const FREQUENCY_STEP_MEDIUM = 100;
 const FREQUENCY_STEP_LARGE = 500;
 
+export type ChladniScreenViewOptions = ScreenViewOptions;
+
 export class ChladniScreenView extends ScreenView {
   private readonly model: ChladniModel;
   private readonly visualizationNode: ChladniVisualizationNode;
@@ -81,13 +84,20 @@ export class ChladniScreenView extends ScreenView {
   // Model-View transform for coordinate conversion
   private modelViewTransform: ModelViewTransform2;
 
-  public constructor(model: ChladniModel, preferencesModel: ResonancePreferencesModel, options?: ScreenViewOptions) {
+  public constructor(
+    model: ChladniModel,
+    preferencesModel: ResonancePreferencesModel,
+    providedOptions?: ChladniScreenViewOptions,
+  ) {
     // Register the accessible screen summary (Interactive Description); current
     // details are derived live from the model.
-    super({
-      screenSummaryContent: new ChladniScreenSummaryContent(model),
-      ...options,
-    });
+    const options = optionize<ChladniScreenViewOptions, EmptySelfOptions, ScreenViewOptions>()(
+      {
+        screenSummaryContent: new ChladniScreenSummaryContent(model),
+      },
+      providedOptions,
+    );
+    super(options);
     this.model = model;
 
     // Fixed center position for the visualization

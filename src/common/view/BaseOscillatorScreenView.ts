@@ -18,6 +18,7 @@
 
 import { Property } from "scenerystack/axon";
 import { Bounds2, Vector2, Vector2Property } from "scenerystack/dot";
+import { type EmptySelfOptions, optionize } from "scenerystack/phet-core";
 import { ModelViewTransform2 } from "scenerystack/phetcommon";
 import { DragListener, KeyboardDragListener, Line, Node, Rectangle, Text } from "scenerystack/scenery";
 import { type ParametricSpringNode, ResetAllButton, RulerNode } from "scenerystack/scenery-phet";
@@ -66,6 +67,8 @@ const RULER_KEYBOARD_SHIFT_DRAG_SPEED = 50; // slower with shift key
 const GRAPH_CHECKBOX_BOX_WIDTH = 14;
 const GRAPH_CHECKBOX_SPACING = 6;
 
+export type BaseOscillatorScreenViewOptions = ScreenViewOptions;
+
 export class BaseOscillatorScreenView extends ScreenView {
   protected readonly model: BaseOscillatorScreenModel;
   protected readonly modelViewTransform: ModelViewTransform2;
@@ -86,13 +89,16 @@ export class BaseOscillatorScreenView extends ScreenView {
   protected readonly traceDataModel: TraceDataModel;
   protected readonly traceNode: OscillatorTraceNode;
 
-  public constructor(model: BaseOscillatorScreenModel, options?: ScreenViewOptions) {
+  public constructor(model: BaseOscillatorScreenModel, providedOptions?: BaseOscillatorScreenViewOptions) {
     // Register the accessible screen summary (Interactive Description). Shared by
     // the oscillator-based screens; current details are derived live from the model.
-    super({
-      screenSummaryContent: new OscillatorScreenSummaryContent(model),
-      ...options,
-    });
+    const options = optionize<BaseOscillatorScreenViewOptions, EmptySelfOptions, ScreenViewOptions>()(
+      {
+        screenSummaryContent: new OscillatorScreenSummaryContent(model),
+      },
+      providedOptions,
+    );
+    super(options);
 
     this.model = model;
 

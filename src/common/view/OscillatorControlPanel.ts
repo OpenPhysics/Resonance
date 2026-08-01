@@ -18,6 +18,7 @@
 
 import { NumberProperty, Property } from "scenerystack/axon";
 import { Bounds2, Range, toFixed } from "scenerystack/dot";
+import { optionize } from "scenerystack/phet-core";
 import {
   AlignBox,
   HBox,
@@ -31,7 +32,7 @@ import {
 } from "scenerystack/scenery";
 import { GridIcon, type NumberControl } from "scenerystack/scenery-phet";
 import type { ComboBoxItem } from "scenerystack/sun";
-import { Checkbox, ComboBox, NumberSpinner, Panel, ToggleSwitch } from "scenerystack/sun";
+import { Checkbox, ComboBox, NumberSpinner, Panel, type PanelOptions, ToggleSwitch } from "scenerystack/sun";
 import { ResonanceStrings } from "../../i18n/ResonanceStrings.js";
 import ResonanceColors from "../../ResonanceColors.js";
 import ResonanceConstants from "../../ResonanceConstants.js";
@@ -43,7 +44,7 @@ import { ResonatorConfigMode } from "../model/ResonatorConfigMode.js";
 import { ListenerTracker } from "../util/index.js";
 import { NumberControlFactory } from "./NumberControlFactory.js";
 
-export type OscillatorControlPanelOptions = {
+type OscillatorControlPanelSelfOptions = {
   /**
    * When true, hides multi-oscillator controls (resonator count slider,
    * configuration combo box, and resonator selection spinner).
@@ -55,6 +56,8 @@ export type OscillatorControlPanelOptions = {
    */
   showTrace?: boolean;
 };
+
+export type OscillatorControlPanelOptions = OscillatorControlPanelSelfOptions & PanelOptions;
 
 export class OscillatorControlPanel extends Panel {
   /**
@@ -100,12 +103,32 @@ export class OscillatorControlPanel extends Panel {
     rulerVisibleProperty: Property<boolean>,
     gridVisibleProperty: Property<boolean>,
     traceEnabledProperty: Property<boolean>,
-    options?: OscillatorControlPanelOptions,
+    providedOptions?: OscillatorControlPanelOptions,
   ) {
+    const options = optionize<OscillatorControlPanelOptions, OscillatorControlPanelSelfOptions, PanelOptions>()(
+      {
+        singleOscillatorMode: false,
+        showTrace: true,
+        fill: ResonanceColors.controlPanelFillProperty,
+        stroke: ResonanceColors.controlPanelStrokeProperty,
+        lineWidth: ResonanceConstants.CONTROL_PANEL_LINE_WIDTH,
+        cornerRadius: ResonanceConstants.CONTROL_PANEL_CORNER_RADIUS,
+        xMargin: ResonanceConstants.CONTROL_PANEL_X_MARGIN,
+        yMargin: ResonanceConstants.CONTROL_PANEL_Y_MARGIN,
+        right: layoutBounds.maxX - ResonanceConstants.CONTROL_PANEL_RIGHT_MARGIN,
+        top: layoutBounds.minY + ResonanceConstants.CONTROL_PANEL_TOP_MARGIN,
+        tagName: "div",
+        labelTagName: "h2",
+        labelContent: ResonanceStrings.a11y.resonatorPanel.labelStringProperty,
+        descriptionContent: ResonanceStrings.a11y.resonatorPanel.descriptionStringProperty,
+      },
+      providedOptions,
+    );
+
+    const { singleOscillatorMode, showTrace, ...panelOptions } = options;
+
     // Store model reference for use in methods
     const tempModel = model;
-    const singleOscillatorMode = options?.singleOscillatorMode ?? false;
-    const showTrace = options?.showTrace ?? true;
 
     // --- Create all controls using extracted methods ---
 
@@ -224,21 +247,7 @@ export class OscillatorControlPanel extends Panel {
       align: "left",
     });
 
-    super(controlPanelContent, {
-      fill: ResonanceColors.controlPanelFillProperty,
-      stroke: ResonanceColors.controlPanelStrokeProperty,
-      lineWidth: ResonanceConstants.CONTROL_PANEL_LINE_WIDTH,
-      cornerRadius: ResonanceConstants.CONTROL_PANEL_CORNER_RADIUS,
-      xMargin: ResonanceConstants.CONTROL_PANEL_X_MARGIN,
-      yMargin: ResonanceConstants.CONTROL_PANEL_Y_MARGIN,
-      right: layoutBounds.maxX - ResonanceConstants.CONTROL_PANEL_RIGHT_MARGIN,
-      top: layoutBounds.minY + ResonanceConstants.CONTROL_PANEL_TOP_MARGIN,
-      // Accessibility
-      tagName: "div",
-      labelTagName: "h2",
-      labelContent: ResonanceStrings.a11y.resonatorPanel.labelStringProperty,
-      descriptionContent: ResonanceStrings.a11y.resonatorPanel.descriptionStringProperty,
-    });
+    super(controlPanelContent, panelOptions);
 
     // Store references for instance methods
     this.model = model;

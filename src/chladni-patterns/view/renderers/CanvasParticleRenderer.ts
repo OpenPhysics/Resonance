@@ -11,6 +11,7 @@
  */
 
 import { Bounds2, type Vector2 } from "scenerystack/dot";
+import { type EmptySelfOptions, optionize } from "scenerystack/phet-core";
 import type { ModelViewTransform2 } from "scenerystack/phetcommon";
 import { CanvasNode, type CanvasNodeOptions, type Node } from "scenerystack/scenery";
 import ResonanceColors from "../../../ResonanceColors.js";
@@ -37,12 +38,13 @@ class ParticleCanvasNode extends CanvasNode {
     modelViewTransform: ModelViewTransform2,
     width: number,
     height: number,
-    options?: CanvasNodeOptions,
+    providedOptions?: CanvasNodeOptions,
   ) {
-    super({
-      ...options,
-      canvasBounds: new Bounds2(0, 0, width, height),
-    });
+    const options = optionize<CanvasNodeOptions, EmptySelfOptions, CanvasNodeOptions>()(
+      { canvasBounds: new Bounds2(0, 0, width, height) },
+      providedOptions,
+    );
+    super(options);
     this.modelViewTransform = modelViewTransform;
   }
 
