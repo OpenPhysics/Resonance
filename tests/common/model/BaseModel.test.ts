@@ -19,7 +19,7 @@ import { SolverType } from "../../../src/common/model/SolverType.js";
 class TestModel extends BaseModel {
   public position: number = 0;
   public velocity: number = 0;
-  private omega: number = 1;
+  private omega: number;
 
   constructor(solverTypeProperty: Property<SolverType>, omega = 1) {
     super(solverTypeProperty);

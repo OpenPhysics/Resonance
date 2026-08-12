@@ -114,9 +114,8 @@ function measureCycleDuration(
       continue;
     }
 
-    if (trackedX > 0 && newX <= 0) {
-      trackedX = newX;
-    } else if (trackedX <= 0 && newX > 0 && newV > 0) {
+    // Track zero-crossing: first arm when x goes non-positive, then complete on upward cross.
+    if (trackedX <= 0 && newX > 0 && newV > 0) {
       return { measuredPeriod: time - startTime, time };
     }
     trackedX = newX;
