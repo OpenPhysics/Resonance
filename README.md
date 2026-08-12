@@ -1,5 +1,7 @@
 # Resonance
 
+[![CI](https://github.com/OpenPhysics/Resonance/actions/workflows/ci.yml/badge.svg)](https://github.com/OpenPhysics/Resonance/actions/workflows/ci.yml)
+
 An interactive simulation of resonance in driven oscillating systems, built with [SceneryStack](https://scenerystack.org/).
 Visualize driven mass-spring systems and Chladni plate vibration patterns.
 
