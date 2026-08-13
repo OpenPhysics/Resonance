@@ -57,6 +57,8 @@ via `StringManager.getA11yStrings()`.
   (interaction surface, not themed chrome).
 - **Domain clock:** `BaseModel` / Chladni playback state machines own play/pause and stepping instead of composing fleet-standard `TimeModel` (`src/common/TimeModel.ts` is present for shared reference only).
 - **Vitest environment:** `jsdom` (not the fleet-default `happy-dom`) — canvas/DOM-heavy model tests need it; `tests/setup.ts` + `execArgv: ["--expose-gc"]` are otherwise fleet-standard.
+- **Biome `style.noNonNullAssertion: off`:** Chladni WebGL/canvas particle paths use intentional
+  non-null assertions; enabling the rule floods lint without improving safety here.
 
 
 ### `package.json` overrides
