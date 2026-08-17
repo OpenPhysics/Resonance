@@ -2,13 +2,12 @@ import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
+    // jsdom: canvas/DOM-heavy model tests (not the fleet-default happy-dom).
     environment: "jsdom",
-    globals: true,
     setupFiles: ["./tests/setup.ts"],
+    include: ["tests/**/*.test.ts"],
+    // --expose-gc lets us call global.gc() to force garbage collection
     execArgv: ["--expose-gc"],
     testTimeout: 30_000,
-    include: ["tests/**/*.test.ts"],
-    // Exclude Playwright tests (they run separately with playwright test)
-    exclude: ["**/node_modules/**", "**/dist/**", "**/tests/fuzz/**"],
   },
 });

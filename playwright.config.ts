@@ -1,19 +1,19 @@
 /**
- * Playwright configuration for fuzz testing.
+ * Playwright configuration for optional fuzz testing (Resonance smoke).
  */
 
 import { defineConfig } from "@playwright/test";
 
 export default defineConfig({
   testDir: "./tests/fuzz",
-  timeout: 5 * 60 * 1000, // 5 minutes per test by default
+  timeout: 5 * 60 * 1000,
   expect: {
-    timeout: 10000,
+    timeout: 10_000,
   },
-  fullyParallel: false, // Run tests sequentially for fuzz testing
-  forbidOnly: !!process.env.CI,
-  retries: 0, // No retries for fuzz tests
-  workers: 1, // Single worker for fuzz testing
+  fullyParallel: false,
+  forbidOnly: !!process.env["CI"],
+  retries: 0,
+  workers: 1,
   reporter: [["list"], ["html", { open: "never" }]],
   use: {
     baseURL: "http://localhost:5173",
@@ -24,8 +24,8 @@ export default defineConfig({
   webServer: {
     command: "npm run start",
     url: "http://localhost:5173",
-    reuseExistingServer: !process.env.CI,
-    timeout: 120000,
+    reuseExistingServer: !process.env["CI"],
+    timeout: 120_000,
   },
   projects: [
     {
