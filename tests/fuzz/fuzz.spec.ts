@@ -49,7 +49,7 @@ test.describe("Fuzz Testing", () => {
     const startTime = Date.now();
 
     // Build the fuzz URL
-    const fuzzUrl = `/?fuzz&randomSeed=${FUZZ_SEED}&fuzzRate=${FUZZ_RATE}&fuzzPointers=${FUZZ_POINTERS}`;
+    const fuzzUrl = `/?fuzz&ea&randomSeed=${FUZZ_SEED}&fuzzRate=${FUZZ_RATE}&fuzzPointers=${FUZZ_POINTERS}`;
 
     console.log("\n========================================");
     console.log("FUZZ TEST CONFIGURATION");
@@ -268,7 +268,7 @@ test.describe("Fuzz Testing", () => {
     const startTime = Date.now();
     const duration = parseInt(process.env["FUZZ_DURATION"] || "30", 10) * 1000;
 
-    const fuzzUrl = `/?fuzz&randomSeed=${FUZZ_SEED}&fuzzRate=50&fuzzPointers=5`;
+    const fuzzUrl = `/?fuzz&ea&randomSeed=${FUZZ_SEED}&fuzzRate=50&fuzzPointers=5`;
 
     console.log("\n========================================");
     console.log("MULTITOUCH FUZZ TEST");
